@@ -5,6 +5,14 @@
  */
 package job.work.management.system;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author sunny
@@ -16,6 +24,7 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public Dashboard() {
         initComponents();
+        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
 
     /**
@@ -28,18 +37,16 @@ public class Dashboard extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuCompanyDetails = new javax.swing.JMenu();
         mnuManageCompanyDetails = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuExit = new javax.swing.JMenuItem();
         mnuClients = new javax.swing.JMenu();
-        mnuAddClient = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuManageClient = new javax.swing.JMenuItem();
         mnuProducts = new javax.swing.JMenu();
-        mnuAddProduct = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnuManageProduct = new javax.swing.JMenuItem();
         mnuSearch = new javax.swing.JMenu();
         mnuQuotations = new javax.swing.JMenu();
@@ -59,17 +66,46 @@ public class Dashboard extends javax.swing.JFrame {
         mnuReports = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Job Work Management  System");
+        setTitle("S. I. GEARS - Job Work Management  System");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/dashlogo_1.png"))); // NOI18N
+        jLabel1.setText("JOB WORK MANAGEMENT SYSTEM");
+        jLabel1.setToolTipText("");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Version 1.0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1319, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1295, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 758, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(152, 152, 152)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(303, Short.MAX_VALUE))
         );
 
         mnuCompanyDetails.setText("Company Details");
@@ -84,38 +120,35 @@ public class Dashboard extends javax.swing.JFrame {
         mnuCompanyDetails.add(jSeparator1);
 
         mnuExit.setText("Exit");
+        mnuExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExitActionPerformed(evt);
+            }
+        });
         mnuCompanyDetails.add(mnuExit);
 
         jMenuBar1.add(mnuCompanyDetails);
 
         mnuClients.setText("Clients");
 
-        mnuAddClient.setText("Add Client");
-        mnuAddClient.addActionListener(new java.awt.event.ActionListener() {
+        mnuManageClient.setText("Manage Client");
+        mnuManageClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAddClientActionPerformed(evt);
+                mnuManageClientActionPerformed(evt);
             }
         });
-        mnuClients.add(mnuAddClient);
-        mnuClients.add(jSeparator2);
-
-        mnuManageClient.setText("Manage Client");
         mnuClients.add(mnuManageClient);
 
         jMenuBar1.add(mnuClients);
 
         mnuProducts.setText("Products");
 
-        mnuAddProduct.setText("Add Product");
-        mnuAddProduct.addActionListener(new java.awt.event.ActionListener() {
+        mnuManageProduct.setText("Manage Product");
+        mnuManageProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAddProductActionPerformed(evt);
+                mnuManageProductActionPerformed(evt);
             }
         });
-        mnuProducts.add(mnuAddProduct);
-        mnuProducts.add(jSeparator3);
-
-        mnuManageProduct.setText("Manage Product");
         mnuProducts.add(mnuManageProduct);
 
         jMenuBar1.add(mnuProducts);
@@ -126,6 +159,11 @@ public class Dashboard extends javax.swing.JFrame {
         mnuQuotations.setText("Quotations");
 
         mnuCreateQuotation.setText("Create Quotation");
+        mnuCreateQuotation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCreateQuotationActionPerformed(evt);
+            }
+        });
         mnuQuotations.add(mnuCreateQuotation);
         mnuQuotations.add(jSeparator4);
 
@@ -206,15 +244,30 @@ public class Dashboard extends javax.swing.JFrame {
         CompanyDetails.getObj().setVisible(true);
     }//GEN-LAST:event_mnuManageCompanyDetailsActionPerformed
 
-    private void mnuAddClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAddClientActionPerformed
+    private void mnuManageClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageClientActionPerformed
         // TODO add your handling code here:
-        AddClient.getObj().setVisible(true);
-    }//GEN-LAST:event_mnuAddClientActionPerformed
+        ManageClients.getObj().setVisible(true);
+    }//GEN-LAST:event_mnuManageClientActionPerformed
 
-    private void mnuAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAddProductActionPerformed
+    private void mnuManageProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageProductActionPerformed
         // TODO add your handling code here:
-        AddProduct.getObj().setVisible(true);
-    }//GEN-LAST:event_mnuAddProductActionPerformed
+        ManageProduct.getObj().setVisible(true);
+    }//GEN-LAST:event_mnuManageProductActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_mnuExitActionPerformed
+
+    private void mnuCreateQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateQuotationActionPerformed
+        // TODO add your handling code here:
+        CreateQuotation.getObj().setVisible(true);
+    }//GEN-LAST:event_mnuCreateQuotationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,16 +305,14 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JMenuItem mnuAddClient;
-    private javax.swing.JMenuItem mnuAddProduct;
     private javax.swing.JMenu mnuChallan;
     private javax.swing.JMenu mnuClients;
     private javax.swing.JMenu mnuCompanyDetails;
