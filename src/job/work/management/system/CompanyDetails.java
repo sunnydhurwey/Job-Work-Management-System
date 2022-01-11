@@ -5,17 +5,24 @@
  */
 package job.work.management.system;
 
+import java.sql.*;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
 /**
  *
  * @author sunny
  */
 public class CompanyDetails extends javax.swing.JFrame {
 
+    Connection conn=null;
+    ResultSet rs=null;
+    PreparedStatement pst=null;
     /**
      * Creates new form CompanyDetails
      */
     public CompanyDetails() {
         initComponents();
+        conn=javaconnect.ConnectDB();
     }
     //Program to set single instance of this form
     private static CompanyDetails obj=null;
@@ -24,6 +31,35 @@ public class CompanyDetails extends javax.swing.JFrame {
             obj=new CompanyDetails();
         }
         return obj;
+    }
+    
+    //Functions
+    //Fucntion to save comapny details
+    String companyname,gstin,offaddress,email,bankname,accountno,ifsc,mobile,landline;
+    public void saveData(){
+        try{
+            String sql="INSERT INTO companydetails (name,gstin,officeaddress,email,mobile,landline,bankname,accountno,ifsc) VALUES (?,?,?,?,?,?,?,?,?)";
+            pst=conn.prepareStatement(sql);
+            pst.setString(1, txtCompanyName.getText());
+            pst.setString(2, txtGSTIN.getText());
+            pst.setString(3, txtOfficeaddress.getText());
+            pst.setString(4, txtEmail.getText());
+            pst.setString(5, txtMobile.getText());
+            pst.setString(6, txtLandline.getText());
+            pst.setString(7, txtBankname.getText());
+            pst.setString(8, txtAccount.getText());
+            pst.setString(9, txtIFSC.getText());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Company Details added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,e, "saveData() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -239,6 +275,11 @@ public class CompanyDetails extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTable3);
 
         jButton3.setText("SAVE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("CLEAR");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -331,6 +372,11 @@ public class CompanyDetails extends javax.swing.JFrame {
     private void txtAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAccountActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAccountActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
