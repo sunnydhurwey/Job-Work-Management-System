@@ -5,9 +5,12 @@
  */
 package job.work.management.system;
 
+import java.awt.HeadlessException;
 import java.sql.*;
 import java.sql.Connection;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
 /**
  *
  * @author sunny
@@ -23,6 +26,7 @@ public class CompanyDetails extends javax.swing.JFrame {
     public CompanyDetails() {
         initComponents();
         conn=javaconnect.ConnectDB();
+        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
     //Program to set single instance of this form
     private static CompanyDetails obj=null;
@@ -34,7 +38,26 @@ public class CompanyDetails extends javax.swing.JFrame {
     }
     
     //Functions
-    //Fucntion to save comapny details
+    
+    //Function to fetch data to table
+    public void getCompanyData(){
+        try{
+            String sql="SELECT * FROM companydetails";
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            tblCompanyDetails.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"getCompanyData() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                rs.close();
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    //Function to save comapny details
     String companyname,gstin,offaddress,email,bankname,accountno,ifsc,mobile,landline;
     public void saveData(){
         try{
@@ -51,6 +74,7 @@ public class CompanyDetails extends javax.swing.JFrame {
             pst.setString(9, txtIFSC.getText());
             pst.execute();
             JOptionPane.showMessageDialog(null, "Company Details added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getCompanyData();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null,e, "saveData() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -60,6 +84,73 @@ public class CompanyDetails extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+    }
+    
+    //Function to getTableDataToField
+    int row;
+    String count,tblClick;
+    public void getTableDataToField(){
+        try{
+            row=tblCompanyDetails.getSelectedRow();
+            tblClick=tblCompanyDetails.getModel().getValueAt(row, 0).toString();
+            String sql="Select * from companydetails where uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            if(rs.next()){
+                txtCompanyName.setText(rs.getString("name"));
+                txtGSTIN.setText(rs.getString("gstin"));
+                txtOfficeaddress.setText(rs.getString("officeaddress"));
+                txtEmail.setText(rs.getString("email"));
+                txtMobile.setText(rs.getString("mobile"));
+                txtLandline.setText(rs.getString("landline"));
+                txtBankname.setText(rs.getString("bankname"));
+                txtAccount.setText(rs.getString("accountno"));
+                txtIFSC.setText(rs.getString("ifsc"));
+            }else{
+                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                rs.close();
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    //Function to delete record
+    public void deleteData(){
+        try{
+            String sql="DELETE FROM companydetails WHERE uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Data deleted from database","Deleted",JOptionPane.PLAIN_MESSAGE);
+            getCompanyData();
+        }catch(HeadlessException | SQLException e){
+            JOptionPane.showMessageDialog(null, e,"deleteData() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    
+    //Function to clear field
+    public void clearField(){
+        txtCompanyName.setText("");
+        txtGSTIN.setText("");
+        txtOfficeaddress.setText("");
+        txtEmail.setText("");
+        txtMobile.setText("");
+        txtLandline.setText("");
+        txtBankname.setText("");
+        txtAccount.setText("");
+        txtIFSC.setText("");
+        txtCompanyName.requestFocus();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,11 +185,11 @@ public class CompanyDetails extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         txtIFSC = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        tblCompanyDetails = new javax.swing.JTable();
+        btnSave = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnPrint = new javax.swing.JButton();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -115,6 +206,11 @@ public class CompanyDetails extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Company Details - Job Work Management System");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -207,19 +303,7 @@ public class CompanyDetails extends javax.swing.JFrame {
 
         jLabel7.setText("Bank Name");
 
-        txtBankname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBanknameActionPerformed(evt);
-            }
-        });
-
         jLabel8.setText("A/C No.");
-
-        txtAccount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtAccountActionPerformed(evt);
-            }
-        });
 
         jLabel9.setText("IFSC");
 
@@ -261,7 +345,7 @@ public class CompanyDetails extends javax.swing.JFrame {
 
         pnlBankDetailsLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAccount, txtBankname, txtIFSC});
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblCompanyDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -272,25 +356,35 @@ public class CompanyDetails extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        tblCompanyDetails.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCompanyDetailsMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblCompanyDetails);
 
-        jButton3.setText("SAVE");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("SAVE");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
-        jButton4.setText("CLEAR");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnClear.setText("CLEAR");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnClearActionPerformed(evt);
             }
         });
 
-        jButton5.setText("DELETE");
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("PRINT");
+        btnPrint.setText("PRINT");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -304,17 +398,17 @@ public class CompanyDetails extends javax.swing.JFrame {
                     .addComponent(jScrollPane3)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(btnSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
+                        .addComponent(btnClear)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)
+                        .addComponent(btnDelete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)))
+                        .addComponent(btnPrint)))
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton3, jButton4, jButton5, jButton6});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnClear, btnDelete, btnPrint, btnSave});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,14 +421,14 @@ public class CompanyDetails extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(btnSave)
+                    .addComponent(btnClear)
+                    .addComponent(btnDelete)
+                    .addComponent(btnPrint))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton3, jButton4, jButton5, jButton6});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnClear, btnDelete, btnPrint, btnSave});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -351,32 +445,33 @@ public class CompanyDetails extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        txtCompanyName.setText("");
-        txtGSTIN.setText("");
-        txtOfficeaddress.setText("");
-        txtEmail.setText("");
-        txtMobile.setText("");
-        txtLandline.setText("");
-        txtBankname.setText("");
-        txtAccount.setText("");
-        txtIFSC.setText("");
-        txtCompanyName.requestFocus();
-    }//GEN-LAST:event_jButton4ActionPerformed
+        clearField();
+    }//GEN-LAST:event_btnClearActionPerformed
 
-    private void txtBanknameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBanknameActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBanknameActionPerformed
+        saveData();
+        clearField();
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void txtAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAccountActionPerformed
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAccountActionPerformed
+        getCompanyData();
+        clearField();
+    }//GEN-LAST:event_formWindowOpened
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
+        deleteData();
+        clearField();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblCompanyDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCompanyDetailsMouseClicked
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblCompanyDetailsMouseClicked
 
     /**
      * @param args the command line arguments
@@ -414,10 +509,10 @@ public class CompanyDetails extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnPrint;
+    private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -431,9 +526,9 @@ public class CompanyDetails extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JPanel pnlBankDetails;
     private javax.swing.JPanel pnlCompanyDetails;
+    private javax.swing.JTable tblCompanyDetails;
     private javax.swing.JTextField txtAccount;
     private javax.swing.JTextField txtBankname;
     private javax.swing.JTextField txtCompanyName;

@@ -108,6 +108,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap(303, Short.MAX_VALUE))
         );
 
+        mnuCompanyDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/factory_16px.png"))); // NOI18N
         mnuCompanyDetails.setText("Company Details");
 
         mnuManageCompanyDetails.setText("Manage Company Details");
@@ -129,6 +130,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuCompanyDetails);
 
+        mnuClients.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/client_management_16px.png"))); // NOI18N
         mnuClients.setText("Clients");
 
         mnuManageClient.setText("Manage Client");
@@ -141,6 +143,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuClients);
 
+        mnuProducts.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/products_16px.png"))); // NOI18N
         mnuProducts.setText("Products");
 
         mnuManageProduct.setText("Manage Product");
@@ -153,9 +156,11 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuProducts);
 
+        mnuSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/search_16px.png"))); // NOI18N
         mnuSearch.setText("Search");
         jMenuBar1.add(mnuSearch);
 
+        mnuQuotations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/quotation_16px.png"))); // NOI18N
         mnuQuotations.setText("Quotations");
 
         mnuCreateQuotation.setText("Create Quotation");
@@ -172,6 +177,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuQuotations);
 
+        mnuInvoices.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/invoice_16px.png"))); // NOI18N
         mnuInvoices.setText("Invoices");
 
         mnuCreateInvoice.setText("Create Invoice");
@@ -188,6 +194,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuInvoices);
 
+        mnuChallan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/challan_16px.png"))); // NOI18N
         mnuChallan.setText("Challan");
 
         mnuCreateChallan.setText("Create Challan");
@@ -204,6 +211,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuChallan);
 
+        mnuPayments.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/payment_16px.png"))); // NOI18N
         mnuPayments.setText("Payments");
 
         mnuManagePayments.setText("Manage Payments");
@@ -211,6 +219,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuPayments);
 
+        mnuReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/report_16px.png"))); // NOI18N
         mnuReports.setText("Reports");
         jMenuBar1.add(mnuReports);
 
