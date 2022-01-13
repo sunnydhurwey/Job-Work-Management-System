@@ -5,14 +5,24 @@
  */
 package job.work.management.system;
 
+import java.awt.Color;
+import static java.lang.Thread.sleep;
 import java.sql.Connection;
-import java.sql.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,9 +30,30 @@ import javax.swing.JOptionPane;
  */
 public class Dashboard extends javax.swing.JFrame {
 
-    Connection conn=null;
+    Connection conn=null,connect=null;
     ResultSet rs=null;
     PreparedStatement pst=null;
+    
+    public void con() throws UnknownHostException, SocketException{
+
+        try {
+            connect = javaconnect.ConnectDB();
+            if(connect == null){
+                lblConnectionStatus.setText("OFFLINE");
+                lblConnectionStatus.setForeground(Color.RED);
+            }
+            else{
+                lblConnectionStatus.setText("ONLINE");
+                lblConnectionStatus.setForeground(Color.GREEN);
+            }   
+        } finally {
+            if (connect != null) try { connect.close(); } catch (SQLException e) {}
+        }
+        
+       
+        InetAddress ip = InetAddress.getLocalHost();
+        lblIPAddress.setText("IP ADDRESS IS : "+ip);             
+    }
     /**
      * Creates new form Dashboard
      */
@@ -30,6 +61,47 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
         conn=javaconnect.ConnectDB();
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+    }
+    
+    public void CurrentDate(){   
+        Thread clock;
+        clock = new Thread(){
+            @Override
+            public void run(){
+                for(;;){
+                    Calendar cal=new GregorianCalendar();
+//                    int month=cal.get(Calendar.MONTH);
+//                    int day=cal.get(Calendar.DAY_OF_MONTH);
+//                    int year=cal.get(Calendar.YEAR);
+//                    lblDate.setText(day+"-"+month+"-"+year);
+                    LocalDate myDateObj= LocalDate.now();
+                    DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String formatedDate = myDateObj.format(myFormatObj);
+                    lblDate.setText(""+formatedDate);
+                    
+
+                    int second= cal.get(Calendar.SECOND);
+                    int minute=cal.get(Calendar.MINUTE);
+                    int hour=cal.get(Calendar.HOUR);
+                    String AM_PM = cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM";
+                    lblTime.setText(hour+":"+minute+":"+second+" "+AM_PM);   
+                    try {
+                        sleep(1000);
+                    } 
+                    catch (InterruptedException ex) {
+                        //Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    try {
+                        con();
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SocketException ex) {
+                        Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        };
+        clock.start();  
     }
 
     /**
@@ -46,6 +118,11 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         lblConnectionStatus = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
+        lblTime = new javax.swing.JLabel();
+        lblIPAddress = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuCompanyDetails = new javax.swing.JMenu();
         mnuManageCompanyDetails = new javax.swing.JMenuItem();
@@ -57,6 +134,8 @@ public class Dashboard extends javax.swing.JFrame {
         mnuManageProduct = new javax.swing.JMenuItem();
         mnuProcess = new javax.swing.JMenu();
         mnuManageProcess = new javax.swing.JMenuItem();
+        mnuMaterial = new javax.swing.JMenu();
+        mnuManageMaterial = new javax.swing.JMenuItem();
         mnuSearch = new javax.swing.JMenu();
         mnuQuotations = new javax.swing.JMenu();
         mnuCreateQuotation = new javax.swing.JMenuItem();
@@ -75,7 +154,7 @@ public class Dashboard extends javax.swing.JFrame {
         mnuReports = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("S. I. GEARS - Job Work Management  System");
+        setTitle("S. I. GEARS - Job Work Management  System * Developed By CODERS TECHNOLOGIES");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -96,13 +175,34 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Version 1.0");
 
-        lblConnectionStatus.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        lblConnectionStatus.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblConnectionStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblConnectionStatus.setText("-");
+        lblConnectionStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblConnectionStatus.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("CONNECTION STATUS");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("TIME");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("DATE");
+
+        lblDate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblDate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        lblTime.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        lblIPAddress.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        lblIPAddress.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIPAddress.setText("------IP ADDRESS------");
+        lblIPAddress.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -116,21 +216,41 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(lblConnectionStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                    .addComponent(lblDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                                    .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblConnectionStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(lblIPAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblConnectionStatus)
-                .addGap(97, 97, 97)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblConnectionStatus)
+                        .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblIPAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(319, Short.MAX_VALUE))
+                .addContainerGap(347, Short.MAX_VALUE))
         );
 
         mnuCompanyDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/factory_16px.png"))); // NOI18N
@@ -193,6 +313,19 @@ public class Dashboard extends javax.swing.JFrame {
         mnuProcess.add(mnuManageProcess);
 
         jMenuBar1.add(mnuProcess);
+
+        mnuMaterial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/material_16px.png"))); // NOI18N
+        mnuMaterial.setText("Material");
+
+        mnuManageMaterial.setText("Manage Material");
+        mnuManageMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuManageMaterialActionPerformed(evt);
+            }
+        });
+        mnuMaterial.add(mnuManageMaterial);
+
+        jMenuBar1.add(mnuMaterial);
 
         mnuSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/search_16px.png"))); // NOI18N
         mnuSearch.setText("Search");
@@ -278,6 +411,7 @@ public class Dashboard extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //Function to check database connection
     private void mnuCreateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateInvoiceActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mnuCreateInvoiceActionPerformed
@@ -304,6 +438,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        CurrentDate();
     }//GEN-LAST:event_formWindowOpened
 
     private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
@@ -320,6 +455,11 @@ public class Dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
         ManageProcess.getObj().setVisible(true);
     }//GEN-LAST:event_mnuManageProcessActionPerformed
+
+    private void mnuManageMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageMaterialActionPerformed
+        // TODO add your handling code here:
+        ManageMaterial.getObj().setVisible(true);
+    }//GEN-LAST:event_mnuManageMaterialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,7 +499,9 @@ public class Dashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -367,6 +509,9 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JLabel lblConnectionStatus;
+    private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblIPAddress;
+    private javax.swing.JLabel lblTime;
     private javax.swing.JMenu mnuChallan;
     private javax.swing.JMenu mnuClients;
     private javax.swing.JMenu mnuCompanyDetails;
@@ -379,10 +524,12 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuManageClient;
     private javax.swing.JMenuItem mnuManageCompanyDetails;
     private javax.swing.JMenuItem mnuManageInvoice;
+    private javax.swing.JMenuItem mnuManageMaterial;
     private javax.swing.JMenuItem mnuManagePayments;
     private javax.swing.JMenuItem mnuManageProcess;
     private javax.swing.JMenuItem mnuManageProduct;
     private javax.swing.JMenuItem mnuManageQuotation;
+    private javax.swing.JMenu mnuMaterial;
     private javax.swing.JMenu mnuPayments;
     private javax.swing.JMenu mnuProcess;
     private javax.swing.JMenu mnuProducts;

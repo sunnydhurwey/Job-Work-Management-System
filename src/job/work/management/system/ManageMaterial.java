@@ -18,7 +18,7 @@ import net.proteanit.sql.DbUtils;
  *
  * @author sunny
  */
-public class ManageProcess extends javax.swing.JFrame {
+public class ManageMaterial extends javax.swing.JFrame {
 
     Connection conn=null;
     ResultSet rs=null;
@@ -26,17 +26,17 @@ public class ManageProcess extends javax.swing.JFrame {
     /**
      * Creates new form ManageProcess
      */
-    public ManageProcess() {
+    public ManageMaterial() {
         initComponents();
         conn=javaconnect.ConnectDB();
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
 
      //Program to set single instance of Manage Product
-    private static ManageProcess obj=null;
-    public static ManageProcess getObj(){
+    private static ManageMaterial obj=null;
+    public static ManageMaterial getObj(){
         if(obj==null){
-            obj=new ManageProcess();
+            obj=new ManageMaterial();
         }
         return obj;
     }
@@ -51,13 +51,13 @@ public class ManageProcess extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        txtProcess = new javax.swing.JTextField();
+        txtMaterial = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblProcess = new javax.swing.JTable();
+        tblMaterial = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Process - JOB WORK MANAGEMENT SYSTEM");
@@ -67,7 +67,7 @@ public class ManageProcess extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Process List", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Material List", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
@@ -103,7 +103,7 @@ public class ManageProcess extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtProcess)
+                    .addComponent(txtMaterial)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnAdd)
@@ -121,7 +121,7 @@ public class ManageProcess extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(txtProcess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
@@ -131,7 +131,7 @@ public class ManageProcess extends javax.swing.JFrame {
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
-        tblProcess.setModel(new javax.swing.table.DefaultTableModel(
+        tblMaterial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -142,12 +142,12 @@ public class ManageProcess extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblProcess.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblMaterial.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblProcessMouseClicked(evt);
+                tblMaterialMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblProcess);
+        jScrollPane1.setViewportView(tblMaterial);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -190,13 +190,13 @@ public class ManageProcess extends javax.swing.JFrame {
     String count,tblClick;
     public void getTableDataToField(){
         try{
-            row=tblProcess.getSelectedRow();
-            tblClick=tblProcess.getModel().getValueAt(row, 0).toString();
-            String sql="SELECT * FROM process WHERE uid='"+tblClick+"'";
+            row=tblMaterial.getSelectedRow();
+            tblClick=tblMaterial.getModel().getValueAt(row, 0).toString();
+            String sql="Select * from material where uid='"+tblClick+"'";
             pst=conn.prepareStatement(sql);
             rs=pst.executeQuery();
             if(rs.next()){
-                txtProcess.setText(rs.getString("processname"));
+                txtMaterial.setText(rs.getString("materialname"));
             }else{
                 JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
             }
@@ -214,10 +214,10 @@ public class ManageProcess extends javax.swing.JFrame {
     //Function to getData
     public void getData(){
         try{
-            String sql="SELECT * FROM process";
+            String sql="SELECT * FROM material";
             pst=conn.prepareStatement(sql);
             rs=pst.executeQuery();
-            tblProcess.setModel(DbUtils.resultSetToTableModel(rs));
+            tblMaterial.setModel(DbUtils.resultSetToTableModel(rs));
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -231,21 +231,21 @@ public class ManageProcess extends javax.swing.JFrame {
     }
     //Function to clearField
     public void clearField(){
-        txtProcess.setText("");
+        txtMaterial.setText("");
     }
     //Function to add process
-    public void addProcess(){
+    public void addMaterial(){
         try{
-            String sql="INSERT INTO process (processname) VALUES (?)";
+            String sql="INSERT INTO material (materialname) VALUES (?)";
             pst=conn.prepareStatement(sql);
-            pst.setString(1, txtProcess.getText());
+            pst.setString(1, txtMaterial.getText());
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Process added to database","Added",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Material added to database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
             //getProductsData();
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addProcess() Exception",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,e, "addMaterial() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 pst.close();
@@ -254,18 +254,18 @@ public class ManageProcess extends javax.swing.JFrame {
             }
         }
     }
-    //Function to update process
-    public void updateProcess(){
+    //Function to update material
+    public void updateMaterial(){
         try{
-            String sql="UPDATE process SET processname=? WHERE uid='"+tblClick+"'";
+            String sql="UPDATE material SET materialname=? WHERE uid='"+tblClick+"'";
             pst=conn.prepareStatement(sql);
-            pst.setString(1, txtProcess.getText());            
+            pst.setString(1, txtMaterial.getText());            
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Process data updated on database","Updated",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Material data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"updateProcess() Exception",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e,"updateMaterial() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 pst.close();
@@ -274,17 +274,17 @@ public class ManageProcess extends javax.swing.JFrame {
             }
         }
     }
-    //Function to delete process
-    public void deleteProcess(){
+    //Function to delete material
+    public void deleteMaterial(){
         try{
-            String sql="DELETE FROM process WHERE uid='"+tblClick+"'";
+            String sql="DELETE FROM material WHERE uid='"+tblClick+"'";
             pst=conn.prepareStatement(sql);
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Process deleted from database","Deleted",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Material deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteProcess() Exception",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e,"deleteMaterial() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 pst.close();
@@ -297,17 +297,17 @@ public class ManageProcess extends javax.swing.JFrame {
     
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:        
-        addProcess();
+        addMaterial();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        updateProcess();
+        updateMaterial();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        deleteProcess();
+        deleteMaterial();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -316,10 +316,10 @@ public class ManageProcess extends javax.swing.JFrame {
         clearField();
     }//GEN-LAST:event_formWindowOpened
 
-    private void tblProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProcessMouseClicked
+    private void tblMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMaterialMouseClicked
         // TODO add your handling code here:
         getTableDataToField();
-    }//GEN-LAST:event_tblProcessMouseClicked
+    }//GEN-LAST:event_tblMaterialMouseClicked
 
     
     /**
@@ -339,20 +339,21 @@ public class ManageProcess extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageProcess().setVisible(true);
+                new ManageMaterial().setVisible(true);
             }
         });
     }
@@ -365,7 +366,7 @@ public class ManageProcess extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblProcess;
-    private javax.swing.JTextField txtProcess;
+    private javax.swing.JTable tblMaterial;
+    private javax.swing.JTextField txtMaterial;
     // End of variables declaration//GEN-END:variables
 }
