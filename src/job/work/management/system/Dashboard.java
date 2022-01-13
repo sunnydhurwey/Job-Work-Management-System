@@ -55,6 +55,8 @@ public class Dashboard extends javax.swing.JFrame {
         mnuManageClient = new javax.swing.JMenuItem();
         mnuProducts = new javax.swing.JMenu();
         mnuManageProduct = new javax.swing.JMenuItem();
+        mnuProcess = new javax.swing.JMenu();
+        mnuManageProcess = new javax.swing.JMenuItem();
         mnuSearch = new javax.swing.JMenu();
         mnuQuotations = new javax.swing.JMenu();
         mnuCreateQuotation = new javax.swing.JMenuItem();
@@ -179,6 +181,19 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuProducts);
 
+        mnuProcess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/process_16px.png"))); // NOI18N
+        mnuProcess.setText("Process");
+
+        mnuManageProcess.setText("Manage Process");
+        mnuManageProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuManageProcessActionPerformed(evt);
+            }
+        });
+        mnuProcess.add(mnuManageProcess);
+
+        jMenuBar1.add(mnuProcess);
+
         mnuSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/search_16px.png"))); // NOI18N
         mnuSearch.setText("Search");
         jMenuBar1.add(mnuSearch);
@@ -301,6 +316,11 @@ public class Dashboard extends javax.swing.JFrame {
         CreateQuotation.getObj().setVisible(true);
     }//GEN-LAST:event_mnuCreateQuotationActionPerformed
 
+    private void mnuManageProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageProcessActionPerformed
+        // TODO add your handling code here:
+        ManageProcess.getObj().setVisible(true);
+    }//GEN-LAST:event_mnuManageProcessActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -360,9 +380,11 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuManageCompanyDetails;
     private javax.swing.JMenuItem mnuManageInvoice;
     private javax.swing.JMenuItem mnuManagePayments;
+    private javax.swing.JMenuItem mnuManageProcess;
     private javax.swing.JMenuItem mnuManageProduct;
     private javax.swing.JMenuItem mnuManageQuotation;
     private javax.swing.JMenu mnuPayments;
+    private javax.swing.JMenu mnuProcess;
     private javax.swing.JMenu mnuProducts;
     private javax.swing.JMenu mnuQuotations;
     private javax.swing.JMenu mnuReports;

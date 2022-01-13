@@ -5,13 +5,19 @@
  */
 package job.work.management.system;
 
+import java.awt.Image;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -19,14 +25,19 @@ import javax.swing.JOptionPane;
  */
 public class ManageProduct extends javax.swing.JFrame {
 
+    Connection conn=null;
+    ResultSet rs=null;
+    PreparedStatement pst=null;
     /**
      * Creates new form AddProduct
      */
     public ManageProduct() {
         initComponents();
+        conn=javaconnect.ConnectDB();
+        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
 
-    //Program to set single instance of Add Product
+    //Program to set single instance of Manage Product
     private static ManageProduct obj=null;
     public static ManageProduct getObj(){
         if(obj==null){
@@ -63,7 +74,12 @@ public class ManageProduct extends javax.swing.JFrame {
         tblProducts = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Add Product - Job Work Management System");
+        setTitle("Manage Products - Job Work Management System");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Product Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
@@ -72,12 +88,27 @@ public class ManageProduct extends javax.swing.JFrame {
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnUpdate.setText("UPDATE");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnPrint.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnPrint.setText("PRINT");
@@ -156,14 +187,15 @@ public class ManageProduct extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(btnAdd)
                                 .addComponent(btnUpdate)
                                 .addComponent(btnDelete)
                                 .addComponent(btnPrint))
-                            .addComponent(btnSelectImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSelectImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -188,6 +220,11 @@ public class ManageProduct extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProducts);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -226,6 +263,7 @@ public class ManageProduct extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //Function to select image
     private ImageIcon format=null;
     String filename=null;
     int s=0;
@@ -246,11 +284,175 @@ public class ManageProduct extends javax.swing.JFrame {
                 baos.write(buf,0,readNum);
             }
             product_image=baos.toByteArray();
+            ImageIcon icon = new ImageIcon(product_image);
+            Image img=icon.getImage();
+            Image imgScale=img.getScaledInstance(lblPicture.getWidth(),lblPicture.getHeight(),Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon=new ImageIcon(imgScale);
+            lblPicture.setIcon(scaledIcon);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, e);
         }
         
     }//GEN-LAST:event_btnSelectImageActionPerformed
+
+    //Function to add product
+    public void addProduct(){
+        try{
+            String sql="INSERT INTO products (productname,description,hsn,image) VALUES (?,?,?,?)";
+            pst=conn.prepareStatement(sql);
+            pst.setString(1, txtProductName.getText());
+            pst.setString(2, txtDescription.getText());
+            pst.setString(3, txtHSNCode.getText());
+            pst.setBytes(4, product_image);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Product added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getData();
+            clearField();
+            //getProductsData();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,e, "addProduct() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    
+    //Function to clear field
+    public void clearField(){
+        txtProductName.setText("");
+        txtDescription.setText("");
+        txtHSNCode.setText("");
+        lblPicture.setIcon(null);
+        txtImagePath.setText("");
+    }
+    //Function to get data from databse to table
+    public void getData(){
+        try{
+            String sql="SELECT * FROM products";
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            tblProducts.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                rs.close();
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    
+    //Function to get table data to field
+    int row;
+    String count,tblClick;
+    public void getTableDataToField(){
+        try{
+            row=tblProducts.getSelectedRow();
+            tblClick=tblProducts.getModel().getValueAt(row, 0).toString();
+            String sql="Select * from products where uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            if(rs.next()){
+                txtProductName.setText(rs.getString("productname"));
+                txtDescription.setText(rs.getString("description"));
+                txtHSNCode.setText(rs.getString("hsn"));
+                byte[] imagedata=rs.getBytes("image");
+                if(imagedata !=null){
+                    ImageIcon icon =new ImageIcon(imagedata);
+                    Image img=icon.getImage();
+                    Image imgScale=img.getScaledInstance(lblPicture.getWidth(),lblPicture.getHeight(),Image.SCALE_SMOOTH);
+                    ImageIcon scaledIcon=new ImageIcon(imgScale);
+                    lblPicture.setIcon(scaledIcon);
+                }else{
+                    lblPicture.setIcon(null);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                rs.close();
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    
+    //Function to update product
+    public void updateProduct(){
+        try{
+            String sql="UPDATE products SET productname=?, description=?, hsn=?, image=? WHERE uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            pst.setString(1, txtProductName.getText());
+            pst.setString(2, txtDescription.getText());
+            pst.setString(3, txtHSNCode.getText());
+            pst.setBytes(4, product_image);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Product data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getData();
+            clearField();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"updateProduct() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    
+    //Fucntion to delete product from database
+    public void deleteProduct(){
+        try{
+            String sql="DELETE FROM products WHERE uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Product deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getData();
+            clearField();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"deleteProduct() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        addProduct();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        getData();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblProductsMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        updateProduct();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        deleteProduct();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
