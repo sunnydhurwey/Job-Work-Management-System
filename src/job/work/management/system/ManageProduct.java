@@ -81,10 +81,15 @@ public class ManageProduct extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Product Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel1.setText("Product Name");
+
+        txtProductName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
@@ -116,6 +121,8 @@ public class ManageProduct extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel8.setText("Description");
 
+        txtDescription.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
         lblPicture.setBackground(new java.awt.Color(204, 204, 204));
         lblPicture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPicture.setBorder(new javax.swing.border.MatteBorder(null));
@@ -134,6 +141,8 @@ public class ManageProduct extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel9.setText("HSN Code");
+
+        txtHSNCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         txtImagePath.setEnabled(false);
 
@@ -211,13 +220,13 @@ public class ManageProduct extends javax.swing.JFrame {
 
         tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -308,7 +317,6 @@ public class ManageProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Product added to database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
-            //getProductsData();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null,e, "addProduct() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -335,6 +343,7 @@ public class ManageProduct extends javax.swing.JFrame {
             pst=conn.prepareStatement(sql);
             rs=pst.executeQuery();
             tblProducts.setModel(DbUtils.resultSetToTableModel(rs));
+            txtProductName.requestFocus();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -399,6 +408,7 @@ public class ManageProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Product data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
+            txtProductName.requestFocus();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e,"updateProduct() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -419,6 +429,7 @@ public class ManageProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Product deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
+            txtProductName.requestFocus();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e,"deleteProduct() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{

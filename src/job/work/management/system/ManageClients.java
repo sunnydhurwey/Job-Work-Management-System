@@ -5,17 +5,31 @@
  */
 package job.work.management.system;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author sunny
  */
 public class ManageClients extends javax.swing.JFrame {
+    
+    Connection conn=null;
+    ResultSet rs=null;
+    PreparedStatement pst=null;
 
     /**
      * Creates new form AddClient
      */
     public ManageClients() {
         initComponents();
+        conn=javaconnect.ConnectDB();
+        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
 
     //Program to set single instance of ManageClients
@@ -37,70 +51,105 @@ public class ManageClients extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtClientname = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtAddress = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtMobile = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtLandline = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtClientCompanyName = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        txtGSTIN = new javax.swing.JTextField();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblClient = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Client - Job Work Management System");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Client Details"));
 
         jLabel1.setText("Client Name");
 
+        txtClientname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
         jLabel2.setText("Address");
+
+        txtAddress.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel3.setText("Email Address");
 
+        txtEmail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
         jLabel4.setText("Mobile Number");
+
+        txtMobile.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel5.setText("Landline Number");
 
+        txtLandline.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
         jLabel6.setText("Clients Company Name (If Client is a Firm, Company or any other Organization)");
+
+        txtClientCompanyName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel7.setText("GSTIN");
 
-        jLabel8.setText("Office Address");
+        txtGSTIN.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton1.setText("ADD");
+        btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton2.setText("UPDATE");
+        btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnUpdate.setText("UPDATE");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton3.setText("DELETE");
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblClient.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblClient.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClientMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblClient);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -112,94 +161,88 @@ public class ManageClients extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
+                            .addComponent(jLabel7))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField8)
-                            .addComponent(jTextField7)
-                            .addComponent(jTextField6)
-                            .addComponent(jTextField2)
+                            .addComponent(txtGSTIN)
+                            .addComponent(txtClientCompanyName)
+                            .addComponent(txtAddress)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtLandline, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtClientname, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton1)
+                                .addComponent(btnAdd)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
+                                .addComponent(btnUpdate)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3))
+                                .addComponent(btnDelete))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnDelete, btnUpdate});
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField4, jTextField5});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtLandline, txtMobile});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtClientname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtLandline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtClientCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextField1, jTextField2, jTextField3, jTextField4, jTextField5, jTextField6, jTextField7, jTextField8});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAddress, txtClientCompanyName, txtClientname, txtEmail, txtGSTIN, txtLandline, txtMobile});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -221,6 +264,170 @@ public class ManageClients extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    //Function or method to get client data
+    public void getData(){
+        try{
+            String sql="SELECT * FROM clients";
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            tblClient.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                rs.close();
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    //Function to getTableDataToField
+    int row;
+    String count,tblClick;
+    public void getTableDataToField(){
+        try{
+            row=tblClient.getSelectedRow();
+            tblClick=tblClient.getModel().getValueAt(row, 0).toString();
+            String sql="Select * from clients where uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            rs=pst.executeQuery();
+            if(rs.next()){
+                txtClientname.setText(rs.getString("clientname"));
+                txtAddress.setText(rs.getString("address"));
+                txtEmail.setText(rs.getString("email"));
+                txtMobile.setText(rs.getString("mobile"));
+                txtLandline.setText(rs.getString("landline"));
+                txtClientCompanyName.setText(rs.getString("clientcompanyname"));
+                txtGSTIN.setText(rs.getString("gstin"));                
+            }else{
+                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                rs.close();
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    //Function to clearField
+    public void clearField(){
+        txtClientname.setText("");
+        txtAddress.setText("");
+        txtEmail.setText("");
+        txtMobile.setText("");
+        txtLandline.setText("");
+        txtClientCompanyName.setText("");
+        txtGSTIN.setText("");
+        txtClientname.requestFocus();
+    }
+    //Function to add process
+    public void addClient(){
+        try{
+            String sql="INSERT INTO clients (clientname,address,email,mobile,landline,clientcompanyname,gstin) VALUES (?,?,?,?,?,?,?)";
+            pst=conn.prepareStatement(sql);
+            pst.setString(1, txtClientname.getText());
+            pst.setString(2, txtAddress.getText());
+            pst.setString(3, txtEmail.getText());
+            pst.setString(4, txtMobile.getText());
+            pst.setString(5, txtLandline.getText());
+            pst.setString(6, txtClientCompanyName.getText());
+            pst.setString(7, txtGSTIN.getText());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Client added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getData();
+            clearField();
+            txtClientname.requestFocus();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,e, "addClient() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    //Function to update material
+    public void updateClient(){
+        try{
+            String sql="UPDATE clients SET clientname=?,address=?,email=?,mobile=?,"
+                    + "landline=?,clientcompanyname=?,gstin=? WHERE uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            pst.setString(1, txtClientname.getText());
+            pst.setString(2, txtAddress.getText());
+            pst.setString(3, txtEmail.getText());
+            pst.setString(4, txtMobile.getText());
+            pst.setString(5, txtLandline.getText());
+            pst.setString(6, txtClientCompanyName.getText());
+            pst.setString(7, txtGSTIN.getText());           
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Client data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getData();
+            clearField();
+            txtClientname.requestFocus();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"updateClient() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    //Function to delete material
+    public void deleteClient(){
+        try{
+            String sql="DELETE FROM clients WHERE uid='"+tblClick+"'";
+            pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Client deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
+            getData();
+            clearField();
+            txtClientname.requestFocus();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e,"deleteClient() Exception",JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                pst.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        addClient();
+        clearField();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        updateClient();
+        clearField();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        deleteClient();
+        clearField();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        getData();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void tblClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientMouseClicked
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblClientMouseClicked
 
     /**
      * @param args the command line arguments
@@ -259,9 +466,9 @@ public class ManageClients extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -269,17 +476,15 @@ public class ManageClients extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTable tblClient;
+    private javax.swing.JTextField txtAddress;
+    private javax.swing.JTextField txtClientCompanyName;
+    private javax.swing.JTextField txtClientname;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtGSTIN;
+    private javax.swing.JTextField txtLandline;
+    private javax.swing.JTextField txtMobile;
     // End of variables declaration//GEN-END:variables
 }

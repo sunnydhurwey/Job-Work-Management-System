@@ -69,6 +69,8 @@ public class ManageMaterial extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Material List", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
+        txtMaterial.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -243,7 +245,7 @@ public class ManageMaterial extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Material added to database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
-            //getProductsData();
+            txtMaterial.requestFocus();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null,e, "addMaterial() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -264,6 +266,7 @@ public class ManageMaterial extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Material data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
+            txtMaterial.requestFocus();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e,"updateMaterial() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -283,6 +286,7 @@ public class ManageMaterial extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Material deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
+            txtMaterial.requestFocus();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e,"deleteMaterial() Exception",JOptionPane.ERROR_MESSAGE);
         }finally{
