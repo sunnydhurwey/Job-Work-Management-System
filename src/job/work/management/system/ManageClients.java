@@ -79,32 +79,39 @@ public class ManageClients extends javax.swing.JFrame {
         });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Client Details"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Client Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel1.setText("Client Name");
 
         txtClientname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Address");
 
         txtAddress.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel3.setText("Email Address");
 
         txtEmail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel4.setText("Mobile Number");
 
         txtMobile.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setText("Landline Number");
 
         txtLandline.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel6.setText("Clients Company Name (If Client is a Firm, Company or any other Organization)");
 
         txtClientCompanyName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("GSTIN");
 
         txtGSTIN.setHorizontalAlignment(javax.swing.JTextField.CENTER);
