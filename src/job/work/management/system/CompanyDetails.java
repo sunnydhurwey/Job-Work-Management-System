@@ -366,6 +366,11 @@ public class CompanyDetails extends javax.swing.JFrame {
                 tblCompanyDetailsMouseClicked(evt);
             }
         });
+        tblCompanyDetails.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblCompanyDetailsKeyPressed(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblCompanyDetails);
 
         btnSave.setText("SAVE");
@@ -477,6 +482,11 @@ public class CompanyDetails extends javax.swing.JFrame {
         // TODO add your handling code here:
         getTableDataToField();
     }//GEN-LAST:event_tblCompanyDetailsMouseClicked
+
+    private void tblCompanyDetailsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCompanyDetailsKeyPressed
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblCompanyDetailsKeyPressed
 
     /**
      * @param args the command line arguments

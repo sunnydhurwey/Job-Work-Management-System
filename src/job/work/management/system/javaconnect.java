@@ -18,8 +18,9 @@ public class javaconnect {
     Connection conn=null;
     public static Connection ConnectDB(){
         try{
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn=DriverManager.getConnection("jdbc:mysql://localhost/si_db","si_root","si_root");
+//            Connection conn=DriverManager.getConnection("jdbc:mysql://localhost/si_db","si_root","si_root");
             return conn;
         }catch(ClassNotFoundException | SQLException e){
             JOptionPane.showMessageDialog(null, e);

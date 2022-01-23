@@ -146,6 +146,11 @@ public class ManageMaterial extends javax.swing.JFrame {
                 tblMaterialMouseClicked(evt);
             }
         });
+        tblMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblMaterialKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblMaterial);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -321,6 +326,11 @@ public class ManageMaterial extends javax.swing.JFrame {
         // TODO add your handling code here:
         getTableDataToField();
     }//GEN-LAST:event_tblMaterialMouseClicked
+
+    private void tblMaterialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblMaterialKeyPressed
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblMaterialKeyPressed
 
     
     /**

@@ -234,6 +234,11 @@ public class ManageProduct extends javax.swing.JFrame {
                 tblProductsMouseClicked(evt);
             }
         });
+        tblProducts.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblProductsKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProducts);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -464,6 +469,11 @@ public class ManageProduct extends javax.swing.JFrame {
         // TODO add your handling code here:
         deleteProduct();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblProductsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblProductsKeyPressed
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblProductsKeyPressed
 
     /**
      * @param args the command line arguments

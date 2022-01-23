@@ -414,6 +414,7 @@ public class Dashboard extends javax.swing.JFrame {
     //Function to check database connection
     private void mnuCreateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateInvoiceActionPerformed
         // TODO add your handling code here:
+//        CreateInvoice.getObj().setVisible(true);
     }//GEN-LAST:event_mnuCreateInvoiceActionPerformed
 
     private void mnuManageChallanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageChallanActionPerformed

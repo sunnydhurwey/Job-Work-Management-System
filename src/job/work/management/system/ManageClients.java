@@ -156,6 +156,11 @@ public class ManageClients extends javax.swing.JFrame {
                 tblClientMouseClicked(evt);
             }
         });
+        tblClient.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblClientKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblClient);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -435,6 +440,11 @@ public class ManageClients extends javax.swing.JFrame {
         // TODO add your handling code here:
         getTableDataToField();
     }//GEN-LAST:event_tblClientMouseClicked
+
+    private void tblClientKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblClientKeyPressed
+        // TODO add your handling code here:
+        getTableDataToField();
+    }//GEN-LAST:event_tblClientKeyPressed
 
     /**
      * @param args the command line arguments
