@@ -61,7 +61,8 @@ public class CompanyDetails extends javax.swing.JFrame {
     String companyname,gstin,offaddress,email,bankname,accountno,ifsc,mobile,landline;
     public void saveData(){
         try{
-            String sql="INSERT INTO companydetails (name,gstin,officeaddress,email,mobile,landline,bankname,accountno,ifsc) VALUES (?,?,?,?,?,?,?,?,?)";
+            String sql="INSERT INTO companydetails (c_name,c_gstin,c_officeaddress,c_email,c_mobile,c_landline,c_bankname,"
+                    + "c_accountno,c_ifsc) VALUES (?,?,?,?,?,?,?,?,?)";
             pst=conn.prepareStatement(sql);
             pst.setString(1, txtCompanyName.getText());
             pst.setString(2, txtGSTIN.getText());
@@ -93,19 +94,19 @@ public class CompanyDetails extends javax.swing.JFrame {
         try{
             row=tblCompanyDetails.getSelectedRow();
             tblClick=tblCompanyDetails.getModel().getValueAt(row, 0).toString();
-            String sql="Select * from companydetails where uid='"+tblClick+"'";
+            String sql="Select * from companydetails where c_uid='"+tblClick+"'";
             pst=conn.prepareStatement(sql);
             rs=pst.executeQuery();
             if(rs.next()){
-                txtCompanyName.setText(rs.getString("name"));
-                txtGSTIN.setText(rs.getString("gstin"));
-                txtOfficeaddress.setText(rs.getString("officeaddress"));
-                txtEmail.setText(rs.getString("email"));
-                txtMobile.setText(rs.getString("mobile"));
-                txtLandline.setText(rs.getString("landline"));
-                txtBankname.setText(rs.getString("bankname"));
-                txtAccount.setText(rs.getString("accountno"));
-                txtIFSC.setText(rs.getString("ifsc"));
+                txtCompanyName.setText(rs.getString("c_name"));
+                txtGSTIN.setText(rs.getString("c_gstin"));
+                txtOfficeaddress.setText(rs.getString("c_officeaddress"));
+                txtEmail.setText(rs.getString("c_email"));
+                txtMobile.setText(rs.getString("c_mobile"));
+                txtLandline.setText(rs.getString("c_landline"));
+                txtBankname.setText(rs.getString("c_bankname"));
+                txtAccount.setText(rs.getString("c_accountno"));
+                txtIFSC.setText(rs.getString("c_ifsc"));
             }else{
                 JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
             }
@@ -123,7 +124,7 @@ public class CompanyDetails extends javax.swing.JFrame {
     //Function to delete record
     public void deleteData(){
         try{
-            String sql="DELETE FROM companydetails WHERE uid='"+tblClick+"'";
+            String sql="DELETE FROM companydetails WHERE c_uid='"+tblClick+"'";
             pst=conn.prepareStatement(sql);
             pst.execute();
             JOptionPane.showMessageDialog(null, "Data deleted from database","Deleted",JOptionPane.PLAIN_MESSAGE);
