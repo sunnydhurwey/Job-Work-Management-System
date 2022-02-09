@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7f62f15-4504-441e-adbd-44a459d89536">
+	<property name="ireport.zoom" value="3.1384283767210177"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="158"/>
+	<queryString>
+		<![CDATA[SELECT * FROM joborder,companydetails,gatepass]]>
+	</queryString>
+	<field name="uid" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="quotationno" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientid" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="productname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="processname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="materialname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="remark" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="t" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="w" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="od" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tl" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="m" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dp" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="std" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rate" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="amount" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_uid" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_gstin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_officeaddress" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_mobile" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_landline" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_bankname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_accountno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="c_ifsc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_uid" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_no" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_porgpno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_firmname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_qno" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_qdate" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_drivername" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_mobile" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gp_vehicleno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="description" class="java.lang.String" resetType="None" calculation="Count">
+		<variableExpression><![CDATA["T-"+$F{t}+" W-"+$F{w}+" OD-"+$F{od}+" TL-"+$F{tl}+" M-"+$F{m}+" DP-"+$F{dp}+" START-"+$F{std}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image hAlign="Center">
+				<reportElement x="4" y="5" width="80" height="69" uuid="d8609013-5634-4df8-8a61-011e593b52b3"/>
+				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job Work Management System\\src\\job\\work\\images\\Satyam Gears1.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="bbba416d-18af-44ae-8982-30545c8de86a"/>
+			</line>
+			<line>
+				<reportElement x="0" y="78" width="555" height="1" uuid="c71cf204-7477-4fee-9b09-03dfdd55cced"/>
+			</line>
+			<textField>
+				<reportElement x="1" y="5" width="554" height="26" uuid="abcfd41e-6267-4d75-82d7-78b9dd5de36f"/>
+				<textElement textAlignment="Center">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{c_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="31" width="555" height="15" uuid="89ce1c8c-aeb0-4b08-9784-b7ca57ee4119"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{c_officeaddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="46" width="555" height="14" uuid="85ae865c-eaf0-492d-bc40-2f1274182068"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[" Landline: "+$F{c_landline}+" Mobile: "+$F{c_mobile}+" Email: "+$F{c_email}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="554" y="1" width="1" height="78" uuid="b899ff8d-f916-411e-8c80-08c65c6680f2"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="79" uuid="a811a49a-611a-4508-9e17-b81750dc6447"/>
+			</line>
+			<textField>
+				<reportElement x="4" y="60" width="551" height="14" uuid="34aa6504-807a-405e-8be2-9707165f3510"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["GSTIN: "+$F{c_gstin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="81" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="-1" width="1" height="66" uuid="5783b76b-fc6f-4b8e-acd4-1ed0eaff6bd1"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="2" width="550" height="18" uuid="f56ff392-e701-43a0-ac9e-52f6010c22c3"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[DELIVERY CHALLAN / GATE PASS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="554" y="-1" width="1" height="66" uuid="1160735c-a0f6-43d9-94c6-da2bef0edcf1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="20" width="554" height="1" uuid="540fa5c1-bc29-4999-8dec-36f5790b36db"/>
+			</line>
+			<textField>
+				<reportElement x="4" y="23" width="177" height="14" uuid="808fcbed-c69a-4c18-92aa-fea4855c59f2"/>
+				<textFieldExpression><![CDATA["Gate Pass No.: "+$F{gp_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="449" y="23" width="102" height="14" uuid="6c9ae08a-5049-41b5-ae4e-34b4761515e8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["DATE : "+$F{gp_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4" y="37" width="295" height="14" uuid="be7617a0-004e-45cb-8b45-3c7730e6cb83"/>
+				<textFieldExpression><![CDATA["Firm Name : "+$F{gp_firmname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="346" y="37" width="205" height="14" uuid="167442e2-6d95-44ef-9e1d-e65ccb75cf18"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["PO/GRNO : "+$F{gp_porgpno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="51" width="131" height="14" uuid="f97a500a-24e6-4532-86b5-2687b86f52db"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Dated : "+$F{gp_qdate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="64" width="553" height="1" uuid="449dc805-1d3d-49b0-9220-0f0f2d4b4785"/>
+			</line>
+			<line>
+				<reportElement x="554" y="64" width="1" height="17" uuid="d75d4fef-fb61-4a08-984b-f88df472bb66"/>
+			</line>
+			<line>
+				<reportElement x="335" y="64" width="1" height="17" uuid="9a96422f-9f1d-4fd6-8290-3ec82fe3982f"/>
+			</line>
+			<line>
+				<reportElement x="382" y="64" width="1" height="17" uuid="f5ed3148-ff37-4914-b01e-619ac36f12ca"/>
+			</line>
+			<line>
+				<reportElement x="0" y="64" width="1" height="17" uuid="07ec5fdc-f2d9-446a-a213-097809d53a4b"/>
+			</line>
+			<line>
+				<reportElement x="43" y="64" width="1" height="17" uuid="78ddc66a-cd2d-4f62-8c7b-67e8774d6612"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="65" width="41" height="16" uuid="b314055c-0577-4f0e-8ecd-888c69a88884"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Sr. No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="44" y="65" width="291" height="16" uuid="48ac0149-0b73-4390-9856-36e1ab0663ac"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ITEM / DESCRIPTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="65" width="47" height="16" uuid="64bb291d-ef85-41c2-a166-95d4903322cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="65" width="171" height="16" uuid="a855be63-675e-44ee-bf6b-b734f86a1e0e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[REMARK]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="80" width="555" height="1" uuid="fd45bfda-b6e9-4376-b645-8eff76b0cb20"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="29" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="1" height="28" uuid="3515a866-4a64-4c8e-8344-b0bccb08326b"/>
+			</line>
+			<line>
+				<reportElement x="43" y="0" width="1" height="28" uuid="78251cfd-6e28-4659-90fb-3e7356ca647c"/>
+			</line>
+			<line>
+				<reportElement x="554" y="0" width="1" height="28" uuid="0853c2ce-73b7-4a64-a97e-202c3f699a32"/>
+			</line>
+			<line>
+				<reportElement x="335" y="0" width="1" height="28" uuid="4f4948f6-df47-42b5-b6c5-feb30e7e8d42"/>
+			</line>
+			<line>
+				<reportElement x="382" y="0" width="1" height="28" uuid="04011fa3-7257-4960-ae02-0075735cadc6"/>
+			</line>
+			<textField>
+				<reportElement x="1" y="0" width="42" height="14" uuid="fa528aa1-1d74-4f9c-8cd8-bf322ee36b0e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="44" y="0" width="291" height="14" uuid="9f9a11cd-667f-4f4e-baa4-14150e911ea5"/>
+				<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="28" width="553" height="1" uuid="d7380a5b-f00c-4dfd-80d6-c24e93aa28ab"/>
+			</line>
+			<textField>
+				<reportElement x="336" y="0" width="46" height="28" uuid="f443c632-a059-439b-bc43-84adf6f5a16c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="383" y="0" width="166" height="28" uuid="0c4b9b70-ed73-4efe-ac7d-3d7f7ffed814"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{remark}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="44" y="14" width="291" height="14" uuid="c2f1b90d-5236-43ec-88a9-d9ea92004790"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="62" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="60" width="555" height="1" uuid="c881522b-1f3f-4c02-9115-d8b3f5c88274"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="60" uuid="60c6e42e-0a37-4088-8cbb-1bcaf7d3ebf2"/>
+			</line>
+			<line>
+				<reportElement x="554" y="0" width="1" height="60" uuid="5f485f43-d2c3-49eb-8748-cdf4a0abef5a"/>
+			</line>
+			<line>
+				<reportElement x="170" y="0" width="1" height="60" uuid="81ef9a30-d16e-4858-bcb5-fe06480e007e"/>
+			</line>
+			<line>
+				<reportElement x="382" y="0" width="1" height="60" uuid="b3abb27d-186d-4e80-be02-e16bc7b85ce2"/>
+			</line>
+			<line>
+				<reportElement x="171" y="18" width="211" height="1" uuid="b0a70923-c9d6-4784-9b4d-d92bfb18d6e3"/>
+			</line>
+			<line>
+				<reportElement x="171" y="39" width="211" height="1" uuid="9dbdfa08-e015-4f56-acee-1728f2733bf7"/>
+			</line>
+			<textField>
+				<reportElement x="238" y="0" width="144" height="18" uuid="f6e5e4ee-67f7-46b6-9ca2-aaaaa0273992"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{gp_drivername}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="238" y="19" width="144" height="20" uuid="396bdf70-df3d-4774-9b6e-faefbffc6157"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{gp_mobile}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="238" y="40" width="144" height="20" uuid="b10a178c-c828-4029-bef1-dd1f76e3b00b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{gp_vehicleno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="171" y="0" width="67" height="18" uuid="cd941b1e-31b4-43a4-af83-f6df33359df7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Driver Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="19" width="67" height="20" uuid="59422ed0-9540-4244-b9d3-1bfae5172b23"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Mobile:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="41" width="67" height="19" uuid="9bd247c0-af46-4ab9-806b-b0d0798daa2c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Vehicle No.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="42" width="168" height="18" uuid="19e9bb21-1886-4844-a967-d7caffe5d37d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Customer Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="44" width="171" height="16" uuid="5119520f-d987-4b7f-8df1-2d4c65e7928e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Seal or Signature]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

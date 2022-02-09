@@ -30,7 +30,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *
  * @author sunny
  */
-public class CreateQuotation extends javax.swing.JFrame {
+public class CreateInvoice extends javax.swing.JFrame {
 
     Connection conn = null;
     ResultSet rs = null, rs2 = null;
@@ -39,7 +39,7 @@ public class CreateQuotation extends javax.swing.JFrame {
     /**
      * Creates new form CreateQuotation
      */
-    public CreateQuotation() {
+    public CreateInvoice() {
         initComponents();
         conn = javaconnect.ConnectDB();
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
@@ -57,34 +57,34 @@ public class CreateQuotation extends javax.swing.JFrame {
     }
 
     //Program to set single instance of ManageClients
-    private static CreateQuotation obj = null;
+    private static CreateInvoice obj = null;
 
-    public static CreateQuotation getObj() {
+    public static CreateInvoice getObj() {
         if (obj == null) {
-            obj = new CreateQuotation();
+            obj = new CreateInvoice();
         }
         return obj;
     }
 
     //Function or method to get data from database
-    int qno = 0;
+    int qno = 0,invno=0;
 
-    public void getQuotationID() {
+    public void getInvoiceID() {
         try {
-            String sql = "SELECT * FROM quotation";
+            String sql = "SELECT * FROM invoice";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
             while (rs.next()) {
-                qno = rs.getInt("quotationno");
+                invno = rs.getInt("invoiceno");
             }
-            qno++;
-            txtQuotationNo.setText(String.valueOf(qno));
-            btnSaveQuotation.setEnabled(true);
-            btnUpdateQuotation.setEnabled(false);
-            btnDeleteQuotation.setEnabled(false);
-            btnPrintQuotation.setEnabled(false);
+            invno++;
+            txtInvoiceNo.setText(String.valueOf(invno));
+            btnSaveInvoice.setEnabled(true);
+            btnUpdateInvoice.setEnabled(false);
+            btnDeleteInvoice.setEnabled(false);
+            btnPrintInvoice.setEnabled(false);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e, "getInvoiceID() Exception", JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
                 rs.close();
@@ -97,7 +97,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
     //Function or method to set current date to jdatechooser
     public void getDate() {
-        jDateChooser1.setDateFormatString("YYYY-MM-DD");
+        jDateChooser1.setDateFormatString("yyyy-MM-dd");
         java.util.Date date = new java.util.Date();
         jDateChooser1.setDate(date);
     }
@@ -239,10 +239,11 @@ public class CreateQuotation extends javax.swing.JFrame {
                 txtSubTotal.setText(rs2.getString("subtotal"));
                 txtGSTAmount.setText(rs2.getString("gstamt"));
                 txtGrandTotal.setText(rs2.getString("totalamt"));
-                btnSaveQuotation.setEnabled(false);
-                btnUpdateQuotation.setEnabled(true);
-                btnDeleteQuotation.setEnabled(true);
-                btnPrintQuotation.setEnabled(true);
+//                txtAreaTC.setText(rs2.getString("termsconditions"));
+                btnSaveInvoice.setEnabled(true);
+                btnUpdateInvoice.setEnabled(false);
+                btnDeleteInvoice.setEnabled(false);
+                btnPrintInvoice.setEnabled(false);
             } else {
                 cmbClientName.setSelectedItem("");
                 cmbCompany.setSelectedItem("");
@@ -257,10 +258,10 @@ public class CreateQuotation extends javax.swing.JFrame {
                 txtSubTotal.setText("0");
                 txtGSTAmount.setText("0");
                 txtGrandTotal.setText("0");
-                btnSaveQuotation.setEnabled(true);
-                btnUpdateQuotation.setEnabled(false);
-                btnDeleteQuotation.setEnabled(false);
-                btnPrintQuotation.setEnabled(false);
+                btnSaveInvoice.setEnabled(true);
+                btnUpdateInvoice.setEnabled(false);
+                btnDeleteInvoice.setEnabled(false);
+                btnPrintInvoice.setEnabled(false);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e, "getQuotationDataCALC() Exception", JOptionPane.ERROR_MESSAGE);
@@ -274,6 +275,62 @@ public class CreateQuotation extends javax.swing.JFrame {
         }
     }
 
+    //Function or method to get invoice data on invoice number entry
+    public void getInvoiceData(){
+        try {
+            String sql = "SELECT * FROM invoice WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            pst = conn.prepareStatement(sql);
+            rs2 = pst.executeQuery();
+            if (rs2.next()) {
+                txtQuotationNo.setText(rs2.getString("quotationno"));
+                cmbClientName.setSelectedItem(rs2.getString("clientname"));
+                cmbCompany.setSelectedItem(rs2.getString("company"));
+                cmbAddress.setSelectedItem(rs2.getString("address"));
+                cmbEmail.setSelectedItem(rs2.getString("email"));
+                cmbMobile.setSelectedItem(rs2.getString("mobile"));
+                cmbLandline.setSelectedItem(rs2.getString("landline"));
+                cmbGSTIN.setSelectedItem(rs2.getString("gstin"));
+                txtGSTPer.setText(rs2.getString("gstper"));
+                txtBasicPrice.setText(rs2.getString("basicprice"));
+                txtDiscount.setText(rs2.getString("discount"));
+                txtSubTotal.setText(rs2.getString("subtotal"));
+                txtGSTAmount.setText(rs2.getString("gstamt"));
+                txtGrandTotal.setText(rs2.getString("totalamt"));
+                txtAreaTC.setText(rs2.getString("termsconditions"));
+                btnSaveInvoice.setEnabled(false);
+                btnUpdateInvoice.setEnabled(true);
+                btnDeleteInvoice.setEnabled(true);
+                btnPrintInvoice.setEnabled(true);
+            } else {
+                cmbClientName.setSelectedItem("");
+                cmbCompany.setSelectedItem("");
+                cmbAddress.setSelectedItem("");
+                cmbEmail.setSelectedItem("");
+                cmbMobile.setSelectedItem("");
+                cmbLandline.setSelectedItem("");
+                cmbGSTIN.setSelectedItem("");
+                txtGSTPer.setText("0");
+                txtBasicPrice.setText("0");
+                txtDiscount.setText("0");
+                txtSubTotal.setText("0");
+                txtGSTAmount.setText("0");
+                txtGrandTotal.setText("0");
+                btnSaveInvoice.setEnabled(true);
+                btnUpdateInvoice.setEnabled(false);
+                btnDeleteInvoice.setEnabled(false);
+                btnPrintInvoice.setEnabled(false);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "getInvoiceData() Exception", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                rs2.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e, "getInvoiceData() Exception", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
     //Function or method to clear client data field
     public void clearClientData() {
         cmbClientName.setSelectedItem("");
@@ -582,11 +639,11 @@ public class CreateQuotation extends javax.swing.JFrame {
         txtGrandTotal.setText(String.valueOf(grandTotal));
     }
     
-    //Function to save quotation
-    public void saveQuotation(){
+    //Function to save invoice
+    public void saveInvoice(){
         try {
-            String sql = "INSERT INTO quotation (quotationno,date,clientname,company,address,email,mobile,landline,gstin,basicprice,"
-                    + "discount,subtotal,gstper,gstamt,totalamt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO invoice (quotationno,date,clientname,company,address,email,mobile,landline,gstin,basicprice,"
+                    + "discount,subtotal,gstper,gstamt,totalamt,termsconditions,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement(sql);
             pst.setString(1, txtQuotationNo.getText());
             pst.setString(2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
@@ -603,13 +660,13 @@ public class CreateQuotation extends javax.swing.JFrame {
             pst.setString(13, txtGSTPer.getText());
             pst.setString(14, txtGSTAmount.getText());
             pst.setString(15, txtGrandTotal.getText());
+            pst.setString(16, txtAreaTC.getText());
+            pst.setString(17, txtInvoiceNo.getText());
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Quotation saved to database", "Saved", JOptionPane.PLAIN_MESSAGE);
-//            getData();
-//            clearProductField();
+            JOptionPane.showMessageDialog(null, "Invoice saved to database", "Saved", JOptionPane.PLAIN_MESSAGE);
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "saveQuotation() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e, "saveInvoice() Exception", JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
                 pst.close();
@@ -619,32 +676,34 @@ public class CreateQuotation extends javax.swing.JFrame {
         }
     }
     
-    //Function or method to update existing quotation
-    public void updateQuotation(){
+    //Function or method to update existing invoice
+    public void updateInvoice(){
         try {
-            String sql = "UPDATE quotation SET date=?,clientname=?,company=?,address=?,email=?,mobile=?,"
-                    + "landline=?,gstin=?,basicprice=?,discount=?,subtotal=?,gstper=?,gstamt=?,totalamt=?"
-                    + "WHERE quotationno='"+txtQuotationNo.getText()+"'";
-            pst = conn.prepareStatement(sql);            
-            pst.setString(1, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
-            pst.setString(2, cmbClientName.getEditor().getItem().toString());
-            pst.setString(3, cmbCompany.getSelectedItem().toString());
-            pst.setString(4, cmbAddress.getSelectedItem().toString());
-            pst.setString(5, cmbEmail.getSelectedItem().toString());
-            pst.setString(6, cmbMobile.getSelectedItem().toString());
-            pst.setString(7, cmbLandline.getSelectedItem().toString());
-            pst.setString(8, cmbGSTIN.getSelectedItem().toString());
-            pst.setString(9, txtBasicPrice.getText());
-            pst.setString(10, txtDiscount.getText());
-            pst.setString(11, txtSubTotal.getText());
-            pst.setString(12, txtGSTPer.getText());
-            pst.setString(13, txtGSTAmount.getText());
-            pst.setString(14, txtGrandTotal.getText());
+            String sql = "UPDATE invoice SET quotationno=?,date=?,clientname=?,company=?,address=?,email=?,mobile=?,"
+                    + "landline=?,gstin=?,basicprice=?,discount=?,subtotal=?,gstper=?,gstamt=?,totalamt=?,termsconditions=? "
+                    + "WHERE invoiceno='"+txtInvoiceNo.getText()+"'";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, txtQuotationNo.getText());
+            pst.setString(2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
+            pst.setString(3, cmbClientName.getEditor().getItem().toString());
+            pst.setString(4, cmbCompany.getSelectedItem().toString());
+            pst.setString(5, cmbAddress.getSelectedItem().toString());
+            pst.setString(6, cmbEmail.getSelectedItem().toString());
+            pst.setString(7, cmbMobile.getSelectedItem().toString());
+            pst.setString(8, cmbLandline.getSelectedItem().toString());
+            pst.setString(9, cmbGSTIN.getSelectedItem().toString());
+            pst.setString(10, txtBasicPrice.getText());
+            pst.setString(11, txtDiscount.getText());
+            pst.setString(12, txtSubTotal.getText());
+            pst.setString(13, txtGSTPer.getText());
+            pst.setString(14, txtGSTAmount.getText());
+            pst.setString(15, txtGrandTotal.getText());
+            pst.setString(16, txtAreaTC.getText());
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Quotation modified on database", "Updated", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invoice modified on database", "Updated", JOptionPane.PLAIN_MESSAGE);
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "updateQuotation() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e, "updateInvoice() Exception", JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
                 pst.close();
@@ -655,13 +714,13 @@ public class CreateQuotation extends javax.swing.JFrame {
     }
 
     //Function or method to delete saved Quotation
-    public void deleteQuotation(){
+    public void deleteInvoice(){
         try{
-            String sql="DELETE FROM quotation WHERE quotationno='"+txtQuotationNo.getText()+"'";
+            String sql="DELETE FROM invoice WHERE invoiceno='"+txtInvoiceNo.getText()+"'";
             pst=conn.prepareStatement(sql);
             pst.execute();
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, "deleteQuotation() Exception", "Quotation Deleted", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "deleteInvoice() Exception", "Invoice Deleted", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 rs.close();
@@ -734,6 +793,7 @@ public class CreateQuotation extends javax.swing.JFrame {
     public void printOptions(){
         try{
             String qno=txtQuotationNo.getText();
+            String invno=txtInvoiceNo.getText();
             //String[] choice={"CGST+SSGT Invoice","IGST Invoice"};
             String[] choice={"Landscape","Portrait"};
             //Integer[] options = {1, 3, 5, 7, 9, 11};
@@ -745,9 +805,9 @@ public class CreateQuotation extends javax.swing.JFrame {
             //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
             if(x == 0){
                 try{
-                    String sql="Select * from quotation,joborder,companydetails where quotation.quotationno='"+qno+"' "
-                            + "AND joborder.quotationno='"+qno+"'";
-                    JasperDesign jd= JRXmlLoader.load("src/reports/quotationLS.jrxml");
+                    String sql="Select * from quotation,joborder,companydetails,invoice where quotation.quotationno='"+qno+"'"
+                            + "AND joborder.quotationno='"+qno+"' AND invoice.quotationno='"+invno+"'";
+                    JasperDesign jd= JRXmlLoader.load("src/reports/invoiceLS.jrxml");
                     JRDesignQuery qry=new JRDesignQuery();
                     qry.setText(sql);
                     jd.setQuery(qry);
@@ -760,9 +820,9 @@ public class CreateQuotation extends javax.swing.JFrame {
             }
             else{
                 try{
-                    String sql="Select * from quotation,joborder,companydetails where quotation.quotationno='"+qno+"' "
-                            + "AND joborder.quotationno='"+qno+"'";
-                    JasperDesign jd= JRXmlLoader.load("src/reports/quotationPT.jrxml");
+                    String sql="SELECT * FROM quotation,joborder,companydetails,invoice WHERE quotation.quotationno='"+qno+"'"
+                            + "AND joborder.quotationno='"+qno+"' AND invoice.quotationno='"+invno+"'";
+                    JasperDesign jd= JRXmlLoader.load("src/reports/invoicePT.jrxml");
                     JRDesignQuery qry=new JRDesignQuery();
                     qry.setText(sql);
                     jd.setQuery(qry);
@@ -844,6 +904,8 @@ public class CreateQuotation extends javax.swing.JFrame {
         txtQuotationNo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel31 = new javax.swing.JLabel();
+        txtInvoiceNo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblQuotation = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
@@ -859,13 +921,16 @@ public class CreateQuotation extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        btnSaveQuotation = new javax.swing.JButton();
-        btnUpdateQuotation = new javax.swing.JButton();
-        btnDeleteQuotation = new javax.swing.JButton();
-        btnPrintQuotation = new javax.swing.JButton();
+        btnSaveInvoice = new javax.swing.JButton();
+        btnUpdateInvoice = new javax.swing.JButton();
+        btnDeleteInvoice = new javax.swing.JButton();
+        btnPrintInvoice = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAreaTC = new javax.swing.JTextArea();
+        jLabel30 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("QUOTATION BUILDER - JOB WORK MANAGEMENT SYSTEM");
+        setTitle("INVOICE BUILDER - JOB WORK MANAGEMENT SYSTEM");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -877,10 +942,10 @@ public class CreateQuotation extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Client Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel1.setText("Client Name");
 
         cmbClientName.setEditable(true);
+        cmbClientName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbClientName.setRequestFocusEnabled(true);
         cmbClientName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -894,6 +959,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbCompany.setEditable(true);
+        cmbCompany.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbCompany.setRequestFocusEnabled(true);
         cmbCompany.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -902,6 +968,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbAddress.setEditable(true);
+        cmbAddress.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbAddress.setRequestFocusEnabled(true);
         cmbAddress.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -910,6 +977,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbEmail.setEditable(true);
+        cmbEmail.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbEmail.setRequestFocusEnabled(true);
         cmbEmail.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -918,6 +986,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbMobile.setEditable(true);
+        cmbMobile.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbMobile.setRequestFocusEnabled(true);
         cmbMobile.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -926,6 +995,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbLandline.setEditable(true);
+        cmbLandline.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbLandline.setRequestFocusEnabled(true);
         cmbLandline.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -934,6 +1004,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbGSTIN.setEditable(true);
+        cmbGSTIN.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbGSTIN.setRequestFocusEnabled(true);
         cmbGSTIN.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -941,22 +1012,16 @@ public class CreateQuotation extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Clients Company Name");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel3.setText("Email");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel4.setText("Mobile");
 
-        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel24.setText("Address");
 
-        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel25.setText("LandLine");
 
-        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel26.setText("GSTIN");
 
         btnSaveClient.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
@@ -1003,7 +1068,7 @@ public class CreateQuotation extends javax.swing.JFrame {
                         .addComponent(jLabel26)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSaveClient)))
                 .addContainerGap())
         );
@@ -1031,9 +1096,10 @@ public class CreateQuotation extends javax.swing.JFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Job Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Job Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         cmbProductName.setEditable(true);
+        cmbProductName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbProductName.setNextFocusableComponent(cmbProcess);
         cmbProductName.setRequestFocusEnabled(true);
         cmbProductName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1043,6 +1109,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbProcess.setEditable(true);
+        cmbProcess.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbProcess.setNextFocusableComponent(cmbMaterial);
         cmbProcess.setRequestFocusEnabled(true);
         cmbProcess.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1052,6 +1119,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         });
 
         cmbMaterial.setEditable(true);
+        cmbMaterial.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         cmbMaterial.setNextFocusableComponent(txtT);
         cmbMaterial.setRequestFocusEnabled(true);
         cmbMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1060,63 +1128,64 @@ public class CreateQuotation extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setText("Product Name");
 
         txtT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtT.setText("0");
+        txtT.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("AMOUNT");
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("T");
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("W");
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("OD");
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("TL");
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("RATE");
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("QTY");
 
         txtW.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtW.setText("0");
+        txtW.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtOD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtOD.setText("0");
+        txtOD.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtTL.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTL.setText("0");
+        txtTL.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtM.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtM.setText("0");
+        txtM.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtDP.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDP.setText("0");
+        txtDP.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtSTD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSTD.setText("0");
+        txtSTD.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtRate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRate.setText("0");
+        txtRate.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
+        txtQTY.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtQTY.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtQTYKeyPressed(evt);
@@ -1128,6 +1197,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAmount.setText("0");
+        txtAmount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         btnAddProduct.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
@@ -1156,27 +1226,22 @@ public class CreateQuotation extends javax.swing.JFrame {
             }
         });
 
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("M");
 
-        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel22.setText("DP");
 
-        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel23.setText("STD");
 
-        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel27.setText("Process");
 
-        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel28.setText("Material");
 
         txtRemarks.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtRemarks.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jLabel29.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel29.setText("Remarks");
 
         btnAddProductName.setText("+");
@@ -1382,16 +1447,29 @@ public class CreateQuotation extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("DATE");
 
+        jLabel31.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel31.setText("INVOICE NO.");
+
+        txtInvoiceNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtInvoiceNoKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1402,7 +1480,9 @@ public class CreateQuotation extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel6)
                 .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jLabel7))
+                .addComponent(jLabel7)
+                .addComponent(jLabel31)
+                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
@@ -1438,6 +1518,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtGSTPer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTPer.setText("0");
+        txtGSTPer.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtGSTPer.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtGSTPerKeyReleased(evt);
@@ -1446,6 +1527,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtBasicPrice.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtBasicPrice.setText("0");
+        txtBasicPrice.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtBasicPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtBasicPriceActionPerformed(evt);
@@ -1454,6 +1536,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtDiscount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDiscount.setText("0");
+        txtDiscount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtDiscountKeyReleased(evt);
@@ -1462,12 +1545,15 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtSubTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSubTotal.setText("0");
+        txtSubTotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtGSTAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTAmount.setText("0");
+        txtGSTAmount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtGrandTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGrandTotal.setText("0");
+        txtGrandTotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1489,44 +1575,62 @@ public class CreateQuotation extends javax.swing.JFrame {
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("GRAND TOTAL");
 
-        btnSaveQuotation.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btnSaveQuotation.setText("SAVE");
-        btnSaveQuotation.addActionListener(new java.awt.event.ActionListener() {
+        btnSaveInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnSaveInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
+        btnSaveInvoice.setText("SAVE");
+        btnSaveInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveQuotationActionPerformed(evt);
+                btnSaveInvoiceActionPerformed(evt);
             }
         });
 
-        btnUpdateQuotation.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btnUpdateQuotation.setText("UPDATE");
-        btnUpdateQuotation.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdateInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnUpdateInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/update_16px.png"))); // NOI18N
+        btnUpdateInvoice.setText("UPDATE");
+        btnUpdateInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateQuotationActionPerformed(evt);
+                btnUpdateInvoiceActionPerformed(evt);
             }
         });
 
-        btnDeleteQuotation.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btnDeleteQuotation.setText("DELETE");
-        btnDeleteQuotation.addActionListener(new java.awt.event.ActionListener() {
+        btnDeleteInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnDeleteInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/Delete_16px.png"))); // NOI18N
+        btnDeleteInvoice.setText("DELETE");
+        btnDeleteInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteQuotationActionPerformed(evt);
+                btnDeleteInvoiceActionPerformed(evt);
             }
         });
 
-        btnPrintQuotation.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btnPrintQuotation.setText("PRINT");
-        btnPrintQuotation.addActionListener(new java.awt.event.ActionListener() {
+        btnPrintInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnPrintInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/print_16px.png"))); // NOI18N
+        btnPrintInvoice.setText("PRINT");
+        btnPrintInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintQuotationActionPerformed(evt);
+                btnPrintInvoiceActionPerformed(evt);
             }
         });
+
+        txtAreaTC.setColumns(20);
+        txtAreaTC.setRows(10);
+        txtAreaTC.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane2.setViewportView(txtAreaTC);
+
+        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel30.setText("Terms and Conditions");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(640, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel30)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -1553,17 +1657,17 @@ public class CreateQuotation extends javax.swing.JFrame {
                             .addComponent(txtGrandTotal)
                             .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(btnSaveQuotation)
+                        .addComponent(btnSaveInvoice)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdateQuotation)
+                        .addComponent(btnUpdateInvoice)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteQuotation)
+                        .addComponent(btnDeleteInvoice)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPrintQuotation)))
+                        .addComponent(btnPrintInvoice)))
                 .addContainerGap())
         );
 
-        jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDeleteQuotation, btnPrintQuotation, btnSaveQuotation, btnUpdateQuotation});
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDeleteInvoice, btnPrintInvoice, btnSaveInvoice, btnUpdateInvoice});
 
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1574,52 +1678,50 @@ public class CreateQuotation extends javax.swing.JFrame {
                     .addComponent(jLabel17)
                     .addComponent(jLabel18)
                     .addComponent(jLabel19)
-                    .addComponent(jLabel20))
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel30))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdateQuotation)
-                    .addComponent(btnDeleteQuotation)
-                    .addComponent(btnPrintQuotation)
-                    .addComponent(btnSaveQuotation))
-                .addGap(0, 37, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUpdateInvoice)
+                            .addComponent(btnDeleteInvoice)
+                            .addComponent(btnPrintInvoice)
+                            .addComponent(btnSaveInvoice)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1633,13 +1735,13 @@ public class CreateQuotation extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1295, 828));
+        setSize(new java.awt.Dimension(1182, 687));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        getQuotationID();
+        getInvoiceID();
         getDate();
         getClientData();
         getProductData();
@@ -1802,20 +1904,20 @@ public class CreateQuotation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtDiscountKeyReleased
 
-    private void btnSaveQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveQuotationActionPerformed
+    private void btnSaveInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInvoiceActionPerformed
         // TODO add your handling code here:
-        saveQuotation();
-    }//GEN-LAST:event_btnSaveQuotationActionPerformed
+        saveInvoice();
+    }//GEN-LAST:event_btnSaveInvoiceActionPerformed
 
-    private void btnUpdateQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateQuotationActionPerformed
+    private void btnUpdateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateInvoiceActionPerformed
         // TODO add your handling code here:
-        updateQuotation();
-    }//GEN-LAST:event_btnUpdateQuotationActionPerformed
+        updateInvoice();
+    }//GEN-LAST:event_btnUpdateInvoiceActionPerformed
 
-    private void btnDeleteQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteQuotationActionPerformed
+    private void btnDeleteInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteInvoiceActionPerformed
         // TODO add your handling code here:
-        deleteQuotation();
-    }//GEN-LAST:event_btnDeleteQuotationActionPerformed
+        deleteInvoice();
+    }//GEN-LAST:event_btnDeleteInvoiceActionPerformed
 
     private void txtQuotationNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyReleased
         // TODO add your handling code here:
@@ -1854,10 +1956,24 @@ public class CreateQuotation extends javax.swing.JFrame {
         getMaterialData();
     }//GEN-LAST:event_btnAddMaterialNameActionPerformed
 
-    private void btnPrintQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintQuotationActionPerformed
+    private void btnPrintInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintInvoiceActionPerformed
         // TODO add your handling code here:
         printOptions();
-    }//GEN-LAST:event_btnPrintQuotationActionPerformed
+    }//GEN-LAST:event_btnPrintInvoiceActionPerformed
+
+    private void txtInvoiceNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyReleased
+        // TODO add your handling code here:
+        if(!"".equals(txtInvoiceNo.getText())){
+            getInvoiceData();
+            getDataToTable();
+//            getQuotationDataCALC();
+        }else{
+            txtInvoiceNo.setText("0");
+            getInvoiceData();
+            getDataToTable();
+//            getQuotationDataCALC();
+        }        
+    }//GEN-LAST:event_txtInvoiceNoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -1876,20 +1992,21 @@ public class CreateQuotation extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CreateQuotation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CreateQuotation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CreateQuotation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CreateQuotation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CreateQuotation().setVisible(true);
+                new CreateInvoice().setVisible(true);
             }
         });
     }
@@ -1900,12 +2017,12 @@ public class CreateQuotation extends javax.swing.JFrame {
     private javax.swing.JButton btnAddProduct;
     private javax.swing.JButton btnAddProductName;
     private javax.swing.JButton btnClearProduct;
+    private javax.swing.JButton btnDeleteInvoice;
     private javax.swing.JButton btnDeleteProduct;
-    private javax.swing.JButton btnDeleteQuotation;
-    private javax.swing.JButton btnPrintQuotation;
+    private javax.swing.JButton btnPrintInvoice;
     private javax.swing.JButton btnSaveClient;
-    private javax.swing.JButton btnSaveQuotation;
-    private javax.swing.JButton btnUpdateQuotation;
+    private javax.swing.JButton btnSaveInvoice;
+    private javax.swing.JButton btnUpdateInvoice;
     private javax.swing.JComboBox<String> cmbAddress;
     private javax.swing.JComboBox<String> cmbClientName;
     private javax.swing.JComboBox<String> cmbCompany;
@@ -1940,6 +2057,8 @@ public class CreateQuotation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1952,14 +2071,17 @@ public class CreateQuotation extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblQuotation;
     private javax.swing.JTextField txtAmount;
+    private javax.swing.JTextArea txtAreaTC;
     private javax.swing.JTextField txtBasicPrice;
     private javax.swing.JTextField txtDP;
     private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtGSTAmount;
     private javax.swing.JTextField txtGSTPer;
     private javax.swing.JTextField txtGrandTotal;
+    private javax.swing.JTextField txtInvoiceNo;
     private javax.swing.JTextField txtM;
     private javax.swing.JTextField txtOD;
     private javax.swing.JTextField txtQTY;
