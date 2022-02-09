@@ -23,8 +23,8 @@ public class CompanyDetails extends javax.swing.JFrame {
     /**
      * Creates new form CompanyDetails
      */
-    public CompanyDetails() {
-        initComponents();
+    public CompanyDetails(){
+        initComponents(); 
         conn=javaconnect.ConnectDB();
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
@@ -217,6 +217,12 @@ public class CompanyDetails extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel1.setText("Name");
+
+        txtCompanyName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCompanyNameKeyPressed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("GSTIN");
@@ -488,6 +494,10 @@ public class CompanyDetails extends javax.swing.JFrame {
         // TODO add your handling code here:
         getTableDataToField();
     }//GEN-LAST:event_tblCompanyDetailsKeyPressed
+
+    private void txtCompanyNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCompanyNameKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCompanyNameKeyPressed
 
     /**
      * @param args the command line arguments
