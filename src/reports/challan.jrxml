@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7f62f15-4504-441e-adbd-44a459d89536">
-	<property name="ireport.zoom" value="3.1384283767210177"/>
+	<property name="ireport.zoom" value="1.948717100000011"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="158"/>
+	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT * FROM joborder,companydetails,gatepass]]>
 	</queryString>
@@ -131,10 +131,6 @@
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
-			<image hAlign="Center">
-				<reportElement x="4" y="5" width="80" height="69" uuid="d8609013-5634-4df8-8a61-011e593b52b3"/>
-				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job Work Management System\\src\\job\\work\\images\\Satyam Gears1.png"]]></imageExpression>
-			</image>
 			<line>
 				<reportElement x="0" y="0" width="555" height="1" uuid="bbba416d-18af-44ae-8982-30545c8de86a"/>
 			</line>
@@ -169,6 +165,10 @@
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["GSTIN: "+$F{c_gstin}]]></textFieldExpression>
 			</textField>
+			<image hAlign="Center">
+				<reportElement x="4" y="5" width="80" height="69" uuid="d8609013-5634-4df8-8a61-011e593b52b3"/>
+				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job-Work-Management-System-master\\src\\images\\Satyam Gears1.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>

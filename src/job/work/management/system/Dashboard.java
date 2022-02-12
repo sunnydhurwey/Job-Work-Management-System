@@ -58,7 +58,11 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public Dashboard() {
         initComponents();
-        conn=javaconnect.ConnectDB();
+        try{
+            conn=javaconnect.ConnectDB();
+        }catch(UnknownHostException e){
+            System.out.println(e);
+        }
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
     

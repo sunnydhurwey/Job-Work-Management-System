@@ -7,6 +7,7 @@ package job.work.management.system;
 
 import com.sun.glass.events.KeyEvent;
 import java.awt.HeadlessException;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +42,11 @@ public class CreateInvoice extends javax.swing.JFrame {
      */
     public CreateInvoice() {
         initComponents();
-        conn = javaconnect.ConnectDB();
+        try{
+            conn=javaconnect.ConnectDB();
+        }catch(UnknownHostException e){
+            System.out.println(e);
+        }
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
         AutoCompleteDecorator.decorate(cmbClientName);
         AutoCompleteDecorator.decorate(cmbCompany);
@@ -1100,7 +1105,6 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         cmbProductName.setEditable(true);
         cmbProductName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        cmbProductName.setNextFocusableComponent(cmbProcess);
         cmbProductName.setRequestFocusEnabled(true);
         cmbProductName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1110,7 +1114,6 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         cmbProcess.setEditable(true);
         cmbProcess.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        cmbProcess.setNextFocusableComponent(cmbMaterial);
         cmbProcess.setRequestFocusEnabled(true);
         cmbProcess.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1120,7 +1123,6 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         cmbMaterial.setEditable(true);
         cmbMaterial.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        cmbMaterial.setNextFocusableComponent(txtT);
         cmbMaterial.setRequestFocusEnabled(true);
         cmbMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1132,7 +1134,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtT.setText("0");
-        txtT.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtT.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("AMOUNT");
@@ -1157,35 +1159,35 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtW.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtW.setText("0");
-        txtW.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtW.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtOD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtOD.setText("0");
-        txtOD.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtOD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtTL.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTL.setText("0");
-        txtTL.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtTL.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtM.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtM.setText("0");
-        txtM.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtM.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtDP.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDP.setText("0");
-        txtDP.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtDP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtSTD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSTD.setText("0");
-        txtSTD.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtSTD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtRate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRate.setText("0");
-        txtRate.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtRate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
-        txtQTY.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtQTY.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtQTY.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtQTYKeyPressed(evt);
@@ -1197,7 +1199,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAmount.setText("0");
-        txtAmount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtAmount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnAddProduct.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
@@ -1240,7 +1242,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel28.setText("Material");
 
         txtRemarks.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtRemarks.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtRemarks.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel29.setText("Remarks");
 
@@ -1418,7 +1420,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                                 .addComponent(txtSTD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnAddProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(btnAddProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnDeleteProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnClearProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(6, 6, 6))
@@ -1518,7 +1520,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtGSTPer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTPer.setText("0");
-        txtGSTPer.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtGSTPer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtGSTPer.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtGSTPerKeyReleased(evt);
@@ -1527,7 +1529,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtBasicPrice.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtBasicPrice.setText("0");
-        txtBasicPrice.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtBasicPrice.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtBasicPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtBasicPriceActionPerformed(evt);
@@ -1536,7 +1538,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtDiscount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDiscount.setText("0");
-        txtDiscount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtDiscount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtDiscountKeyReleased(evt);
@@ -1545,15 +1547,15 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtSubTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSubTotal.setText("0");
-        txtSubTotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtSubTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtGSTAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTAmount.setText("0");
-        txtGSTAmount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtGSTAmount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtGrandTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGrandTotal.setText("0");
-        txtGrandTotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtGrandTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1655,7 +1657,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtGrandTotal)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 100, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addComponent(btnSaveInvoice)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1724,18 +1726,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(1182, 687));
+        setSize(new java.awt.Dimension(1252, 687));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

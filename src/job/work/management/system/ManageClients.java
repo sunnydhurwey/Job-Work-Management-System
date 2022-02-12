@@ -5,6 +5,7 @@
  */
 package job.work.management.system;
 
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +29,11 @@ public class ManageClients extends javax.swing.JFrame {
      */
     public ManageClients() {
         initComponents();
-        conn=javaconnect.ConnectDB();
+        try{
+            conn=javaconnect.ConnectDB();
+        }catch(UnknownHostException e){
+            System.out.println(e);
+        }
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
 

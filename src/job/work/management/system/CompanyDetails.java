@@ -6,6 +6,7 @@
 package job.work.management.system;
 
 import java.awt.HeadlessException;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.sql.Connection;
 import javax.swing.ImageIcon;
@@ -25,7 +26,12 @@ public class CompanyDetails extends javax.swing.JFrame {
      */
     public CompanyDetails(){
         initComponents(); 
-        conn=javaconnect.ConnectDB();
+        try{
+            conn=javaconnect.ConnectDB();
+        }catch(UnknownHostException e){
+            System.out.println(e);
+        }
+        
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
     //Program to set single instance of this form

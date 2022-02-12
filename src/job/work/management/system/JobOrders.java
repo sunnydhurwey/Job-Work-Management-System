@@ -7,6 +7,7 @@ package job.work.management.system;
 
 import com.sun.glass.events.KeyEvent;
 import java.awt.HeadlessException;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +40,11 @@ public class JobOrders extends javax.swing.JFrame {
      */
     public JobOrders() {
         initComponents();
-        conn = javaconnect.ConnectDB();
+        try{
+            conn=javaconnect.ConnectDB();
+        }catch(UnknownHostException e){
+            System.out.println(e);
+        }
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
         AutoCompleteDecorator.decorate(cmbClientName);
         AutoCompleteDecorator.decorate(cmbProductName);
