@@ -145,24 +145,24 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel24" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbClientName" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbCompany" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbAddress" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel24" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbClientName" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbCompany" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbAddress" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnSaveClient" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbEmail" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbMobile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbGSTIN" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbLandline" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel3" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel4" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel25" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel26" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnSaveClient" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbEmail" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbMobile" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbGSTIN" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbLandline" linkSize="8" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -474,10 +474,10 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnAddProductName" linkSize="5" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cmbProductName" alignment="3" max="32767" attributes="0"/>
-                              <Component id="jLabel27" alignment="3" max="32767" attributes="0"/>
-                              <Component id="cmbProcess" alignment="3" max="32767" attributes="0"/>
+                              <Component id="jLabel5" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cmbProductName" linkSize="5" alignment="3" max="32767" attributes="0"/>
+                              <Component id="jLabel27" linkSize="5" alignment="3" max="32767" attributes="0"/>
+                              <Component id="cmbProcess" linkSize="5" alignment="3" max="32767" attributes="0"/>
                               <Component id="btnAddProcessName" linkSize="5" min="-2" pref="22" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -485,12 +485,12 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabel29" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="jLabel29" linkSize="5" min="-2" pref="25" max="-2" attributes="0"/>
                                   <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="btnAddMaterialName" alignment="1" pref="0" max="32767" attributes="0"/>
+                                      <Component id="btnAddMaterialName" linkSize="5" alignment="1" pref="0" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cmbMaterial" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="cmbMaterial" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel28" linkSize="5" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -498,7 +498,7 @@
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="txtRemarks" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtRemarks" linkSize="5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -513,10 +513,10 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtW" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtOD" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtTL" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtT" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtW" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtOD" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtTL" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtT" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
@@ -528,25 +528,25 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="txtAmount" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtRate" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtQTY" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtAmount" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtRate" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtQTY" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtM" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtM" linkSize="7" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtDP" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtDP" linkSize="7" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtSTD" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtSTD" linkSize="7" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -907,11 +907,11 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtQuotationNo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel6" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtQuotationNo" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel7" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jDateChooser1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jDateChooser1" linkSize="9" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -1061,7 +1061,7 @@
                           <Component id="btnPrintQuotation" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnSaveQuotation" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="37" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="24" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

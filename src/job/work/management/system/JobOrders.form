@@ -41,7 +41,7 @@
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="cc" red="ff" type="rgb"/>
+          <Color blue="cc" green="ff" red="ff" type="rgb"/>
         </Property>
       </Properties>
 
@@ -57,7 +57,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="334" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="332" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -66,7 +66,7 @@
         <Container class="javax.swing.JPanel" name="jPanel2">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="99" green="ff" red="ff" type="rgb"/>
+              <Color blue="cc" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -173,17 +173,16 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="txtQuotationNo" max="32767" attributes="0"/>
+                              <Component id="txtQuotationNo" linkSize="2" min="-2" pref="27" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="dtJobDate" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="dtJobDate" linkSize="2" alignment="0" max="32767" attributes="0"/>
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="cmbClientName" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cmbProductName" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmbClientName" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmbProductName" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -199,17 +198,17 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="txtT" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtW" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtOD" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtTL" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtM" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtDP" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtSTD" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cmbJobStatus" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtAmount" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtT" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtW" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtOD" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtTL" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtM" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtDP" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtSTD" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cmbJobStatus" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton1" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton2" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtAmount" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>

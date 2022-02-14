@@ -113,26 +113,26 @@ public class CreateQuotation extends javax.swing.JFrame {
         cmbProcess.setSelectedIndex(0);
         cmbMaterial.setSelectedIndex(0);
         txtRemarks.setText("");
-        txtT.setText("");
-        txtW.setText("");
-        txtOD.setText("");
-        txtTL.setText("");
-        txtM.setText("");
-        txtDP.setText("");
-        txtSTD.setText("");
-        txtRate.setText("");
-        txtQTY.setText("");
-        txtAmount.setText("");
+        txtT.setText("0");
+        txtW.setText("0");
+        txtOD.setText("0");
+        txtTL.setText("0");
+        txtM.setText("0");
+        txtDP.setText("0");
+        txtSTD.setText("0");
+        txtRate.setText("0");
+        txtQTY.setText("0");
+        txtAmount.setText("0");
     }
 
     //Function or method to clear Quotation Fields
     public void clearQuotationTotals() {
-        txtGSTPer.setText("");
-        txtBasicPrice.setText("");
-        txtDiscount.setText("");
-        txtSubTotal.setText("");
-        txtGSTAmount.setText("");
-        txtGrandTotal.setText("");
+        txtGSTPer.setText("0");
+        txtBasicPrice.setText("0");
+        txtDiscount.setText("0");
+        txtSubTotal.setText("0");
+        txtGSTAmount.setText("0");
+        txtGrandTotal.setText("0");
     }
 
     //Function or method to save client
@@ -1035,6 +1035,8 @@ public class CreateQuotation extends javax.swing.JFrame {
                     .addComponent(cmbLandline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbAddress, cmbClientName, cmbCompany, cmbEmail, cmbGSTIN, cmbLandline, cmbMobile, jLabel1, jLabel2, jLabel24, jLabel25, jLabel26, jLabel3, jLabel4});
+
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Job Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
@@ -1364,7 +1366,9 @@ public class CreateQuotation extends javax.swing.JFrame {
                 .addGap(6, 6, 6))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAddProcessName, btnAddProductName});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAddMaterialName, btnAddProcessName, btnAddProductName, cmbMaterial, cmbProcess, cmbProductName, jLabel27, jLabel28, jLabel29, jLabel5, txtRemarks});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAmount, txtDP, txtM, txtOD, txtQTY, txtRate, txtSTD, txtT, txtTL, txtW});
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 153));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1410,6 +1414,8 @@ public class CreateQuotation extends javax.swing.JFrame {
                 .addComponent(jLabel7))
             .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jDateChooser1, jLabel6, jLabel7, txtQuotationNo});
 
         tblQuotation.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1594,7 +1600,7 @@ public class CreateQuotation extends javax.swing.JFrame {
                     .addComponent(btnDeleteQuotation)
                     .addComponent(btnPrintQuotation)
                     .addComponent(btnSaveQuotation))
-                .addGap(0, 37, Short.MAX_VALUE))
+                .addGap(0, 24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

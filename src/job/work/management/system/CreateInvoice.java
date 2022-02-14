@@ -113,26 +113,26 @@ public class CreateInvoice extends javax.swing.JFrame {
         cmbProcess.setSelectedIndex(0);
         cmbMaterial.setSelectedIndex(0);
         txtRemarks.setText("");
-        txtT.setText("");
-        txtW.setText("");
-        txtOD.setText("");
-        txtTL.setText("");
-        txtM.setText("");
-        txtDP.setText("");
-        txtSTD.setText("");
-        txtRate.setText("");
-        txtQTY.setText("");
-        txtAmount.setText("");
+        txtT.setText("0");
+        txtW.setText("0");
+        txtOD.setText("0");
+        txtTL.setText("0");
+        txtM.setText("0");
+        txtDP.setText("0");
+        txtSTD.setText("0");
+        txtRate.setText("0");
+        txtQTY.setText("0");
+        txtAmount.setText("0");
     }
 
     //Function or method to clear Quotation Fields
     public void clearQuotationTotals() {
-        txtGSTPer.setText("");
-        txtBasicPrice.setText("");
-        txtDiscount.setText("");
-        txtSubTotal.setText("");
-        txtGSTAmount.setText("");
-        txtGrandTotal.setText("");
+        txtGSTPer.setText("0");
+        txtBasicPrice.setText("0");
+        txtDiscount.setText("0");
+        txtSubTotal.setText("0");
+        txtGSTAmount.setText("0");
+        txtGrandTotal.setText("0");
     }
 
     //Function or method to save client
@@ -950,7 +950,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel1.setText("Client Name");
 
         cmbClientName.setEditable(true);
-        cmbClientName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbClientName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbClientName.setRequestFocusEnabled(true);
         cmbClientName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -964,7 +964,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbCompany.setEditable(true);
-        cmbCompany.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbCompany.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbCompany.setRequestFocusEnabled(true);
         cmbCompany.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -973,7 +973,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbAddress.setEditable(true);
-        cmbAddress.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbAddress.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbAddress.setRequestFocusEnabled(true);
         cmbAddress.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -982,7 +982,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbEmail.setEditable(true);
-        cmbEmail.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbEmail.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbEmail.setRequestFocusEnabled(true);
         cmbEmail.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -991,7 +991,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbMobile.setEditable(true);
-        cmbMobile.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbMobile.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbMobile.setRequestFocusEnabled(true);
         cmbMobile.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1000,7 +1000,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbLandline.setEditable(true);
-        cmbLandline.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbLandline.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbLandline.setRequestFocusEnabled(true);
         cmbLandline.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1009,7 +1009,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbGSTIN.setEditable(true);
-        cmbGSTIN.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbGSTIN.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbGSTIN.setRequestFocusEnabled(true);
         cmbGSTIN.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1100,11 +1100,13 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addComponent(cmbLandline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbAddress, cmbClientName, cmbCompany, cmbEmail, cmbGSTIN, cmbLandline, cmbMobile, jLabel1, jLabel2, jLabel24, jLabel25, jLabel26, jLabel3, jLabel4});
+
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Job Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         cmbProductName.setEditable(true);
-        cmbProductName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbProductName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbProductName.setRequestFocusEnabled(true);
         cmbProductName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1113,7 +1115,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbProcess.setEditable(true);
-        cmbProcess.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbProcess.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbProcess.setRequestFocusEnabled(true);
         cmbProcess.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1122,7 +1124,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         cmbMaterial.setEditable(true);
-        cmbMaterial.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmbMaterial.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cmbMaterial.setRequestFocusEnabled(true);
         cmbMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1426,7 +1428,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addGap(6, 6, 6))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAddProcessName, btnAddProductName});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAddMaterialName, btnAddProcessName, btnAddProductName, cmbMaterial, cmbProcess, cmbProductName, jLabel27, jLabel28, jLabel29, jLabel5, txtRemarks});
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 153));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1487,6 +1489,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jDateChooser1, jLabel31, jLabel6, jLabel7, txtInvoiceNo, txtQuotationNo});
 
         tblQuotation.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1657,7 +1661,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtGrandTotal)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 100, Short.MAX_VALUE)))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addComponent(btnSaveInvoice)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1728,7 +1732,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(1252, 687));
+        setSize(new java.awt.Dimension(1252, 689));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

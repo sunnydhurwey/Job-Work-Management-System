@@ -5,6 +5,7 @@
  */
 package job.work.management.system;
 
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,32 +20,34 @@ import net.proteanit.sql.DbUtils;
  * @author sunny
  */
 public class ManageClients extends javax.swing.JFrame {
-    
-    Connection conn=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+
+    Connection conn = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
 
     /**
      * Creates new form AddClient
      */
     public ManageClients() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
             System.out.println(e);
         }
         this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
     }
 
     //Program to set single instance of ManageClients
-    private static ManageClients obj=null;
-    public static ManageClients getObj(){
-        if(obj==null){
-            obj=new ManageClients();
+    private static ManageClients obj = null;
+
+    public static ManageClients getObj() {
+        if (obj == null) {
+            obj = new ManageClients();
         }
         return obj;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,36 +93,71 @@ public class ManageClients extends javax.swing.JFrame {
         jLabel1.setText("Client Name");
 
         txtClientname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtClientname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtClientnameKeyPressed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Address");
 
         txtAddress.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtAddress.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAddressKeyPressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel3.setText("Email Address");
 
         txtEmail.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEmailKeyPressed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel4.setText("Mobile Number");
 
         txtMobile.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMobile.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMobileKeyPressed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setText("Landline Number");
 
         txtLandline.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtLandline.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLandlineKeyPressed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel6.setText("Clients Company Name (If Client is a Firm, Company or any other Organization)");
 
         txtClientCompanyName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtClientCompanyName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtClientCompanyNameKeyPressed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("GSTIN");
 
         txtGSTIN.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtGSTIN.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGSTINKeyPressed(evt);
+            }
+        });
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
@@ -189,7 +227,7 @@ public class ManageClients extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,27 +293,20 @@ public class ManageClients extends javax.swing.JFrame {
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAddress, txtClientCompanyName, txtClientname, txtEmail, txtGSTIN, txtLandline, txtMobile});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAdd, btnDelete, btnUpdate, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, txtAddress, txtClientCompanyName, txtClientname, txtEmail, txtGSTIN, txtLandline, txtMobile});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -283,57 +314,59 @@ public class ManageClients extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     //Function or method to get client data
-    public void getData(){
-        try{
-            String sql="SELECT * FROM clients";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
+    public void getData() {
+        try {
+            String sql = "SELECT * FROM clients";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
             tblClient.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
     }
     //Function to getTableDataToField
     int row;
-    String count,tblClick;
-    public void getTableDataToField(){
-        try{
-            row=tblClient.getSelectedRow();
-            tblClick=tblClient.getModel().getValueAt(row, 0).toString();
-            String sql="Select * from clients where uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            if(rs.next()){
+    String count, tblClick;
+
+    public void getTableDataToField() {
+        try {
+            row = tblClient.getSelectedRow();
+            tblClick = tblClient.getModel().getValueAt(row, 0).toString();
+            String sql = "Select * from clients where uid='" + tblClick + "'";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            if (rs.next()) {
                 txtClientname.setText(rs.getString("clientname"));
                 txtAddress.setText(rs.getString("address"));
                 txtEmail.setText(rs.getString("email"));
                 txtMobile.setText(rs.getString("mobile"));
                 txtLandline.setText(rs.getString("landline"));
                 txtClientCompanyName.setText(rs.getString("clientcompanyname"));
-                txtGSTIN.setText(rs.getString("gstin"));                
-            }else{
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+                txtGSTIN.setText(rs.getString("gstin"));
+            } else {
+                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE);
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
     }
+
     //Function to clearField
-    public void clearField(){
+    public void clearField() {
         txtClientname.setText("");
         txtAddress.setText("");
         txtEmail.setText("");
@@ -343,11 +376,12 @@ public class ManageClients extends javax.swing.JFrame {
         txtGSTIN.setText("");
         txtClientname.requestFocus();
     }
+
     //Function to add process
-    public void addClient(){
-        try{
-            String sql="INSERT INTO clients (clientname,address,email,mobile,landline,clientcompanyname,gstin) VALUES (?,?,?,?,?,?,?)";
-            pst=conn.prepareStatement(sql);
+    public void addClient() {
+        try {
+            String sql = "INSERT INTO clients (clientname,address,email,mobile,landline,clientcompanyname,gstin) VALUES (?,?,?,?,?,?,?)";
+            pst = conn.prepareStatement(sql);
             pst.setString(1, txtClientname.getText());
             pst.setString(2, txtAddress.getText());
             pst.setString(3, txtEmail.getText());
@@ -356,64 +390,66 @@ public class ManageClients extends javax.swing.JFrame {
             pst.setString(6, txtClientCompanyName.getText());
             pst.setString(7, txtGSTIN.getText());
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Client added to database", "Saved", JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
             txtClientname.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addClient() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "addClient() Exception", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
     }
+
     //Function to update material
-    public void updateClient(){
-        try{
-            String sql="UPDATE clients SET clientname=?,address=?,email=?,mobile=?,"
-                    + "landline=?,clientcompanyname=?,gstin=? WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
+    public void updateClient() {
+        try {
+            String sql = "UPDATE clients SET clientname=?,address=?,email=?,mobile=?,"
+                    + "landline=?,clientcompanyname=?,gstin=? WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement(sql);
             pst.setString(1, txtClientname.getText());
             pst.setString(2, txtAddress.getText());
             pst.setString(3, txtEmail.getText());
             pst.setString(4, txtMobile.getText());
             pst.setString(5, txtLandline.getText());
             pst.setString(6, txtClientCompanyName.getText());
-            pst.setString(7, txtGSTIN.getText());           
+            pst.setString(7, txtGSTIN.getText());
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Client data updated on database", "Saved", JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
             txtClientname.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"updateClient() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "updateClient() Exception", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
     }
+
     //Function to delete material
-    public void deleteClient(){
-        try{
-            String sql="DELETE FROM clients WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteClient() {
+        try {
+            String sql = "DELETE FROM clients WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement(sql);
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Client deleted from database", "Saved", JOptionPane.PLAIN_MESSAGE);
             getData();
             clearField();
             txtClientname.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteClient() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e, "deleteClient() Exception", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
@@ -450,6 +486,56 @@ public class ManageClients extends javax.swing.JFrame {
         // TODO add your handling code here:
         getTableDataToField();
     }//GEN-LAST:event_tblClientKeyPressed
+
+    private void txtClientnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClientnameKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtAddress.requestFocus();
+        }
+    }//GEN-LAST:event_txtClientnameKeyPressed
+
+    private void txtAddressKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddressKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtEmail.requestFocus();
+        }
+    }//GEN-LAST:event_txtAddressKeyPressed
+
+    private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtMobile.requestFocus();
+        }
+    }//GEN-LAST:event_txtEmailKeyPressed
+
+    private void txtMobileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMobileKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtLandline.requestFocus();
+        }
+    }//GEN-LAST:event_txtMobileKeyPressed
+
+    private void txtClientCompanyNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClientCompanyNameKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtGSTIN.requestFocus();
+        }
+    }//GEN-LAST:event_txtClientCompanyNameKeyPressed
+
+    private void txtLandlineKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLandlineKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtClientCompanyName.requestFocus();
+        }
+    }//GEN-LAST:event_txtLandlineKeyPressed
+
+    private void txtGSTINKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTINKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            addClient();
+            clearField();
+        }
+    }//GEN-LAST:event_txtGSTINKeyPressed
 
     /**
      * @param args the command line arguments
