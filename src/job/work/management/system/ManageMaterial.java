@@ -5,7 +5,6 @@
  */
 package job.work.management.system;
 
-
 import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
@@ -22,30 +21,33 @@ import net.proteanit.sql.DbUtils;
  */
 public class ManageMaterial extends javax.swing.JFrame {
 
-    Connection conn=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+    Connection conn = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+
     /**
      * Creates new form ManageProcess
      */
     public ManageMaterial() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
     }
 
-     //Program to set single instance of Manage Product
-    private static ManageMaterial obj=null;
-    public static ManageMaterial getObj(){
-        if(obj==null){
-            obj=new ManageMaterial();
+    //Program to set single instance of Manage Product
+    private static ManageMaterial obj = null;
+
+    public static ManageMaterial getObj() {
+        if (obj == null) {
+            obj = new ManageMaterial();
         }
         return obj;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -202,116 +204,122 @@ public class ManageMaterial extends javax.swing.JFrame {
 
     //Function to getTableDataToField
     int row;
-    String count,tblClick;
-    public void getTableDataToField(){
-        try{
-            row=tblMaterial.getSelectedRow();
-            tblClick=tblMaterial.getModel().getValueAt(row, 0).toString();
-            String sql="Select * from material where uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            if(rs.next()){
-                txtMaterial.setText(rs.getString("materialname"));
-            }else{
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+    String count, tblClick;
+
+    public void getTableDataToField() {
+        try {
+            row = tblMaterial.getSelectedRow();
+            tblClick = tblMaterial.getModel().getValueAt( row, 0 ).toString();
+            String sql = "Select * from material where uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                txtMaterial.setText( rs.getString( "materialname" ) );
+            } else {
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to getData
-    public void getData(){
-        try{
-            String sql="SELECT * FROM material";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            tblMaterial.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+    public void getData() {
+        try {
+            String sql = "SELECT * FROM material";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblMaterial.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to clearField
-    public void clearField(){
-        txtMaterial.setText("");
+    public void clearField() {
+        txtMaterial.setText( "" );
     }
+
     //Function to add process
-    public void addMaterial(){
-        try{
-            String sql="INSERT INTO material (materialname) VALUES (?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtMaterial.getText());
+    public void addMaterial() {
+        try {
+            String sql = "INSERT INTO material (materialname) VALUES (?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtMaterial.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Material added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Material added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtMaterial.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addMaterial() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "addMaterial() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to update material
-    public void updateMaterial(){
-        try{
-            String sql="UPDATE material SET materialname=? WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtMaterial.getText());            
+    public void updateMaterial() {
+        try {
+            String sql = "UPDATE material SET materialname=? WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtMaterial.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Material data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Material data updated on database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtMaterial.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"updateMaterial() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "updateMaterial() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to delete material
-    public void deleteMaterial(){
-        try{
-            String sql="DELETE FROM material WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteMaterial() {
+        try {
+            String sql = "DELETE FROM material WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Material deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Material deleted from database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtMaterial.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteMaterial() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "deleteMaterial() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
     //Function to print process
-    
+
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:        
         addMaterial();
@@ -345,13 +353,12 @@ public class ManageMaterial extends javax.swing.JFrame {
 
     private void txtMaterialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMaterialKeyPressed
         // TODO add your handling code here:
-if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             addMaterial();
             txtMaterial.requestFocus();
         }
     }//GEN-LAST:event_txtMaterialKeyPressed
 
-    
     /**
      * @param args the command line arguments
      */
@@ -363,29 +370,29 @@ if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageMaterial.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageMaterial.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageMaterial.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageMaterial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageMaterial.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new ManageMaterial().setVisible(true);
+                new ManageMaterial().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -174,7 +174,7 @@
 			</textField>
 			<image hAlign="Center">
 				<reportElement x="4" y="5" width="80" height="69" uuid="d8609013-5634-4df8-8a61-011e593b52b3"/>
-				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job-Work-Management-System-master\\src\\images\\Satyam Gears1.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Job Work Management System\\src\\images\\Satyam Gears1.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

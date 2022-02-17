@@ -6,159 +6,167 @@
 package job.work.management.system;
 
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.sql.Connection;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author sunny
  */
 public class CompanyDetails extends javax.swing.JFrame {
 
-    Connection conn=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+    Connection conn = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+
     /**
      * Creates new form CompanyDetails
      */
-    public CompanyDetails(){
-        initComponents(); 
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+    public CompanyDetails() {
+        initComponents();
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
     }
     //Program to set single instance of this form
-    private static CompanyDetails obj=null;
-    public static CompanyDetails getObj(){
-        if(obj==null){
-            obj=new CompanyDetails();
+    private static CompanyDetails obj = null;
+
+    public static CompanyDetails getObj() {
+        if (obj == null) {
+            obj = new CompanyDetails();
         }
         return obj;
     }
-    
+
     //Functions
-    
     //Function to fetch data to table
-    public void getCompanyData(){
-        try{
-            String sql="SELECT * FROM companydetails";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            tblCompanyDetails.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getCompanyData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+    public void getCompanyData() {
+        try {
+            String sql = "SELECT * FROM companydetails";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblCompanyDetails.setModel( DbUtils.resultSetToTableModel( rs ) );
+            txtCompanyName.requestFocus();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getCompanyData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
     //Function to save comapny details
-    String companyname,gstin,offaddress,email,bankname,accountno,ifsc,mobile,landline;
-    public void saveData(){
-        try{
-            String sql="INSERT INTO companydetails (c_name,c_gstin,c_officeaddress,c_email,c_mobile,c_landline,c_bankname,"
+    String companyname, gstin, offaddress, email, bankname, accountno, ifsc, mobile, landline;
+
+    public void saveData() {
+        try {
+            String sql = "INSERT INTO companydetails (c_name,c_gstin,c_officeaddress,c_email,c_mobile,c_landline,c_bankname,"
                     + "c_accountno,c_ifsc) VALUES (?,?,?,?,?,?,?,?,?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtCompanyName.getText());
-            pst.setString(2, txtGSTIN.getText());
-            pst.setString(3, txtOfficeaddress.getText());
-            pst.setString(4, txtEmail.getText());
-            pst.setString(5, txtMobile.getText());
-            pst.setString(6, txtLandline.getText());
-            pst.setString(7, txtBankname.getText());
-            pst.setString(8, txtAccount.getText());
-            pst.setString(9, txtIFSC.getText());
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtCompanyName.getText() );
+            pst.setString( 2, txtGSTIN.getText() );
+            pst.setString( 3, txtOfficeaddress.getText() );
+            pst.setString( 4, txtEmail.getText() );
+            pst.setString( 5, txtMobile.getText() );
+            pst.setString( 6, txtLandline.getText() );
+            pst.setString( 7, txtBankname.getText() );
+            pst.setString( 8, txtAccount.getText() );
+            pst.setString( 9, txtIFSC.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Company Details added to database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Company Details added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getCompanyData();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "saveData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "saveData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function to getTableDataToField
     int row;
-    String count,tblClick;
-    public void getTableDataToField(){
-        try{
-            row=tblCompanyDetails.getSelectedRow();
-            tblClick=tblCompanyDetails.getModel().getValueAt(row, 0).toString();
-            String sql="Select * from companydetails where c_uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            if(rs.next()){
-                txtCompanyName.setText(rs.getString("c_name"));
-                txtGSTIN.setText(rs.getString("c_gstin"));
-                txtOfficeaddress.setText(rs.getString("c_officeaddress"));
-                txtEmail.setText(rs.getString("c_email"));
-                txtMobile.setText(rs.getString("c_mobile"));
-                txtLandline.setText(rs.getString("c_landline"));
-                txtBankname.setText(rs.getString("c_bankname"));
-                txtAccount.setText(rs.getString("c_accountno"));
-                txtIFSC.setText(rs.getString("c_ifsc"));
-            }else{
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+    String count, tblClick;
+
+    public void getTableDataToField() {
+        try {
+            row = tblCompanyDetails.getSelectedRow();
+            tblClick = tblCompanyDetails.getModel().getValueAt( row, 0 ).toString();
+            String sql = "Select * from companydetails where c_uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                txtCompanyName.setText( rs.getString( "c_name" ) );
+                txtGSTIN.setText( rs.getString( "c_gstin" ) );
+                txtOfficeaddress.setText( rs.getString( "c_officeaddress" ) );
+                txtEmail.setText( rs.getString( "c_email" ) );
+                txtMobile.setText( rs.getString( "c_mobile" ) );
+                txtLandline.setText( rs.getString( "c_landline" ) );
+                txtBankname.setText( rs.getString( "c_bankname" ) );
+                txtAccount.setText( rs.getString( "c_accountno" ) );
+                txtIFSC.setText( rs.getString( "c_ifsc" ) );
+            } else {
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to delete record
-    public void deleteData(){
-        try{
-            String sql="DELETE FROM companydetails WHERE c_uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteData() {
+        try {
+            String sql = "DELETE FROM companydetails WHERE c_uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Data deleted from database","Deleted",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Data deleted from database", "Deleted", JOptionPane.PLAIN_MESSAGE );
             getCompanyData();
-        }catch(HeadlessException | SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "deleteData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function to clear field
-    public void clearField(){
-        txtCompanyName.setText("");
-        txtGSTIN.setText("");
-        txtOfficeaddress.setText("");
-        txtEmail.setText("");
-        txtMobile.setText("");
-        txtLandline.setText("");
-        txtBankname.setText("");
-        txtAccount.setText("");
-        txtIFSC.setText("");
+    public void clearField() {
+        txtCompanyName.setText( "" );
+        txtGSTIN.setText( "" );
+        txtOfficeaddress.setText( "" );
+        txtEmail.setText( "" );
+        txtMobile.setText( "" );
+        txtLandline.setText( "" );
+        txtBankname.setText( "" );
+        txtAccount.setText( "" );
+        txtIFSC.setText( "" );
         txtCompanyName.requestFocus();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -236,17 +244,47 @@ public class CompanyDetails extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("GSTIN");
 
+        txtGSTIN.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGSTINKeyPressed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel3.setText("Office Address");
+
+        txtOfficeaddress.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtOfficeaddressKeyPressed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel4.setText("Email Address");
 
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEmailKeyPressed(evt);
+            }
+        });
+
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setText("Mobile Number");
 
+        txtMobile.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMobileKeyPressed(evt);
+            }
+        });
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel6.setText("Landline");
+
+        txtLandline.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLandlineKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlCompanyDetailsLayout = new javax.swing.GroupLayout(pnlCompanyDetails);
         pnlCompanyDetails.setLayout(pnlCompanyDetailsLayout);
@@ -324,11 +362,29 @@ public class CompanyDetails extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("Bank Name");
 
+        txtBankname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBanknameKeyPressed(evt);
+            }
+        });
+
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel8.setText("A/C No.");
 
+        txtAccount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAccountKeyPressed(evt);
+            }
+        });
+
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel9.setText("IFSC");
+
+        txtIFSC.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtIFSCKeyPressed(evt);
+            }
+        });
 
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnSave.setText("SAVE");
@@ -508,7 +564,66 @@ public class CompanyDetails extends javax.swing.JFrame {
 
     private void txtCompanyNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCompanyNameKeyPressed
         // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtGSTIN.requestFocus();
+        }
     }//GEN-LAST:event_txtCompanyNameKeyPressed
+
+    private void txtGSTINKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTINKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtOfficeaddress.requestFocus();
+        }
+    }//GEN-LAST:event_txtGSTINKeyPressed
+
+    private void txtOfficeaddressKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOfficeaddressKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtEmail.requestFocus();
+        }
+    }//GEN-LAST:event_txtOfficeaddressKeyPressed
+
+    private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtMobile.requestFocus();
+        }
+    }//GEN-LAST:event_txtEmailKeyPressed
+
+    private void txtMobileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMobileKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtLandline.requestFocus();
+        }
+    }//GEN-LAST:event_txtMobileKeyPressed
+
+    private void txtLandlineKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLandlineKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtBankname.requestFocus();
+        }
+    }//GEN-LAST:event_txtLandlineKeyPressed
+
+    private void txtBanknameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBanknameKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtAccount.requestFocus();
+        }
+    }//GEN-LAST:event_txtBanknameKeyPressed
+
+    private void txtAccountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAccountKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtIFSC.requestFocus();
+        }
+    }//GEN-LAST:event_txtAccountKeyPressed
+
+    private void txtIFSCKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIFSCKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            saveData();
+        }
+    }//GEN-LAST:event_txtIFSCKeyPressed
 
     /**
      * @param args the command line arguments
@@ -521,28 +636,28 @@ public class CompanyDetails extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CompanyDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CompanyDetails.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CompanyDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CompanyDetails.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CompanyDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CompanyDetails.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CompanyDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CompanyDetails.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new CompanyDetails().setVisible(true);
+                new CompanyDetails().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

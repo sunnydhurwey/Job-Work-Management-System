@@ -33,9 +33,9 @@ public class ManageClients extends javax.swing.JFrame {
         try {
             conn = javaconnect.ConnectDB();
         } catch (UnknownHostException e) {
-            System.out.println(e);
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
     }
 
     //Program to set single instance of ManageClients
@@ -317,17 +317,17 @@ public class ManageClients extends javax.swing.JFrame {
     public void getData() {
         try {
             String sql = "SELECT * FROM clients";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblClient.setModel(DbUtils.resultSetToTableModel(rs));
+            tblClient.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -338,42 +338,42 @@ public class ManageClients extends javax.swing.JFrame {
     public void getTableDataToField() {
         try {
             row = tblClient.getSelectedRow();
-            tblClick = tblClient.getModel().getValueAt(row, 0).toString();
+            tblClick = tblClient.getModel().getValueAt( row, 0 ).toString();
             String sql = "Select * from clients where uid='" + tblClick + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next()) {
-                txtClientname.setText(rs.getString("clientname"));
-                txtAddress.setText(rs.getString("address"));
-                txtEmail.setText(rs.getString("email"));
-                txtMobile.setText(rs.getString("mobile"));
-                txtLandline.setText(rs.getString("landline"));
-                txtClientCompanyName.setText(rs.getString("clientcompanyname"));
-                txtGSTIN.setText(rs.getString("gstin"));
+                txtClientname.setText( rs.getString( "clientname" ) );
+                txtAddress.setText( rs.getString( "address" ) );
+                txtEmail.setText( rs.getString( "email" ) );
+                txtMobile.setText( rs.getString( "mobile" ) );
+                txtLandline.setText( rs.getString( "landline" ) );
+                txtClientCompanyName.setText( rs.getString( "clientcompanyname" ) );
+                txtGSTIN.setText( rs.getString( "gstin" ) );
             } else {
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
 
     //Function to clearField
     public void clearField() {
-        txtClientname.setText("");
-        txtAddress.setText("");
-        txtEmail.setText("");
-        txtMobile.setText("");
-        txtLandline.setText("");
-        txtClientCompanyName.setText("");
-        txtGSTIN.setText("");
+        txtClientname.setText( "" );
+        txtAddress.setText( "" );
+        txtEmail.setText( "" );
+        txtMobile.setText( "" );
+        txtLandline.setText( "" );
+        txtClientCompanyName.setText( "" );
+        txtGSTIN.setText( "" );
         txtClientname.requestFocus();
     }
 
@@ -381,26 +381,26 @@ public class ManageClients extends javax.swing.JFrame {
     public void addClient() {
         try {
             String sql = "INSERT INTO clients (clientname,address,email,mobile,landline,clientcompanyname,gstin) VALUES (?,?,?,?,?,?,?)";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtClientname.getText());
-            pst.setString(2, txtAddress.getText());
-            pst.setString(3, txtEmail.getText());
-            pst.setString(4, txtMobile.getText());
-            pst.setString(5, txtLandline.getText());
-            pst.setString(6, txtClientCompanyName.getText());
-            pst.setString(7, txtGSTIN.getText());
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtClientname.getText() );
+            pst.setString( 2, txtAddress.getText() );
+            pst.setString( 3, txtEmail.getText() );
+            pst.setString( 4, txtMobile.getText() );
+            pst.setString( 5, txtLandline.getText() );
+            pst.setString( 6, txtClientCompanyName.getText() );
+            pst.setString( 7, txtGSTIN.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client added to database", "Saved", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Client added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtClientname.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "addClient() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "addClient() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -410,26 +410,26 @@ public class ManageClients extends javax.swing.JFrame {
         try {
             String sql = "UPDATE clients SET clientname=?,address=?,email=?,mobile=?,"
                     + "landline=?,clientcompanyname=?,gstin=? WHERE uid='" + tblClick + "'";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtClientname.getText());
-            pst.setString(2, txtAddress.getText());
-            pst.setString(3, txtEmail.getText());
-            pst.setString(4, txtMobile.getText());
-            pst.setString(5, txtLandline.getText());
-            pst.setString(6, txtClientCompanyName.getText());
-            pst.setString(7, txtGSTIN.getText());
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtClientname.getText() );
+            pst.setString( 2, txtAddress.getText() );
+            pst.setString( 3, txtEmail.getText() );
+            pst.setString( 4, txtMobile.getText() );
+            pst.setString( 5, txtLandline.getText() );
+            pst.setString( 6, txtClientCompanyName.getText() );
+            pst.setString( 7, txtGSTIN.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client data updated on database", "Saved", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Client data updated on database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtClientname.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "updateClient() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "updateClient() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -438,19 +438,19 @@ public class ManageClients extends javax.swing.JFrame {
     public void deleteClient() {
         try {
             String sql = "DELETE FROM clients WHERE uid='" + tblClick + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client deleted from database", "Saved", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Client deleted from database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtClientname.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "deleteClient() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "deleteClient() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -548,29 +548,29 @@ public class ManageClients extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageClients.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageClients.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageClients.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageClients.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageClients.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageClients.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageClients.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageClients.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new ManageClients().setVisible(true);
+                new ManageClients().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

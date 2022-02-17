@@ -5,8 +5,8 @@
  */
 package job.work.management.system;
 
-import com.sun.glass.events.KeyEvent;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,23 +42,23 @@ public class CreateInvoice extends javax.swing.JFrame {
      */
     public CreateInvoice() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
-        AutoCompleteDecorator.decorate(cmbClientName);
-        AutoCompleteDecorator.decorate(cmbCompany);
-        AutoCompleteDecorator.decorate(cmbAddress);
-        AutoCompleteDecorator.decorate(cmbEmail);
-        AutoCompleteDecorator.decorate(cmbMobile);
-        AutoCompleteDecorator.decorate(cmbLandline);
-        AutoCompleteDecorator.decorate(cmbGSTIN);
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
+        AutoCompleteDecorator.decorate( cmbClientName );
+        AutoCompleteDecorator.decorate( cmbCompany );
+        AutoCompleteDecorator.decorate( cmbAddress );
+        AutoCompleteDecorator.decorate( cmbEmail );
+        AutoCompleteDecorator.decorate( cmbMobile );
+        AutoCompleteDecorator.decorate( cmbLandline );
+        AutoCompleteDecorator.decorate( cmbGSTIN );
 
-        AutoCompleteDecorator.decorate(cmbProductName);
-        AutoCompleteDecorator.decorate(cmbProcess);
-        AutoCompleteDecorator.decorate(cmbMaterial);
+        AutoCompleteDecorator.decorate( cmbProductName );
+        AutoCompleteDecorator.decorate( cmbProcess );
+        AutoCompleteDecorator.decorate( cmbMaterial );
     }
 
     //Program to set single instance of ManageClients
@@ -72,99 +72,99 @@ public class CreateInvoice extends javax.swing.JFrame {
     }
 
     //Function or method to get data from database
-    int qno = 0,invno=0;
+    int qno = 0, invno = 0;
 
     public void getInvoiceID() {
         try {
             String sql = "SELECT * FROM invoice";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
-                invno = rs.getInt("invoiceno");
+                invno = rs.getInt( "invoiceno" );
             }
             invno++;
-            txtInvoiceNo.setText(String.valueOf(invno));
-            btnSaveInvoice.setEnabled(true);
-            btnUpdateInvoice.setEnabled(false);
-            btnDeleteInvoice.setEnabled(false);
-            btnPrintInvoice.setEnabled(false);
+            txtInvoiceNo.setText( String.valueOf( invno ) );
+            btnSaveInvoice.setEnabled( true );
+            btnUpdateInvoice.setEnabled( false );
+            btnDeleteInvoice.setEnabled( false );
+            btnPrintInvoice.setEnabled( false );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getInvoiceID() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getInvoiceID() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
 
     //Function or method to set current date to jdatechooser
     public void getDate() {
-        jDateChooser1.setDateFormatString("yyyy-MM-dd");
+        jDateChooser1.setDateFormatString( "yyyy-MM-dd" );
         java.util.Date date = new java.util.Date();
-        jDateChooser1.setDate(date);
+        jDateChooser1.setDate( date );
     }
 
     //Function or method to clear product field
     public void clearProductField() {
-        cmbProductName.setSelectedIndex(0);
-        cmbProcess.setSelectedIndex(0);
-        cmbMaterial.setSelectedIndex(0);
-        txtRemarks.setText("");
-        txtT.setText("0");
-        txtW.setText("0");
-        txtOD.setText("0");
-        txtTL.setText("0");
-        txtM.setText("0");
-        txtDP.setText("0");
-        txtSTD.setText("0");
-        txtRate.setText("0");
-        txtQTY.setText("0");
-        txtAmount.setText("0");
+        cmbProductName.setSelectedIndex( 0 );
+        cmbProcess.setSelectedIndex( 0 );
+        cmbMaterial.setSelectedIndex( 0 );
+        txtRemarks.setText( "" );
+        txtT.setText( "0" );
+        txtW.setText( "0" );
+        txtOD.setText( "0" );
+        txtTL.setText( "0" );
+        txtM.setText( "0" );
+        txtDP.setText( "0" );
+        txtSTD.setText( "0" );
+        txtRate.setText( "0" );
+        txtQTY.setText( "0" );
+        txtAmount.setText( "0" );
     }
 
     //Function or method to clear Quotation Fields
     public void clearQuotationTotals() {
-        txtGSTPer.setText("0");
-        txtBasicPrice.setText("0");
-        txtDiscount.setText("0");
-        txtSubTotal.setText("0");
-        txtGSTAmount.setText("0");
-        txtGrandTotal.setText("0");
+        txtGSTPer.setText( "0" );
+        txtBasicPrice.setText( "0" );
+        txtDiscountPer.setText( "0" );
+        txtSubTotal.setText( "0" );
+        txtGSTAmount.setText( "0" );
+        txtGrandTotal.setText( "0" );
     }
 
     //Function or method to save client
     public void saveClient() {
         try {
             String sql = "INSERT INTO clients (clientname,clientcompanyname,address,email,mobile,landline,gstin) VALUES (?,?,?,?,?,?,?)";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, cmbClientName.getEditor().getItem().toString());
-            pst.setString(2, cmbCompany.getEditor().getItem().toString());
-            pst.setString(3, cmbAddress.getEditor().getItem().toString());
-            pst.setString(4, cmbEmail.getEditor().getItem().toString());
-            pst.setString(5, cmbMobile.getEditor().getItem().toString());
-            pst.setString(6, cmbLandline.getEditor().getItem().toString());
-            pst.setString(7, cmbGSTIN.getEditor().getItem().toString());
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, cmbClientName.getEditor().getItem().toString() );
+            pst.setString( 2, cmbCompany.getEditor().getItem().toString() );
+            pst.setString( 3, cmbAddress.getEditor().getItem().toString() );
+            pst.setString( 4, cmbEmail.getEditor().getItem().toString() );
+            pst.setString( 5, cmbMobile.getEditor().getItem().toString() );
+            pst.setString( 6, cmbLandline.getEditor().getItem().toString() );
+            pst.setString( 7, cmbGSTIN.getEditor().getItem().toString() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE);
-            btnSaveClient.setEnabled(false);
-            cmbClientName.setEnabled(false);
-            cmbCompany.setEnabled(false);
-            cmbAddress.setEnabled(false);
-            cmbEmail.setEnabled(false);
-            cmbMobile.setEnabled(false);
-            cmbLandline.setEnabled(false);
-            cmbGSTIN.setEnabled(false);
+            JOptionPane.showMessageDialog( null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
+            btnSaveClient.setEnabled( false );
+            cmbClientName.setEnabled( false );
+            cmbCompany.setEnabled( false );
+            cmbAddress.setEnabled( false );
+            cmbEmail.setEnabled( false );
+            cmbMobile.setEnabled( false );
+            cmbLandline.setEnabled( false );
+            cmbGSTIN.setEnabled( false );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "saveClient() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "saveClient() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -173,53 +173,54 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void getDataToTable() {
         try {
             String sql = "SELECT * FROM joborder WHERE quotationno='" + txtQuotationNo.getText() + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblQuotation.setModel(DbUtils.resultSetToTableModel(rs));
+            tblQuotation.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to set totcalcfields zero
-    public void setTotCalFieldsZero(){
-        txtGSTPer.setText("0");
-        txtBasicPrice.setText("0");
-        txtDiscount.setText("0");
-        txtSubTotal.setText("0");
-        txtGSTAmount.setText("0");
-        txtGrandTotal.setText("0");
+    public void setTotCalFieldsZero() {
+        txtGSTPer.setText( "0" );
+        txtBasicPrice.setText( "0" );
+        txtDiscountPer.setText( "0" );
+        txtSubTotal.setText( "0" );
+        txtGSTAmount.setText( "0" );
+        txtGrandTotal.setText( "0" );
     }
     //Function to getData
     double basicprice = 0, dbamt = 0;
     String cn;
+
     public void getData() {
         try {
             String sql = "SELECT * FROM joborder WHERE quotationno='" + txtQuotationNo.getText() + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next()) {
-                cn = rs.getString("clientname");
-                dbamt = rs.getDouble("amount");
+                cn = rs.getString( "clientname" );
+                dbamt = rs.getDouble( "amount" );
                 basicprice = basicprice + dbamt;
             }
 //            cmbClientName.setSelectedItem(String.valueOf(cn));
-            txtBasicPrice.setText(String.valueOf(basicprice));
+            txtBasicPrice.setText( String.valueOf( basicprice ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -228,159 +229,160 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void getQuotationDataCALC() {
         try {
             String sql = "SELECT * FROM quotation WHERE quotationno='" + txtQuotationNo.getText() + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem(rs2.getString("clientname"));
-                cmbCompany.setSelectedItem(rs2.getString("company"));
-                cmbAddress.setSelectedItem(rs2.getString("address"));
-                cmbEmail.setSelectedItem(rs2.getString("email"));
-                cmbMobile.setSelectedItem(rs2.getString("mobile"));
-                cmbLandline.setSelectedItem(rs2.getString("landline"));
-                cmbGSTIN.setSelectedItem(rs2.getString("gstin"));
-                txtGSTPer.setText(rs2.getString("gstper"));
-                txtBasicPrice.setText(rs2.getString("basicprice"));
-                txtDiscount.setText(rs2.getString("discount"));
-                txtSubTotal.setText(rs2.getString("subtotal"));
-                txtGSTAmount.setText(rs2.getString("gstamt"));
-                txtGrandTotal.setText(rs2.getString("totalamt"));
+                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+                cmbCompany.setSelectedItem( rs2.getString( "company" ) );
+                cmbAddress.setSelectedItem( rs2.getString( "address" ) );
+                cmbEmail.setSelectedItem( rs2.getString( "email" ) );
+                cmbMobile.setSelectedItem( rs2.getString( "mobile" ) );
+                cmbLandline.setSelectedItem( rs2.getString( "landline" ) );
+                cmbGSTIN.setSelectedItem( rs2.getString( "gstin" ) );
+                txtGSTPer.setText( rs2.getString( "gstper" ) );
+                txtBasicPrice.setText( rs2.getString( "basicprice" ) );
+                txtDiscountPer.setText( rs2.getString( "discount" ) );
+                txtSubTotal.setText( rs2.getString( "subtotal" ) );
+                txtGSTAmount.setText( rs2.getString( "gstamt" ) );
+                txtGrandTotal.setText( rs2.getString( "totalamt" ) );
 //                txtAreaTC.setText(rs2.getString("termsconditions"));
-                btnSaveInvoice.setEnabled(true);
-                btnUpdateInvoice.setEnabled(false);
-                btnDeleteInvoice.setEnabled(false);
-                btnPrintInvoice.setEnabled(false);
+                btnSaveInvoice.setEnabled( true );
+                btnUpdateInvoice.setEnabled( false );
+                btnDeleteInvoice.setEnabled( false );
+                btnPrintInvoice.setEnabled( false );
             } else {
-                cmbClientName.setSelectedItem("");
-                cmbCompany.setSelectedItem("");
-                cmbAddress.setSelectedItem("");
-                cmbEmail.setSelectedItem("");
-                cmbMobile.setSelectedItem("");
-                cmbLandline.setSelectedItem("");
-                cmbGSTIN.setSelectedItem("");
-                txtGSTPer.setText("0");
-                txtBasicPrice.setText("0");
-                txtDiscount.setText("0");
-                txtSubTotal.setText("0");
-                txtGSTAmount.setText("0");
-                txtGrandTotal.setText("0");
-                btnSaveInvoice.setEnabled(true);
-                btnUpdateInvoice.setEnabled(false);
-                btnDeleteInvoice.setEnabled(false);
-                btnPrintInvoice.setEnabled(false);
+                cmbClientName.setSelectedItem( "" );
+                cmbCompany.setSelectedItem( "" );
+                cmbAddress.setSelectedItem( "" );
+                cmbEmail.setSelectedItem( "" );
+                cmbMobile.setSelectedItem( "" );
+                cmbLandline.setSelectedItem( "" );
+                cmbGSTIN.setSelectedItem( "" );
+                txtGSTPer.setText( "0" );
+                txtBasicPrice.setText( "0" );
+                txtDiscountPer.setText( "0" );
+                txtSubTotal.setText( "0" );
+                txtGSTAmount.setText( "0" );
+                txtGrandTotal.setText( "0" );
+                btnSaveInvoice.setEnabled( true );
+                btnUpdateInvoice.setEnabled( false );
+                btnDeleteInvoice.setEnabled( false );
+                btnPrintInvoice.setEnabled( false );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getQuotationDataCALC() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getQuotationDataCALC() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs2.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e, "getQuotationDataCALC() Exception", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog( null, e, "getQuotationDataCALC() Exception", JOptionPane.ERROR_MESSAGE );
             }
         }
     }
 
     //Function or method to get invoice data on invoice number entry
-    public void getInvoiceData(){
+    public void getInvoiceData() {
         try {
             String sql = "SELECT * FROM invoice WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
-                txtQuotationNo.setText(rs2.getString("quotationno"));
-                cmbClientName.setSelectedItem(rs2.getString("clientname"));
-                cmbCompany.setSelectedItem(rs2.getString("company"));
-                cmbAddress.setSelectedItem(rs2.getString("address"));
-                cmbEmail.setSelectedItem(rs2.getString("email"));
-                cmbMobile.setSelectedItem(rs2.getString("mobile"));
-                cmbLandline.setSelectedItem(rs2.getString("landline"));
-                cmbGSTIN.setSelectedItem(rs2.getString("gstin"));
-                txtGSTPer.setText(rs2.getString("gstper"));
-                txtBasicPrice.setText(rs2.getString("basicprice"));
-                txtDiscount.setText(rs2.getString("discount"));
-                txtSubTotal.setText(rs2.getString("subtotal"));
-                txtGSTAmount.setText(rs2.getString("gstamt"));
-                txtGrandTotal.setText(rs2.getString("totalamt"));
-                txtAreaTC.setText(rs2.getString("termsconditions"));
-                btnSaveInvoice.setEnabled(false);
-                btnUpdateInvoice.setEnabled(true);
-                btnDeleteInvoice.setEnabled(true);
-                btnPrintInvoice.setEnabled(true);
+                txtQuotationNo.setText( rs2.getString( "quotationno" ) );
+                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+                cmbCompany.setSelectedItem( rs2.getString( "company" ) );
+                cmbAddress.setSelectedItem( rs2.getString( "address" ) );
+                cmbEmail.setSelectedItem( rs2.getString( "email" ) );
+                cmbMobile.setSelectedItem( rs2.getString( "mobile" ) );
+                cmbLandline.setSelectedItem( rs2.getString( "landline" ) );
+                cmbGSTIN.setSelectedItem( rs2.getString( "gstin" ) );
+                txtGSTPer.setText( rs2.getString( "gstper" ) );
+                txtBasicPrice.setText( rs2.getString( "basicprice" ) );
+                txtDiscountPer.setText( rs2.getString( "discount" ) );
+                txtSubTotal.setText( rs2.getString( "subtotal" ) );
+                txtGSTAmount.setText( rs2.getString( "gstamt" ) );
+                txtGrandTotal.setText( rs2.getString( "totalamt" ) );
+                txtAreaTC.setText( rs2.getString( "termsconditions" ) );
+                btnSaveInvoice.setEnabled( false );
+                btnUpdateInvoice.setEnabled( true );
+                btnDeleteInvoice.setEnabled( true );
+                btnPrintInvoice.setEnabled( true );
             } else {
-                cmbClientName.setSelectedItem("");
-                cmbCompany.setSelectedItem("");
-                cmbAddress.setSelectedItem("");
-                cmbEmail.setSelectedItem("");
-                cmbMobile.setSelectedItem("");
-                cmbLandline.setSelectedItem("");
-                cmbGSTIN.setSelectedItem("");
-                txtGSTPer.setText("0");
-                txtBasicPrice.setText("0");
-                txtDiscount.setText("0");
-                txtSubTotal.setText("0");
-                txtGSTAmount.setText("0");
-                txtGrandTotal.setText("0");
-                btnSaveInvoice.setEnabled(true);
-                btnUpdateInvoice.setEnabled(false);
-                btnDeleteInvoice.setEnabled(false);
-                btnPrintInvoice.setEnabled(false);
+                cmbClientName.setSelectedItem( "" );
+                cmbCompany.setSelectedItem( "" );
+                cmbAddress.setSelectedItem( "" );
+                cmbEmail.setSelectedItem( "" );
+                cmbMobile.setSelectedItem( "" );
+                cmbLandline.setSelectedItem( "" );
+                cmbGSTIN.setSelectedItem( "" );
+                txtGSTPer.setText( "0" );
+                txtBasicPrice.setText( "0" );
+                txtDiscountPer.setText( "0" );
+                txtSubTotal.setText( "0" );
+                txtGSTAmount.setText( "0" );
+                txtGrandTotal.setText( "0" );
+                btnSaveInvoice.setEnabled( true );
+                btnUpdateInvoice.setEnabled( false );
+                btnDeleteInvoice.setEnabled( false );
+                btnPrintInvoice.setEnabled( false );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getInvoiceData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getInvoiceData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs2.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e, "getInvoiceData() Exception", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog( null, e, "getInvoiceData() Exception", JOptionPane.ERROR_MESSAGE );
             }
         }
     }
+
     //Function or method to clear client data field
     public void clearClientData() {
-        cmbClientName.setSelectedItem("");
-        cmbCompany.setSelectedItem("");
-        cmbAddress.setSelectedItem("");
-        cmbEmail.setSelectedItem("");
-        cmbMobile.setSelectedItem("");
-        cmbLandline.setSelectedItem("");
-        cmbGSTIN.setSelectedItem("");
+        cmbClientName.setSelectedItem( "" );
+        cmbCompany.setSelectedItem( "" );
+        cmbAddress.setSelectedItem( "" );
+        cmbEmail.setSelectedItem( "" );
+        cmbMobile.setSelectedItem( "" );
+        cmbLandline.setSelectedItem( "" );
+        cmbGSTIN.setSelectedItem( "" );
     }
 
     //Function to populate combobox on client name input
     public void getClientData() {
         try {
-            cmbClientName.setSelectedItem("");
-            cmbCompany.setSelectedItem("");
-            cmbAddress.setSelectedItem("");
-            cmbEmail.setSelectedItem("");
-            cmbMobile.setSelectedItem("");
-            cmbLandline.setSelectedItem("");
-            cmbGSTIN.setSelectedItem("");
+            cmbClientName.setSelectedItem( "" );
+            cmbCompany.setSelectedItem( "" );
+            cmbAddress.setSelectedItem( "" );
+            cmbEmail.setSelectedItem( "" );
+            cmbMobile.setSelectedItem( "" );
+            cmbLandline.setSelectedItem( "" );
+            cmbGSTIN.setSelectedItem( "" );
             String sql = "SELECT * FROM clients";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next() == false) {
-                System.out.println("Resultset is empty at getClientData()");
+                System.out.println( "Resultset is empty at getClientData()" );
             } else {
                 do {
-                    cmbClientName.addItem(rs.getString("clientname"));
-                    cmbCompany.addItem(rs.getString("clientcompanyname"));
-                    cmbAddress.addItem(rs.getString("address"));
-                    cmbEmail.addItem(rs.getString("email"));
-                    cmbMobile.addItem(rs.getString("mobile"));
-                    cmbLandline.addItem(rs.getString("landline"));
-                    cmbGSTIN.addItem(rs.getString("gstin"));
+                    cmbClientName.addItem( rs.getString( "clientname" ) );
+                    cmbCompany.addItem( rs.getString( "clientcompanyname" ) );
+                    cmbAddress.addItem( rs.getString( "address" ) );
+                    cmbEmail.addItem( rs.getString( "email" ) );
+                    cmbMobile.addItem( rs.getString( "mobile" ) );
+                    cmbLandline.addItem( rs.getString( "landline" ) );
+                    cmbGSTIN.addItem( rs.getString( "gstin" ) );
                 } while (rs.next());
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getClientData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getClientData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -388,36 +390,37 @@ public class CreateInvoice extends javax.swing.JFrame {
     boolean clientexist = false;
     int clientID = 0;
     String clientname;
+
     public void setDataToFieldsOnNameInput() {
-        clientname=cmbClientName.getSelectedItem().toString();
+        clientname = cmbClientName.getSelectedItem().toString();
         try {
             String sql = "SELECT * FROM clients WHERE clientname LIKE '" + clientname + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            if (rs.next()==false) {
-                System.out.println("Resultset is empty setDataToFieldOnNameInput()");
-                btnSaveClient.setEnabled(true);
+            if (rs.next() == false) {
+                System.out.println( "Resultset is empty setDataToFieldOnNameInput()" );
+                btnSaveClient.setEnabled( true );
             } else {
                 do {
-                    clientID = rs.getInt("uid");
-                    System.out.println(String.valueOf(clientID));
-                    cmbCompany.setSelectedItem(rs.getString("clientcompanyname"));
-                    cmbAddress.setSelectedItem(rs.getString("address"));
-                    cmbEmail.setSelectedItem(rs.getString("email"));
-                    cmbMobile.setSelectedItem(rs.getString("mobile"));
-                    cmbLandline.setSelectedItem(rs.getString("landline"));
-                    cmbGSTIN.setSelectedItem(rs.getString("gstin"));
+                    clientID = rs.getInt( "uid" );
+                    System.out.println( String.valueOf( clientID ) );
+                    cmbCompany.setSelectedItem( rs.getString( "clientcompanyname" ) );
+                    cmbAddress.setSelectedItem( rs.getString( "address" ) );
+                    cmbEmail.setSelectedItem( rs.getString( "email" ) );
+                    cmbMobile.setSelectedItem( rs.getString( "mobile" ) );
+                    cmbLandline.setSelectedItem( rs.getString( "landline" ) );
+                    cmbGSTIN.setSelectedItem( rs.getString( "gstin" ) );
                 } while (rs.next());
-                btnSaveClient.setEnabled(false);
+                btnSaveClient.setEnabled( false );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "setDataToFieldsOnNameInput() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "setDataToFieldsOnNameInput() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
 
@@ -427,25 +430,25 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void getProductData() {
         try {
             cmbProductName.removeAllItems();
-            cmbProductName.addItem("");
+            cmbProductName.addItem( "" );
             String sql = "SELECT * FROM products";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next() == false) {
-                System.out.println("Resultset is empty at getProductData()");
+                System.out.println( "Resultset is empty at getProductData()" );
             } else {
                 do {
-                    cmbProductName.addItem(rs.getString("productname"));
+                    cmbProductName.addItem( rs.getString( "productname" ) );
                 } while (rs.next());
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getProductData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getProductData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -454,25 +457,25 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void getProcessData() {
         try {
             cmbProcess.removeAllItems();
-            cmbProcess.addItem("");
+            cmbProcess.addItem( "" );
             String sql = "SELECT * FROM process";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next() == false) {
-                System.out.println("Resultset is empty");
+                System.out.println( "Resultset is empty" );
             } else {
                 do {
-                    cmbProcess.addItem(rs.getString("processname"));
+                    cmbProcess.addItem( rs.getString( "processname" ) );
                 } while (rs.next());
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getProcessData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getProcessData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -481,25 +484,25 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void getMaterialData() {
         try {
             cmbMaterial.removeAllItems();
-            cmbMaterial.addItem("");
+            cmbMaterial.addItem( "" );
             String sql = "SELECT * FROM material";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next() == false) {
-                System.out.println("Resultset is empty");
+                System.out.println( "Resultset is empty" );
             } else {
                 do {
-                    cmbMaterial.addItem(rs.getString("materialname"));
+                    cmbMaterial.addItem( rs.getString( "materialname" ) );
                 } while (rs.next());
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getMaterialData() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getMaterialData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -509,37 +512,37 @@ public class CreateInvoice extends javax.swing.JFrame {
         try {
             String sql = "INSERT INTO joborder (quotationno,date,clientname,productname,processname,materialname,t,w,od,tl,m,dp,std,qty,rate,"
                     + "amount,remark,clientid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtQuotationNo.getText());
-            pst.setString(2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
-            pst.setString(3, cmbClientName.getEditor().getItem().toString());
-            pst.setString(4, cmbProductName.getSelectedItem().toString());
-            pst.setString(5, cmbProcess.getSelectedItem().toString());
-            pst.setString(6, cmbMaterial.getSelectedItem().toString());
-            pst.setString(7, txtT.getText());
-            pst.setString(8, txtW.getText());
-            pst.setString(9, txtOD.getText());
-            pst.setString(10, txtTL.getText());
-            pst.setString(11, txtM.getText());
-            pst.setString(12, txtDP.getText());
-            pst.setString(13, txtSTD.getText());
-            pst.setString(14, txtQTY.getText());
-            pst.setString(15, txtRate.getText());
-            pst.setString(16, txtAmount.getText());
-            pst.setString(17, txtRemarks.getText());
-            pst.setInt(18, clientID);
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtQuotationNo.getText() );
+            pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
+            pst.setString( 4, cmbProductName.getSelectedItem().toString() );
+            pst.setString( 5, cmbProcess.getSelectedItem().toString() );
+            pst.setString( 6, cmbMaterial.getSelectedItem().toString() );
+            pst.setString( 7, txtT.getText() );
+            pst.setString( 8, txtW.getText() );
+            pst.setString( 9, txtOD.getText() );
+            pst.setString( 10, txtTL.getText() );
+            pst.setString( 11, txtM.getText() );
+            pst.setString( 12, txtDP.getText() );
+            pst.setString( 13, txtSTD.getText() );
+            pst.setString( 14, txtQTY.getText() );
+            pst.setString( 15, txtRate.getText() );
+            pst.setString( 16, txtAmount.getText() );
+            pst.setString( 17, txtRemarks.getText() );
+            pst.setInt( 18, clientID );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Poduct added to database", "Saved", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Poduct added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
 //            getData();
             clearProductField();
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "addProduct() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "addProduct() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -551,37 +554,37 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void getTableDataToField() {
         try {
             row = tblQuotation.getSelectedRow();
-            tblClick = tblQuotation.getModel().getValueAt(row, 0).toString();
+            tblClick = tblQuotation.getModel().getValueAt( row, 0 ).toString();
             String sql = "SELECT * FROM joborder WHERE uid='" + tblClick + "'";
-            pst2 = conn.prepareStatement(sql);
+            pst2 = conn.prepareStatement( sql );
             rs2 = pst2.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem(rs2.getString("clientname"));
-                cmbProductName.setSelectedItem(rs2.getString("productname"));
-                cmbProcess.setSelectedItem(rs2.getString("processname"));
-                cmbMaterial.setSelectedItem(rs2.getString("materialname"));
-                txtRemarks.setText(rs2.getString("remark"));
-                txtT.setText(rs2.getString("t"));
-                txtW.setText(rs2.getString("w"));
-                txtOD.setText(rs2.getString("od"));
-                txtTL.setText(rs2.getString("tl"));
-                txtM.setText(rs2.getString("m"));
-                txtDP.setText(rs2.getString("dp"));
-                txtSTD.setText(rs2.getString("std"));
-                txtRate.setText(rs2.getString("rate"));
-                txtQTY.setText(rs2.getString("qty"));
-                txtAmount.setText(rs2.getString("amount"));
+                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+                cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
+                cmbProcess.setSelectedItem( rs2.getString( "processname" ) );
+                cmbMaterial.setSelectedItem( rs2.getString( "materialname" ) );
+                txtRemarks.setText( rs2.getString( "remark" ) );
+                txtT.setText( rs2.getString( "t" ) );
+                txtW.setText( rs2.getString( "w" ) );
+                txtOD.setText( rs2.getString( "od" ) );
+                txtTL.setText( rs2.getString( "tl" ) );
+                txtM.setText( rs2.getString( "m" ) );
+                txtDP.setText( rs2.getString( "dp" ) );
+                txtSTD.setText( rs2.getString( "std" ) );
+                txtRate.setText( rs2.getString( "rate" ) );
+                txtQTY.setText( rs2.getString( "qty" ) );
+                txtAmount.setText( rs2.getString( "amount" ) );
             } else {
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -590,19 +593,19 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void deleteProduct() {
         try {
             String sql = "DELETE FROM joborder WHERE uid='" + tblClick + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Poduct deleted to database", "Deleted", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Poduct deleted to database", "Deleted", JOptionPane.PLAIN_MESSAGE );
 //            getData();
             clearProductField();
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "deleteProduct() Exception", "Deleted", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, "deleteProduct() Exception", "Deleted", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
@@ -610,8 +613,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     double rate = 0, quantity = 0, amount = 0;
 
     public void calcAmt() {
-        rate = Double.parseDouble(txtRate.getText());
-        quantity = Double.parseDouble(txtQTY.getText());
+        rate = Double.parseDouble( txtRate.getText() );
+        quantity = Double.parseDouble( txtQTY.getText() );
         if (rate < 0) {
             rate = 0;
         }
@@ -619,230 +622,230 @@ public class CreateInvoice extends javax.swing.JFrame {
             quantity = 0;
         }
         amount = rate * quantity;
-        txtAmount.setText(String.valueOf(amount));
+        txtAmount.setText( String.valueOf( amount ) );
     }
 
     //Funtion or method to calculate GRAND TOTAL
-    double gstper = 0, discount = 0, subtotal = 0, gstamt = 0, grandTotal = 0;
+    double gstper = 0, discount = 0, subtotal = 0, gstamt = 0, grandTotal = 0, discountper = 0;
 
     public void calcGT() {
-        if (txtGSTPer.getText() != null || !"".equals(txtGSTPer.getText())) {
-            gstper = Double.parseDouble(txtGSTPer.getText());
-        }else{
-            gstper=0;
+        if (txtGSTPer.getText() != null || !"".equals( txtGSTPer.getText() )) {
+            gstper = Double.parseDouble( txtGSTPer.getText() );
+        } else {
+            gstper = 0;
         }
-        if (txtDiscount.getText() != null || !"".equals(txtDiscount.getText())) {
-            discount = Double.parseDouble(txtDiscount.getText());
-        }else{
-            discount=0;
+        if (txtDiscountPer.getText() != null || !"".equals( txtDiscountPer.getText() )) {
+            discountper = Double.parseDouble( txtDiscountPer.getText() );
+        } else {
+            discountper = 0;
         }
+        discount = (basicprice * discountper) / 100;
         subtotal = basicprice - discount;
-        txtSubTotal.setText(String.valueOf(subtotal));
+        txtSubTotal.setText( String.valueOf( subtotal ) );
         gstamt = (subtotal * gstper) / 100;
-        txtGSTAmount.setText(String.valueOf(gstamt));
+        txtGSTAmount.setText( String.valueOf( gstamt ) );
         grandTotal = subtotal + gstamt;
-        txtGrandTotal.setText(String.valueOf(grandTotal));
+        txtGrandTotal.setText( String.valueOf( grandTotal ) );
     }
-    
+
     //Function to save invoice
-    public void saveInvoice(){
+    public void saveInvoice() {
         try {
             String sql = "INSERT INTO invoice (quotationno,date,clientname,company,address,email,mobile,landline,gstin,basicprice,"
                     + "discount,subtotal,gstper,gstamt,totalamt,termsconditions,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtQuotationNo.getText());
-            pst.setString(2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
-            pst.setString(3, cmbClientName.getEditor().getItem().toString());
-            pst.setString(4, cmbCompany.getSelectedItem().toString());
-            pst.setString(5, cmbAddress.getSelectedItem().toString());
-            pst.setString(6, cmbEmail.getSelectedItem().toString());
-            pst.setString(7, cmbMobile.getSelectedItem().toString());
-            pst.setString(8, cmbLandline.getSelectedItem().toString());
-            pst.setString(9, cmbGSTIN.getSelectedItem().toString());
-            pst.setString(10, txtBasicPrice.getText());
-            pst.setString(11, txtDiscount.getText());
-            pst.setString(12, txtSubTotal.getText());
-            pst.setString(13, txtGSTPer.getText());
-            pst.setString(14, txtGSTAmount.getText());
-            pst.setString(15, txtGrandTotal.getText());
-            pst.setString(16, txtAreaTC.getText());
-            pst.setString(17, txtInvoiceNo.getText());
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtQuotationNo.getText() );
+            pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
+            pst.setString( 4, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 5, cmbAddress.getSelectedItem().toString() );
+            pst.setString( 6, cmbEmail.getSelectedItem().toString() );
+            pst.setString( 7, cmbMobile.getSelectedItem().toString() );
+            pst.setString( 8, cmbLandline.getSelectedItem().toString() );
+            pst.setString( 9, cmbGSTIN.getSelectedItem().toString() );
+            pst.setString( 10, txtBasicPrice.getText() );
+            pst.setString( 11, txtDiscountPer.getText() );
+            pst.setString( 12, txtSubTotal.getText() );
+            pst.setString( 13, txtGSTPer.getText() );
+            pst.setString( 14, txtGSTAmount.getText() );
+            pst.setString( 15, txtGrandTotal.getText() );
+            pst.setString( 16, txtAreaTC.getText() );
+            pst.setString( 17, txtInvoiceNo.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Invoice saved to database", "Saved", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Invoice saved to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "saveInvoice() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "saveInvoice() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to update existing invoice
-    public void updateInvoice(){
+    public void updateInvoice() {
         try {
             String sql = "UPDATE invoice SET quotationno=?,date=?,clientname=?,company=?,address=?,email=?,mobile=?,"
                     + "landline=?,gstin=?,basicprice=?,discount=?,subtotal=?,gstper=?,gstamt=?,totalamt=?,termsconditions=? "
-                    + "WHERE invoiceno='"+txtInvoiceNo.getText()+"'";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtQuotationNo.getText());
-            pst.setString(2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
-            pst.setString(3, cmbClientName.getEditor().getItem().toString());
-            pst.setString(4, cmbCompany.getSelectedItem().toString());
-            pst.setString(5, cmbAddress.getSelectedItem().toString());
-            pst.setString(6, cmbEmail.getSelectedItem().toString());
-            pst.setString(7, cmbMobile.getSelectedItem().toString());
-            pst.setString(8, cmbLandline.getSelectedItem().toString());
-            pst.setString(9, cmbGSTIN.getSelectedItem().toString());
-            pst.setString(10, txtBasicPrice.getText());
-            pst.setString(11, txtDiscount.getText());
-            pst.setString(12, txtSubTotal.getText());
-            pst.setString(13, txtGSTPer.getText());
-            pst.setString(14, txtGSTAmount.getText());
-            pst.setString(15, txtGrandTotal.getText());
-            pst.setString(16, txtAreaTC.getText());
+                    + "WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtQuotationNo.getText() );
+            pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
+            pst.setString( 4, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 5, cmbAddress.getSelectedItem().toString() );
+            pst.setString( 6, cmbEmail.getSelectedItem().toString() );
+            pst.setString( 7, cmbMobile.getSelectedItem().toString() );
+            pst.setString( 8, cmbLandline.getSelectedItem().toString() );
+            pst.setString( 9, cmbGSTIN.getSelectedItem().toString() );
+            pst.setString( 10, txtBasicPrice.getText() );
+            pst.setString( 11, txtDiscountPer.getText() );
+            pst.setString( 12, txtSubTotal.getText() );
+            pst.setString( 13, txtGSTPer.getText() );
+            pst.setString( 14, txtGSTAmount.getText() );
+            pst.setString( 15, txtGrandTotal.getText() );
+            pst.setString( 16, txtAreaTC.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Invoice modified on database", "Updated", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Invoice modified on database", "Updated", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "updateInvoice() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "updateInvoice() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
 
     //Function or method to delete saved Quotation
-    public void deleteInvoice(){
-        try{
-            String sql="DELETE FROM invoice WHERE invoiceno='"+txtInvoiceNo.getText()+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteInvoice() {
+        try {
+            String sql = "DELETE FROM invoice WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
             pst.execute();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, "deleteInvoice() Exception", "Invoice Deleted", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, "deleteInvoice() Exception", "Invoice Deleted", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to add product name to database
-    public void addProductName(){
-        try{
-            String sql="INSERT INTO products (productname) VALUES (?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, cmbProductName.getEditor().getItem().toString());
+    public void addProductName() {
+        try {
+            String sql = "INSERT INTO products (productname) VALUES (?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, cmbProductName.getEditor().getItem().toString() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "New Product Name added to database","Saved",JOptionPane.PLAIN_MESSAGE);
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addProductName() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            JOptionPane.showMessageDialog( null, "New Product Name added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "addProductName() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to add process name to database
-    public void addProcessName(){
-        try{
-            String sql="INSERT INTO process (processname) VALUES (?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, cmbProductName.getEditor().getItem().toString());
+    public void addProcessName() {
+        try {
+            String sql = "INSERT INTO process (processname) VALUES (?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, cmbProductName.getEditor().getItem().toString() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "New Process Name added to database","Saved",JOptionPane.PLAIN_MESSAGE);
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addProcessName() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            JOptionPane.showMessageDialog( null, "New Process Name added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "addProcessName() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to add material name to database
-    public void addMaterialName(){
-        try{
-            String sql="INSERT INTO material (materialname) VALUES (?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, cmbMaterial.getEditor().getItem().toString());
+    public void addMaterialName() {
+        try {
+            String sql = "INSERT INTO material (materialname) VALUES (?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, cmbMaterial.getEditor().getItem().toString() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "New Material Name added to database","Saved",JOptionPane.PLAIN_MESSAGE);
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addMaterialName() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            JOptionPane.showMessageDialog( null, "New Material Name added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "addMaterialName() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Program to give printout options
     //final JDialog dialog=new JDialog();
-    public void printOptions(){
-        try{
-            String qno=txtQuotationNo.getText();
-            String invno=txtInvoiceNo.getText();
+    public void printOptions() {
+        try {
+            String qno = txtQuotationNo.getText();
+            String invno = txtInvoiceNo.getText();
             //String[] choice={"CGST+SSGT Invoice","IGST Invoice"};
-            String[] choice={"Landscape","Portrait"};
+            String[] choice = {"Landscape", "Portrait"};
             //Integer[] options = {1, 3, 5, 7, 9, 11};
             //Double[] options = {3.141, 1.618};
             //Character[] options = {'a', 'b', 'c', 'd'};
-            
-            int x = JOptionPane.showOptionDialog(null, "Choose Print Method","Invoice Print",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0]);
+
+            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
             //System.out.println(x);
             //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
-            if(x == 0){
-                try{
-                    String sql="Select * from quotation,joborder,companydetails,invoice where quotation.quotationno='"+qno+"'"
-                            + "AND joborder.quotationno='"+qno+"' AND invoice.quotationno='"+invno+"'";
-                    JasperDesign jd= JRXmlLoader.load("src/reports/invoiceLS.jrxml");
-                    JRDesignQuery qry=new JRDesignQuery();
-                    qry.setText(sql);
-                    jd.setQuery(qry);
-                    JasperReport jr= JasperCompileManager.compileReport(jd);
-                    JasperPrint jp=JasperFillManager.fillReport(jr, null,conn);
-                    JasperViewer.viewReport(jp,false);
-                }catch(JRException e){
-                    JOptionPane.showMessageDialog(null, e,"printOption() Exception",JOptionPane.ERROR_MESSAGE);
+            if (x == 0) {
+                try {
+                    String sql = "Select * from quotation,joborder,companydetails,invoice where quotation.quotationno='" + qno + "'"
+                            + "AND joborder.quotationno='" + qno + "' AND invoice.quotationno='" + invno + "'";
+                    JasperDesign jd = JRXmlLoader.load( "src/reports/invoiceLS.jrxml" );
+                    JRDesignQuery qry = new JRDesignQuery();
+                    qry.setText( sql );
+                    jd.setQuery( qry );
+                    JasperReport jr = JasperCompileManager.compileReport( jd );
+                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+                    JasperViewer.viewReport( jp, false );
+                } catch (JRException e) {
+                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+                }
+            } else {
+                try {
+                    String sql = "SELECT * FROM quotation,joborder,companydetails,invoice WHERE quotation.quotationno='" + qno + "'"
+                            + "AND joborder.quotationno='" + qno + "' AND invoice.quotationno='" + invno + "'";
+                    JasperDesign jd = JRXmlLoader.load( "src/reports/invoicePT.jrxml" );
+                    JRDesignQuery qry = new JRDesignQuery();
+                    qry.setText( sql );
+                    jd.setQuery( qry );
+                    JasperReport jr = JasperCompileManager.compileReport( jd );
+                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+                    JasperViewer.viewReport( jp, false );
+                } catch (JRException e) {
+                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
                 }
             }
-            else{
-                try{
-                    String sql="SELECT * FROM quotation,joborder,companydetails,invoice WHERE quotation.quotationno='"+qno+"'"
-                            + "AND joborder.quotationno='"+qno+"' AND invoice.quotationno='"+invno+"'";
-                    JasperDesign jd= JRXmlLoader.load("src/reports/invoicePT.jrxml");
-                    JRDesignQuery qry=new JRDesignQuery();
-                    qry.setText(sql);
-                    jd.setQuery(qry);
-                    JasperReport jr= JasperCompileManager.compileReport(jd);
-                    JasperPrint jp=JasperFillManager.fillReport(jr, null,conn);
-                    JasperViewer.viewReport(jp,false);
-                }catch(JRException e){
-                    JOptionPane.showMessageDialog(null, e,"printOption() Exception",JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-        catch(HeadlessException e){
-            JOptionPane.showMessageDialog(null, e,"Print Invoice Exception",JOptionPane.ERROR_MESSAGE);
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -917,7 +920,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txtGSTPer = new javax.swing.JTextField();
         txtBasicPrice = new javax.swing.JTextField();
-        txtDiscount = new javax.swing.JTextField();
+        txtDiscountPer = new javax.swing.JTextField();
         txtSubTotal = new javax.swing.JTextField();
         txtGSTAmount = new javax.swing.JTextField();
         txtGrandTotal = new javax.swing.JTextField();
@@ -1137,6 +1140,11 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtT.setText("0");
         txtT.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtTKeyPressed(evt);
+            }
+        });
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("AMOUNT");
@@ -1162,30 +1170,65 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtW.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtW.setText("0");
         txtW.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtW.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtWKeyPressed(evt);
+            }
+        });
 
         txtOD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtOD.setText("0");
         txtOD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtOD.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtODKeyPressed(evt);
+            }
+        });
 
         txtTL.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTL.setText("0");
         txtTL.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtTL.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtTLKeyPressed(evt);
+            }
+        });
 
         txtM.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtM.setText("0");
         txtM.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtM.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMKeyPressed(evt);
+            }
+        });
 
         txtDP.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDP.setText("0");
         txtDP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtDP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDPKeyPressed(evt);
+            }
+        });
 
         txtSTD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSTD.setText("0");
         txtSTD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtSTD.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSTDKeyPressed(evt);
+            }
+        });
 
         txtRate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRate.setText("0");
         txtRate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtRate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtRateKeyPressed(evt);
+            }
+        });
 
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
@@ -1202,6 +1245,11 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAmount.setText("0");
         txtAmount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtAmount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAmountKeyPressed(evt);
+            }
+        });
 
         btnAddProduct.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
@@ -1245,6 +1293,11 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtRemarks.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRemarks.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtRemarks.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtRemarksKeyPressed(evt);
+            }
+        });
 
         jLabel29.setText("Remarks");
 
@@ -1443,6 +1496,9 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         });
         txtQuotationNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtQuotationNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtQuotationNoKeyReleased(evt);
             }
@@ -1451,10 +1507,19 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("DATE");
 
+        jDateChooser1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDateChooser1KeyPressed(evt);
+            }
+        });
+
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel31.setText("INVOICE NO.");
 
         txtInvoiceNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtInvoiceNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtInvoiceNoKeyReleased(evt);
             }
@@ -1526,6 +1591,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtGSTPer.setText("0");
         txtGSTPer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtGSTPer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGSTPerKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtGSTPerKeyReleased(evt);
             }
@@ -1539,27 +1607,50 @@ public class CreateInvoice extends javax.swing.JFrame {
                 txtBasicPriceActionPerformed(evt);
             }
         });
+        txtBasicPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBasicPriceKeyPressed(evt);
+            }
+        });
 
-        txtDiscount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtDiscount.setText("0");
-        txtDiscount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDiscountPer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtDiscountPer.setText("0");
+        txtDiscountPer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtDiscountPer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDiscountPerKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDiscountKeyReleased(evt);
+                txtDiscountPerKeyReleased(evt);
             }
         });
 
         txtSubTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSubTotal.setText("0");
         txtSubTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtSubTotal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSubTotalKeyPressed(evt);
+            }
+        });
 
         txtGSTAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTAmount.setText("0");
         txtGSTAmount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtGSTAmount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGSTAmountKeyPressed(evt);
+            }
+        });
 
         txtGrandTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGrandTotal.setText("0");
         txtGrandTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtGrandTotal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGrandTotalKeyPressed(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1567,7 +1658,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setText("Discount");
+        jLabel17.setText("Discount%");
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1648,7 +1739,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDiscount)
+                            .addComponent(txtDiscountPer)
                             .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1691,7 +1782,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDiscountPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1732,7 +1823,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(1252, 689));
+        setSize(new java.awt.Dimension(1165, 689));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1883,23 +1974,23 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void txtGSTPerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTPerKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtGSTPer.getText())){
+        if (!"".equals( txtGSTPer.getText() )) {
             calcGT();
-        }else{
-            txtGSTPer.setText("0");
+        } else {
+            txtGSTPer.setText( "0" );
             calcGT();
         }
     }//GEN-LAST:event_txtGSTPerKeyReleased
 
-    private void txtDiscountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyReleased
+    private void txtDiscountPerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountPerKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtDiscount.getText())){
+        if (!"".equals( txtDiscountPer.getText() )) {
             calcGT();
-        }else{
-            txtDiscount.setText("0");
+        } else {
+            txtDiscountPer.setText( "0" );
             calcGT();
         }
-    }//GEN-LAST:event_txtDiscountKeyReleased
+    }//GEN-LAST:event_txtDiscountPerKeyReleased
 
     private void btnSaveInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInvoiceActionPerformed
         // TODO add your handling code here:
@@ -1938,7 +2029,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private void btnAddProductNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductNameActionPerformed
         // TODO add your handling code here:
         addProductName();
-        getProductData();        
+        getProductData();
     }//GEN-LAST:event_btnAddProductNameActionPerformed
 
     private void btnAddProcessNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProcessNameActionPerformed
@@ -1960,17 +2051,147 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void txtInvoiceNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtInvoiceNo.getText())){
+        if (!"".equals( txtInvoiceNo.getText() )) {
             getInvoiceData();
             getDataToTable();
 //            getQuotationDataCALC();
-        }else{
-            txtInvoiceNo.setText("0");
+        } else {
+            txtInvoiceNo.setText( "0" );
             getInvoiceData();
             getDataToTable();
 //            getQuotationDataCALC();
-        }        
+        }
     }//GEN-LAST:event_txtInvoiceNoKeyReleased
+
+    private void txtInvoiceNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtQuotationNo.requestFocus();
+        }
+    }//GEN-LAST:event_txtInvoiceNoKeyPressed
+
+    private void txtQuotationNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            jDateChooser1.requestFocus();
+        }
+    }//GEN-LAST:event_txtQuotationNoKeyPressed
+
+    private void jDateChooser1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDateChooser1KeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            cmbProductName.requestFocus();
+        }
+    }//GEN-LAST:event_jDateChooser1KeyPressed
+
+    private void txtRemarksKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRemarksKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtT.requestFocus();
+        }
+    }//GEN-LAST:event_txtRemarksKeyPressed
+
+    private void txtTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtW.requestFocus();
+        }
+    }//GEN-LAST:event_txtTKeyPressed
+
+    private void txtWKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtWKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtOD.requestFocus();
+        }
+    }//GEN-LAST:event_txtWKeyPressed
+
+    private void txtODKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtODKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtTL.requestFocus();
+        }
+    }//GEN-LAST:event_txtODKeyPressed
+
+    private void txtTLKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTLKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtM.requestFocus();
+        }
+    }//GEN-LAST:event_txtTLKeyPressed
+
+    private void txtMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtDP.requestFocus();
+        }
+    }//GEN-LAST:event_txtMKeyPressed
+
+    private void txtDPKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDPKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtSTD.requestFocus();
+        }
+    }//GEN-LAST:event_txtDPKeyPressed
+
+    private void txtSTDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSTDKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtRate.requestFocus();
+        }
+    }//GEN-LAST:event_txtSTDKeyPressed
+
+    private void txtRateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRateKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtAmount.requestFocus();
+        }
+    }//GEN-LAST:event_txtRateKeyPressed
+
+    private void txtAmountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            addProduct();
+        }
+    }//GEN-LAST:event_txtAmountKeyPressed
+
+    private void txtGSTPerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTPerKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtBasicPrice.requestFocus();
+        }
+    }//GEN-LAST:event_txtGSTPerKeyPressed
+
+    private void txtBasicPriceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBasicPriceKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtDiscountPer.requestFocus();
+        }
+    }//GEN-LAST:event_txtBasicPriceKeyPressed
+
+    private void txtDiscountPerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountPerKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtSubTotal.requestFocus();
+        }
+    }//GEN-LAST:event_txtDiscountPerKeyPressed
+
+    private void txtSubTotalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSubTotalKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtGSTAmount.requestFocus();
+        }
+    }//GEN-LAST:event_txtSubTotalKeyPressed
+
+    private void txtGSTAmountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTAmountKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtGrandTotal.requestFocus();
+        }
+    }//GEN-LAST:event_txtGSTAmountKeyPressed
+
+    private void txtGrandTotalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGrandTotalKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGrandTotalKeyPressed
 
     /**
      * @param args the command line arguments
@@ -1983,29 +2204,29 @@ public class CreateInvoice extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CreateInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new CreateInvoice().setVisible(true);
+                new CreateInvoice().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2074,7 +2295,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JTextArea txtAreaTC;
     private javax.swing.JTextField txtBasicPrice;
     private javax.swing.JTextField txtDP;
-    private javax.swing.JTextField txtDiscount;
+    private javax.swing.JTextField txtDiscountPer;
     private javax.swing.JTextField txtGSTAmount;
     private javax.swing.JTextField txtGSTPer;
     private javax.swing.JTextField txtGrandTotal;

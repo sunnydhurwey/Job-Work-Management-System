@@ -197,6 +197,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDriverNameKeyPressed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtMobile">
               <Properties>
@@ -206,6 +209,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtMobileKeyPressed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtVehicleNo">
               <Properties>
@@ -215,6 +221,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtVehicleNoKeyPressed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnAdd">
               <Properties>
@@ -349,10 +358,8 @@
                           <Component id="txtQuotationNo" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" alignment="1" groupAlignment="1" attributes="0">
-                          <Component id="dtGatePass" linkSize="3" alignment="1" pref="0" max="32767" attributes="0"/>
-                          <Component id="dtQuotation" linkSize="3" alignment="1" min="-2" pref="21" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="dtGatePass" linkSize="3" alignment="1" pref="0" max="32767" attributes="0"/>
+                      <Component id="dtQuotation" linkSize="3" alignment="1" min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -383,6 +390,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtGatePassNoKeyPressed"/>
             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtGatePassNoKeyReleased"/>
           </Events>
         </Component>
@@ -395,6 +403,9 @@
           <Properties>
             <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dtGatePassKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -430,6 +441,9 @@
               </Border>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtporgpnoKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
@@ -445,6 +459,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtQuotationNoKeyPressed"/>
             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtQuotationNoKeyReleased"/>
           </Events>
         </Component>
@@ -454,6 +469,9 @@
           </Properties>
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="dtQuotation">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dtQuotationKeyPressed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

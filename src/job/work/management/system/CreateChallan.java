@@ -5,8 +5,8 @@
  */
 package job.work.management.system;
 
-import com.sun.glass.events.KeyEvent;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 /**
  *
  * @author sunny
@@ -35,18 +36,19 @@ public class CreateChallan extends javax.swing.JFrame {
     Connection conn = null;
     ResultSet rs = null, rs2 = null;
     PreparedStatement pst = null, pst2 = null;
+
     /**
      * Creates new form CreateChallan
      */
     public CreateChallan() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
-        AutoCompleteDecorator.decorate(cmbFirmName);
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
+        AutoCompleteDecorator.decorate( cmbFirmName );
     }
 
     //Program to set single instance of ManageClients
@@ -59,247 +61,258 @@ public class CreateChallan extends javax.swing.JFrame {
         return obj;
     }
     //Function or method to get challan id
-    int gpno=0;
-    public void getChallanID(){
+    int gpno = 0;
+
+    public void getChallanID() {
         try {
             String sql = "SELECT * FROM gatepass";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
-                gpno = rs.getInt("gp_no");
+                gpno = rs.getInt( "gp_no" );
             }
             gpno++;
-            txtGatePassNo.setText(String.valueOf(gpno));
-            btnAdd.setEnabled(true);
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
-            btnPrint.setEnabled(false);
+            txtGatePassNo.setText( String.valueOf( gpno ) );
+            btnAdd.setEnabled( true );
+            btnUpdate.setEnabled( false );
+            btnDelete.setEnabled( false );
+            btnPrint.setEnabled( false );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getChallanID() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getChallanID() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
-    }    
+    }
+
     //Function or method to set current date to jdatechooser
     public void getDate() {
-        dtGatePass.setDateFormatString("yyyy-MM-dd");
-        dtQuotation.setDateFormatString("yyyy-MM-dd");
+        dtGatePass.setDateFormatString( "yyyy-MM-dd" );
+        dtQuotation.setDateFormatString( "yyyy-MM-dd" );
         java.util.Date date = new java.util.Date();
-        dtGatePass.setDate(date);
+        dtGatePass.setDate( date );
     }
+
     //Function or method to clear Fields
     public void clearFields() {
-        txtDriverName.setText("");
-        txtMobile.setText("");
-        cmbFirmName.setSelectedItem("");
-        txtporgpno.setText("");
-        txtQuotationNo.setText("");
-        txtVehicleNo.setText("");
+        txtDriverName.setText( "" );
+        txtMobile.setText( "" );
+        cmbFirmName.setSelectedItem( "" );
+        txtporgpno.setText( "" );
+        txtQuotationNo.setText( "" );
+        txtVehicleNo.setText( "" );
         getDate();
-        btnAdd.setEnabled(true);
-        btnUpdate.setEnabled(false);
-        btnDelete.setEnabled(false);
-        btnPrint.setEnabled(false);
+        btnAdd.setEnabled( true );
+        btnUpdate.setEnabled( false );
+        btnDelete.setEnabled( false );
+        btnPrint.setEnabled( false );
     }
+
     //Function or method to get data to table
     public void getDataToTable() {
         try {
             String sql = "SELECT productname,t,w,od,tl,m,dp,std,qty,remark FROM joborder WHERE quotationno='" + txtQuotationNo.getText() + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblChallan.setModel(DbUtils.resultSetToTableModel(rs));
+            tblChallan.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to get data to table
     public void getChallanData() {
         try {
-            String sql = "SELECT * FROM gatepass WHERE gp_no='"+txtGatePassNo.getText()+"'";
-            pst = conn.prepareStatement(sql);
+            String sql = "SELECT * FROM gatepass WHERE gp_no='" + txtGatePassNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            if(rs.next()){
-                dtGatePass.setDate(rs.getDate("gp_date"));
-                dtQuotation.setDate(rs.getDate("gp_qdate"));
-                txtQuotationNo.setText(rs.getString("gp_qno"));
-                txtDriverName.setText(rs.getString("gp_drivername"));
-                txtMobile.setText(rs.getString("gp_mobile"));
-                txtVehicleNo.setText(rs.getString("gp_vehicleno"));
-                cmbFirmName.setSelectedItem(rs.getString("gp_firmname"));
-                txtporgpno.setText(rs.getString("gp_porgpno"));
-                btnAdd.setEnabled(false);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-                btnPrint.setEnabled(true);
-            }else{
+            if (rs.next()) {
+                dtGatePass.setDate( rs.getDate( "gp_date" ) );
+                dtQuotation.setDate( rs.getDate( "gp_qdate" ) );
+                txtQuotationNo.setText( rs.getString( "gp_qno" ) );
+                txtDriverName.setText( rs.getString( "gp_drivername" ) );
+                txtMobile.setText( rs.getString( "gp_mobile" ) );
+                txtVehicleNo.setText( rs.getString( "gp_vehicleno" ) );
+                cmbFirmName.setSelectedItem( rs.getString( "gp_firmname" ) );
+                txtporgpno.setText( rs.getString( "gp_porgpno" ) );
+                btnAdd.setEnabled( false );
+                btnUpdate.setEnabled( true );
+                btnDelete.setEnabled( true );
+                btnPrint.setEnabled( true );
+            } else {
                 clearFields();
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getChallanDataToTable() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getChallanDataToTable() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to get data to table
     public void getQuotationDate() {
         try {
             String sql = "SELECT * FROM quotation WHERE quotationno='" + txtQuotationNo.getText() + "'";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            if(rs.next()){
-                dtQuotation.setDate(rs.getDate("date"));
-                cmbFirmName.setSelectedItem(rs.getString("Company"));
+            if (rs.next()) {
+                dtQuotation.setDate( rs.getDate( "date" ) );
+                cmbFirmName.setSelectedItem( rs.getString( "Company" ) );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to populate firm list
-    public void getFirmData(){
-        try{
-            cmbFirmName.addItem("");
+    public void getFirmData() {
+        try {
+            cmbFirmName.addItem( "" );
             String sql = "SELECT * FROM clients ";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            while(rs.next()){                
-                cmbFirmName.addItem(rs.getString("clientcompanyname"));
+            while (rs.next()) {
+                cmbFirmName.addItem( rs.getString( "clientcompanyname" ) );
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getFirmData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getFirmData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to add challan
-    public void addChallan(){
+    public void addChallan() {
         try {
             String sql = "INSERT INTO `gatepass`(`gp_no`, `gp_porgpno`, `gp_date`, `gp_firmname`, `gp_qno`, `gp_qdate`, `gp_drivername`, `gp_mobile`, `gp_vehicleno`) "
                     + "VALUES (?,?,?,?,?,?,?,?,?)";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtGatePassNo.getText());
-            pst.setString(2, txtporgpno.getText());
-            pst.setString(3, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText());
-            pst.setString(4, cmbFirmName.getSelectedItem().toString());
-            pst.setString(5, txtQuotationNo.getText());
-            pst.setString(6, ((JTextField) dtQuotation.getDateEditor().getUiComponent()).getText());
-            pst.setString(7, txtDriverName.getText());
-            pst.setString(8, txtMobile.getText());
-            pst.setString(9, txtVehicleNo.getText());
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtGatePassNo.getText() );
+            pst.setString( 2, txtporgpno.getText() );
+            pst.setString( 3, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 4, cmbFirmName.getSelectedItem().toString() );
+            pst.setString( 5, txtQuotationNo.getText() );
+            pst.setString( 6, ((JTextField) dtQuotation.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 7, txtDriverName.getText() );
+            pst.setString( 8, txtMobile.getText() );
+            pst.setString( 9, txtVehicleNo.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Challan added to database", "CHALLAN ADDED", JOptionPane.PLAIN_MESSAGE);
-            btnAdd.setEnabled(false);
-            btnUpdate.setEnabled(true);
-            btnDelete.setEnabled(true);
-            btnPrint.setEnabled(true);
+            JOptionPane.showMessageDialog( null, "Challan added to database", "CHALLAN ADDED", JOptionPane.PLAIN_MESSAGE );
+            btnAdd.setEnabled( false );
+            btnUpdate.setEnabled( true );
+            btnDelete.setEnabled( true );
+            btnPrint.setEnabled( true );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "addChallan() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "addChallan() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to update challan
-    public void updateChallan(){
+    public void updateChallan() {
         try {
             String sql = "UPDATE `gatepass` SET `gp_porgpno`=?, `gp_date`=?, `gp_firmname`=?, `gp_qno`=?, `gp_qdate`=?, "
-                    + "`gp_drivername`=?, `gp_mobile`=?, `gp_vehicleno`=? WHERE 'gp_no'='"+txtGatePassNo.getText()+"'";
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, txtporgpno.getText());
-            pst.setString(2, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText());
-            pst.setString(3, cmbFirmName.getSelectedItem().toString());
-            pst.setString(4, txtQuotationNo.getText());
-            pst.setString(5, ((JTextField) dtQuotation.getDateEditor().getUiComponent()).getText());
-            pst.setString(6, txtDriverName.getText());
-            pst.setString(7, txtMobile.getText());
-            pst.setString(8, txtVehicleNo.getText());
+                    + "`gp_drivername`=?, `gp_mobile`=?, `gp_vehicleno`=? WHERE 'gp_no'='" + txtGatePassNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtporgpno.getText() );
+            pst.setString( 2, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbFirmName.getSelectedItem().toString() );
+            pst.setString( 4, txtQuotationNo.getText() );
+            pst.setString( 5, ((JTextField) dtQuotation.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 6, txtDriverName.getText() );
+            pst.setString( 7, txtMobile.getText() );
+            pst.setString( 8, txtVehicleNo.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Challan updated to database", "CHALLAN UPDATED", JOptionPane.PLAIN_MESSAGE);
-            btnAdd.setEnabled(false);
-            btnUpdate.setEnabled(true);
-            btnDelete.setEnabled(true);
-            btnPrint.setEnabled(true);
+            JOptionPane.showMessageDialog( null, "Challan updated to database", "CHALLAN UPDATED", JOptionPane.PLAIN_MESSAGE );
+            btnAdd.setEnabled( false );
+            btnUpdate.setEnabled( true );
+            btnDelete.setEnabled( true );
+            btnPrint.setEnabled( true );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "updateChallan() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "updateChallan() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to delete challan
-    public void deleteChallan(){
-        try{
-            String sql="DELETE FROM gatepass WHERE gp_no='"+txtGatePassNo.getText()+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteChallan() {
+        try {
+            String sql = "DELETE FROM gatepass WHERE gp_no='" + txtGatePassNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null,"Challan deleted from database","CHALLAN DELETED",JOptionPane.PLAIN_MESSAGE);
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteChallan() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            JOptionPane.showMessageDialog( null, "Challan deleted from database", "CHALLAN DELETED", JOptionPane.PLAIN_MESSAGE );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "deleteChallan() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Program to give printout options
     //final JDialog dialog=new JDialog();
-    public void printOption(){
-        try{
-            String qno=txtQuotationNo.getText();
-            String gpno=txtGatePassNo.getText();
-            try{
-                String sql="SELECT * FROM joborder,companydetails,gatepass WHERE joborder.quotationno='"+qno+"' AND gatepass.gp_no='"+gpno+"'";
-                JasperDesign jd= JRXmlLoader.load("src/reports/challan.jrxml");
-                JRDesignQuery qry=new JRDesignQuery();
-                qry.setText(sql);
-                jd.setQuery(qry);
-                JasperReport jr= JasperCompileManager.compileReport(jd);
-                JasperPrint jp=JasperFillManager.fillReport(jr, null,conn);
-                JasperViewer.viewReport(jp,false);
-            }catch(JRException e){
-                JOptionPane.showMessageDialog(null, e,"printOption() Exception",JOptionPane.ERROR_MESSAGE);
+    public void printOption() {
+        try {
+            String qno = txtQuotationNo.getText();
+            String gpno = txtGatePassNo.getText();
+            try {
+                String sql = "SELECT * FROM joborder,companydetails,gatepass WHERE joborder.quotationno='" + qno + "' AND gatepass.gp_no='" + gpno + "'";
+                JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
+                JRDesignQuery qry = new JRDesignQuery();
+                qry.setText( sql );
+                jd.setQuery( qry );
+                JasperReport jr = JasperCompileManager.compileReport( jd );
+                JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+                JasperViewer.viewReport( jp, false );
+            } catch (JRException e) {
+                JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
             }
-        }
-        catch(HeadlessException e){
-            JOptionPane.showMessageDialog(null, e,"Print Challan Exception",JOptionPane.ERROR_MESSAGE);
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog( null, e, "Print Challan Exception", JOptionPane.ERROR_MESSAGE );
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -373,10 +386,25 @@ public class CreateChallan extends javax.swing.JFrame {
         jLabel9.setText("Vehicle No.");
 
         txtDriverName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtDriverName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDriverNameKeyPressed(evt);
+            }
+        });
 
         txtMobile.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtMobile.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMobileKeyPressed(evt);
+            }
+        });
 
         txtVehicleNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtVehicleNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtVehicleNoKeyPressed(evt);
+            }
+        });
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
@@ -491,6 +519,9 @@ public class CreateChallan extends javax.swing.JFrame {
 
         txtGatePassNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtGatePassNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGatePassNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtGatePassNoKeyReleased(evt);
             }
@@ -499,6 +530,11 @@ public class CreateChallan extends javax.swing.JFrame {
         jLabel2.setText("Date");
 
         dtGatePass.setDateFormatString("yyyy-MM-dd");
+        dtGatePass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dtGatePassKeyPressed(evt);
+            }
+        });
 
         jLabel3.setText("Firm Name");
 
@@ -508,17 +544,31 @@ public class CreateChallan extends javax.swing.JFrame {
         jLabel4.setText("PO/RGP No.");
 
         txtporgpno.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtporgpno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtporgpnoKeyPressed(evt);
+            }
+        });
 
         jLabel5.setText("Quot. No.");
 
         txtQuotationNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtQuotationNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtQuotationNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtQuotationNoKeyReleased(evt);
             }
         });
 
         jLabel6.setText("Quotation Dated");
+
+        dtQuotation.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dtQuotationKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -569,9 +619,8 @@ public class CreateChallan extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(dtQuotation, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(dtQuotation, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -613,7 +662,7 @@ public class CreateChallan extends javax.swing.JFrame {
 
     private void txtQuotationNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtQuotationNo.getText())){
+        if (!"".equals( txtQuotationNo.getText() )) {
             getDataToTable();
             getQuotationDate();
         }
@@ -641,13 +690,68 @@ public class CreateChallan extends javax.swing.JFrame {
 
     private void txtGatePassNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGatePassNoKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtGatePassNo.getText())){
+        if (!"".equals( txtGatePassNo.getText() )) {
             getChallanData();
             getDataToTable();
-        }else{
+        } else {
             clearFields();
         }
     }//GEN-LAST:event_txtGatePassNoKeyReleased
+
+    private void txtGatePassNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGatePassNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            dtGatePass.requestFocus();
+        }
+    }//GEN-LAST:event_txtGatePassNoKeyPressed
+
+    private void dtGatePassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dtGatePassKeyPressed
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtQuotationNo.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_dtGatePassKeyPressed
+
+    private void txtQuotationNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            dtQuotation.requestFocus();
+        }
+    }//GEN-LAST:event_txtQuotationNoKeyPressed
+
+    private void dtQuotationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dtQuotationKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtporgpno.requestFocus();
+        }
+    }//GEN-LAST:event_dtQuotationKeyPressed
+
+    private void txtporgpnoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtporgpnoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtDriverName.requestFocus();
+        }
+    }//GEN-LAST:event_txtporgpnoKeyPressed
+
+    private void txtDriverNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDriverNameKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtMobile.requestFocus();
+        }
+    }//GEN-LAST:event_txtDriverNameKeyPressed
+
+    private void txtMobileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMobileKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtVehicleNo.requestFocus();
+        }
+    }//GEN-LAST:event_txtMobileKeyPressed
+
+    private void txtVehicleNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVehicleNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            addChallan();
+        }
+    }//GEN-LAST:event_txtVehicleNoKeyPressed
 
     /**
      * @param args the command line arguments
@@ -660,28 +764,28 @@ public class CreateChallan extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CreateChallan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateChallan.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CreateChallan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateChallan.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CreateChallan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateChallan.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CreateChallan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( CreateChallan.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new CreateChallan().setVisible(true);
+                new CreateChallan().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

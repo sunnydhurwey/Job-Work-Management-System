@@ -5,7 +5,7 @@
  */
 package job.work.management.system;
 
-
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,30 +21,33 @@ import net.proteanit.sql.DbUtils;
  */
 public class ManageProcess extends javax.swing.JFrame {
 
-    Connection conn=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+    Connection conn = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+
     /**
      * Creates new form ManageProcess
      */
     public ManageProcess() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
     }
 
-     //Program to set single instance of Manage Product
-    private static ManageProcess obj=null;
-    public static ManageProcess getObj(){
-        if(obj==null){
-            obj=new ManageProcess();
+    //Program to set single instance of Manage Product
+    private static ManageProcess obj = null;
+
+    public static ManageProcess getObj() {
+        if (obj == null) {
+            obj = new ManageProcess();
         }
         return obj;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,6 +79,12 @@ public class ManageProcess extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Process List", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
+
+        txtProcess.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtProcessKeyPressed(evt);
+            }
+        });
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
@@ -190,114 +199,120 @@ public class ManageProcess extends javax.swing.JFrame {
 
     //Function to getTableDataToField
     int row;
-    String count,tblClick;
-    public void getTableDataToField(){
-        try{
-            row=tblProcess.getSelectedRow();
-            tblClick=tblProcess.getModel().getValueAt(row, 0).toString();
-            String sql="SELECT * FROM process WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            if(rs.next()){
-                txtProcess.setText(rs.getString("processname"));
-            }else{
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+    String count, tblClick;
+
+    public void getTableDataToField() {
+        try {
+            row = tblProcess.getSelectedRow();
+            tblClick = tblProcess.getModel().getValueAt( row, 0 ).toString();
+            String sql = "SELECT * FROM process WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                txtProcess.setText( rs.getString( "processname" ) );
+            } else {
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to getData
-    public void getData(){
-        try{
-            String sql="SELECT * FROM process";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            tblProcess.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+    public void getData() {
+        try {
+            String sql = "SELECT * FROM process";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblProcess.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to clearField
-    public void clearField(){
-        txtProcess.setText("");
+    public void clearField() {
+        txtProcess.setText( "" );
     }
+
     //Function to add process
-    public void addProcess(){
-        try{
-            String sql="INSERT INTO process (processname) VALUES (?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtProcess.getText());
+    public void addProcess() {
+        try {
+            String sql = "INSERT INTO process (processname) VALUES (?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtProcess.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Process added to database","Added",JOptionPane.PLAIN_MESSAGE);
-            getData();
+            JOptionPane.showMessageDialog( null, "Process added to database", "Added", JOptionPane.PLAIN_MESSAGE );
             clearField();
+            getData();
             //getProductsData();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addProcess() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "addProcess() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to update process
-    public void updateProcess(){
-        try{
-            String sql="UPDATE process SET processname=? WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtProcess.getText());            
+    public void updateProcess() {
+        try {
+            String sql = "UPDATE process SET processname=? WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtProcess.getText() );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Process data updated on database","Updated",JOptionPane.PLAIN_MESSAGE);
-            getData();
+            JOptionPane.showMessageDialog( null, "Process data updated on database", "Updated", JOptionPane.PLAIN_MESSAGE );
             clearField();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"updateProcess() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            getData();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "updateProcess() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function to delete process
-    public void deleteProcess(){
-        try{
-            String sql="DELETE FROM process WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteProcess() {
+        try {
+            String sql = "DELETE FROM process WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Process deleted from database","Deleted",JOptionPane.PLAIN_MESSAGE);
-            getData();
+            JOptionPane.showMessageDialog( null, "Process deleted from database", "Deleted", JOptionPane.PLAIN_MESSAGE );
             clearField();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteProcess() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            getData();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "deleteProcess() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
     //Function to print process
-    
+
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:        
         addProcess();
@@ -324,7 +339,13 @@ public class ManageProcess extends javax.swing.JFrame {
         getTableDataToField();
     }//GEN-LAST:event_tblProcessMouseClicked
 
-    
+    private void txtProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProcessKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            addProcess();
+        }
+    }//GEN-LAST:event_txtProcessKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -336,28 +357,28 @@ public class ManageProcess extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProcess.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProcess.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProcess.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProcess.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new ManageProcess().setVisible(true);
+                new ManageProcess().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -6,6 +6,7 @@
 package job.work.management.system;
 
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,168 +27,172 @@ import net.proteanit.sql.DbUtils;
  */
 public class ManageProduct extends javax.swing.JFrame {
 
-    Connection conn=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+    Connection conn = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+
     /**
      * Creates new form AddProduct
      */
     public ManageProduct() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
     }
 
     //Program to set single instance of Manage Product
-    private static ManageProduct obj=null;
-    public static ManageProduct getObj(){
-        if(obj==null){
-            obj=new ManageProduct();
+    private static ManageProduct obj = null;
+
+    public static ManageProduct getObj() {
+        if (obj == null) {
+            obj = new ManageProduct();
         }
         return obj;
     }
 
-    
     //Function to add product
-    public void addProduct(){
-        try{
-            String sql="INSERT INTO products (productname,description,hsn,image) VALUES (?,?,?,?)";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtProductName.getText());
-            pst.setString(2, txtDescription.getText());
-            pst.setString(3, txtHSNCode.getText());
-            pst.setBytes(4, product_image);
+    public void addProduct() {
+        try {
+            String sql = "INSERT INTO products (productname,description,hsn,image) VALUES (?,?,?,?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtProductName.getText() );
+            pst.setString( 2, txtDescription.getText() );
+            pst.setString( 3, txtHSNCode.getText() );
+            pst.setBytes( 4, product_image );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Product added to database","Saved",JOptionPane.PLAIN_MESSAGE);
-            getData();
+            JOptionPane.showMessageDialog( null, "Product added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             clearField();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,e, "addProduct() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+            getData();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "addProduct() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function to clear field
-    public void clearField(){
-        txtProductName.setText("");
-        txtDescription.setText("");
-        txtHSNCode.setText("");
-        lblPicture.setIcon(null);
-        txtImagePath.setText("");
+    public void clearField() {
+        txtProductName.setText( "" );
+        txtDescription.setText( "" );
+        txtHSNCode.setText( "" );
+        lblPicture.setIcon( null );
+        txtImagePath.setText( "" );
     }
+
     //Function to get data from databse to table
-    public void getData(){
-        try{
-            String sql="SELECT * FROM products";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            tblProducts.setModel(DbUtils.resultSetToTableModel(rs));
+    public void getData() {
+        try {
+            String sql = "SELECT * FROM products";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblProducts.setModel( DbUtils.resultSetToTableModel( rs ) );
             txtProductName.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getData() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function to get table data to field
     int row;
-    String count,tblClick;
-    public void getTableDataToField(){
-        try{
-            row=tblProducts.getSelectedRow();
-            tblClick=tblProducts.getModel().getValueAt(row, 0).toString();
-            String sql="Select * from products where uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            rs=pst.executeQuery();
-            if(rs.next()){
-                txtProductName.setText(rs.getString("productname"));
-                txtDescription.setText(rs.getString("description"));
-                txtHSNCode.setText(rs.getString("hsn"));
-                byte[] imagedata=rs.getBytes("image");
-                if(imagedata !=null){
-                    ImageIcon icon =new ImageIcon(imagedata);
-                    Image img=icon.getImage();
-                    Image imgScale=img.getScaledInstance(lblPicture.getWidth(),lblPicture.getHeight(),Image.SCALE_SMOOTH);
-                    ImageIcon scaledIcon=new ImageIcon(imgScale);
-                    lblPicture.setIcon(scaledIcon);
-                }else{
-                    lblPicture.setIcon(null);
+    String count, tblClick;
+
+    public void getTableDataToField() {
+        try {
+            row = tblProducts.getSelectedRow();
+            tblClick = tblProducts.getModel().getValueAt( row, 0 ).toString();
+            String sql = "Select * from products where uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                txtProductName.setText( rs.getString( "productname" ) );
+                txtDescription.setText( rs.getString( "description" ) );
+                txtHSNCode.setText( rs.getString( "hsn" ) );
+                byte[] imagedata = rs.getBytes( "image" );
+                if (imagedata != null) {
+                    ImageIcon icon = new ImageIcon( imagedata );
+                    Image img = icon.getImage();
+                    Image imgScale = img.getScaledInstance( lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH );
+                    ImageIcon scaledIcon = new ImageIcon( imgScale );
+                    lblPicture.setIcon( scaledIcon );
+                } else {
+                    lblPicture.setIcon( null );
                 }
-            }else{
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.","No record found",JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs.close();
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function to update product
-    public void updateProduct(){
-        try{
-            String sql="UPDATE products SET productname=?, description=?, hsn=?, image=? WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
-            pst.setString(1, txtProductName.getText());
-            pst.setString(2, txtDescription.getText());
-            pst.setString(3, txtHSNCode.getText());
-            pst.setBytes(4, product_image);
+    public void updateProduct() {
+        try {
+            String sql = "UPDATE products SET productname=?, description=?, hsn=?, image=? WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtProductName.getText() );
+            pst.setString( 2, txtDescription.getText() );
+            pst.setString( 3, txtHSNCode.getText() );
+            pst.setBytes( 4, product_image );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Product data updated on database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Product data updated on database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtProductName.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"updateProduct() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "updateProduct() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Fucntion to delete product from database
-    public void deleteProduct(){
-        try{
-            String sql="DELETE FROM products WHERE uid='"+tblClick+"'";
-            pst=conn.prepareStatement(sql);
+    public void deleteProduct() {
+        try {
+            String sql = "DELETE FROM products WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Product deleted from database","Saved",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog( null, "Product deleted from database", "Saved", JOptionPane.PLAIN_MESSAGE );
             getData();
             clearField();
             txtProductName.requestFocus();
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"deleteProduct() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "deleteProduct() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 pst.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -233,6 +238,11 @@ public class ManageProduct extends javax.swing.JFrame {
         jLabel1.setText("Product Name");
 
         txtProductName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtProductName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtProductNameKeyPressed(evt);
+            }
+        });
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAdd.setText("ADD");
@@ -265,6 +275,11 @@ public class ManageProduct extends javax.swing.JFrame {
         jLabel8.setText("Description");
 
         txtDescription.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDescriptionKeyPressed(evt);
+            }
+        });
 
         lblPicture.setBackground(new java.awt.Color(204, 204, 204));
         lblPicture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -286,6 +301,11 @@ public class ManageProduct extends javax.swing.JFrame {
         jLabel9.setText("HSN Code");
 
         txtHSNCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtHSNCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtHSNCodeKeyPressed(evt);
+            }
+        });
 
         txtImagePath.setEnabled(false);
 
@@ -417,37 +437,37 @@ public class ManageProduct extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     //Function to select image
-    private ImageIcon format=null;
-    String filename=null;
-    int s=0;
-    byte[] product_image=null;
+    private ImageIcon format = null;
+    String filename = null;
+    int s = 0;
+    byte[] product_image = null;
     private void btnSelectImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectImageActionPerformed
         // TODO add your handling code here:
         JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(null);
+        chooser.showOpenDialog( null );
         File f = chooser.getSelectedFile();
-        if(f!=null){
+        if (f != null) {
             filename = f.getAbsolutePath();
-            txtImagePath.setText(filename);
-            try{
-                File image=new File (filename);
-                FileInputStream fis=new FileInputStream(image);
-                ByteArrayOutputStream baos=new ByteArrayOutputStream();
-                byte[] buf=new byte[1024];
-                for(int readNum;(readNum=fis.read(buf))!=-1;){
-                    baos.write(buf,0,readNum);
+            txtImagePath.setText( filename );
+            try {
+                File image = new File( filename );
+                FileInputStream fis = new FileInputStream( image );
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
+                for (int readNum; (readNum = fis.read( buf )) != -1;) {
+                    baos.write( buf, 0, readNum );
                 }
-                product_image=baos.toByteArray();
-                ImageIcon icon = new ImageIcon(product_image);
-                Image img=icon.getImage();
-                Image imgScale=img.getScaledInstance(lblPicture.getWidth(),lblPicture.getHeight(),Image.SCALE_SMOOTH);
-                ImageIcon scaledIcon=new ImageIcon(imgScale);
-                lblPicture.setIcon(scaledIcon);
-            }catch(IOException e){
-                JOptionPane.showMessageDialog(null, e);
+                product_image = baos.toByteArray();
+                ImageIcon icon = new ImageIcon( product_image );
+                Image img = icon.getImage();
+                Image imgScale = img.getScaledInstance( lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH );
+                ImageIcon scaledIcon = new ImageIcon( imgScale );
+                lblPicture.setIcon( scaledIcon );
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
-        
+
     }//GEN-LAST:event_btnSelectImageActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -480,6 +500,27 @@ public class ManageProduct extends javax.swing.JFrame {
         getTableDataToField();
     }//GEN-LAST:event_tblProductsKeyPressed
 
+    private void txtProductNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductNameKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtDescription.requestFocus();
+        }
+    }//GEN-LAST:event_txtProductNameKeyPressed
+
+    private void txtDescriptionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescriptionKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtHSNCode.requestFocus();
+        }
+    }//GEN-LAST:event_txtDescriptionKeyPressed
+
+    private void txtHSNCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHSNCodeKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            addProduct();
+        }
+    }//GEN-LAST:event_txtHSNCodeKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -491,29 +532,29 @@ public class ManageProduct extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProduct.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProduct.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProduct.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( ManageProduct.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new ManageProduct().setVisible(true);
+                new ManageProduct().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
