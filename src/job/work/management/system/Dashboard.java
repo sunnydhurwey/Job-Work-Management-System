@@ -89,16 +89,14 @@ public class Dashboard extends javax.swing.JFrame {
                     String AM_PM = cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM";
                     lblTime.setText(hour+":"+minute+":"+second+" "+AM_PM);   
                     try {
-                        sleep(1000);
+                        sleep(1500);
                     } 
                     catch (InterruptedException ex) {
                         //Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     try {
                         con();
-                    } catch (UnknownHostException ex) {
-                        Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SocketException ex) {
+                    } catch (UnknownHostException | SocketException ex) {
                         Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

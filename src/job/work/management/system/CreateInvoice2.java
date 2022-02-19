@@ -1118,7 +1118,7 @@ public class CreateInvoice2 extends javax.swing.JFrame {
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbAddress, cmbClientName, cmbCompany, cmbEmail, cmbGSTIN, cmbLandline, cmbMobile, jLabel1, jLabel2, jLabel24, jLabel25, jLabel26, jLabel3, jLabel4});
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Job Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         cmbProductName.setEditable(true);
         cmbProductName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1500,6 +1500,7 @@ public class CreateInvoice2 extends javax.swing.JFrame {
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel31.setText("INVOICE NO.");
 
+        txtInvoiceNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtInvoiceNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtInvoiceNo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -1561,7 +1562,7 @@ public class CreateInvoice2 extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblQuotation);
 
         jPanel5.setBackground(new java.awt.Color(204, 255, 255));
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
