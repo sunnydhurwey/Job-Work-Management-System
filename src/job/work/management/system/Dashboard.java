@@ -29,80 +29,80 @@ import java.util.logging.Logger;
  * @author sunny
  */
 public class Dashboard extends javax.swing.JFrame {
-
-    Connection conn=null,connect=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
     
-    public void con() throws UnknownHostException, SocketException{
+    Connection conn = null, connect = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    
+    public void con() throws UnknownHostException, SocketException {
         try {
             connect = javaconnect.ConnectDB();
-            if(connect == null){
-                lblConnectionStatus.setText("OFFLINE");
-                lblConnectionStatus.setForeground(Color.RED);
-            }
-            else{
-                lblConnectionStatus.setText("ONLINE");
-                lblConnectionStatus.setForeground(Color.GREEN);
-            }   
+            if (connect == null) {
+                lblConnectionStatus.setText( "OFFLINE" );
+                lblConnectionStatus.setForeground( Color.RED );
+            } else {
+                lblConnectionStatus.setText( "ONLINE" );
+                lblConnectionStatus.setForeground( Color.GREEN );
+            }            
         } finally {
-            if (connect != null) try { connect.close(); } catch (SQLException e) {}
+            if (connect != null) try {
+                connect.close();
+            } catch (SQLException e) {
+            }
         }
         
-       
         InetAddress ip = InetAddress.getLocalHost();
-        lblIPAddress.setText("IP ADDRESS IS : "+ip);             
+        lblIPAddress.setText( "IP ADDRESS IS : " + ip );        
     }
+
     /**
      * Creates new form Dashboard
      */
     public Dashboard() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.jpg" ) ).getImage() );
     }
     
-    public void CurrentDate(){   
+    public void CurrentDate() {        
         Thread clock;
-        clock = new Thread(){
+        clock = new Thread() {
             @Override
-            public void run(){
-                for(;;){
-                    Calendar cal=new GregorianCalendar();
+            public void run() {
+                for (;;) {
+                    Calendar cal = new GregorianCalendar();
 //                    int month=cal.get(Calendar.MONTH);
 //                    int day=cal.get(Calendar.DAY_OF_MONTH);
 //                    int year=cal.get(Calendar.YEAR);
 //                    lblDate.setText(day+"-"+month+"-"+year);
-                    LocalDate myDateObj= LocalDate.now();
-                    DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    String formatedDate = myDateObj.format(myFormatObj);
-                    lblDate.setText(""+formatedDate);
+                    LocalDate myDateObj = LocalDate.now();
+                    DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
+                    String formatedDate = myDateObj.format( myFormatObj );
+                    lblDate.setText( "" + formatedDate );
                     
-
-                    int second= cal.get(Calendar.SECOND);
-                    int minute=cal.get(Calendar.MINUTE);
-                    int hour=cal.get(Calendar.HOUR);
-                    String AM_PM = cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM";
-                    lblTime.setText(hour+":"+minute+":"+second+" "+AM_PM);   
+                    int second = cal.get( Calendar.SECOND );
+                    int minute = cal.get( Calendar.MINUTE );
+                    int hour = cal.get( Calendar.HOUR );
+                    String AM_PM = cal.get( Calendar.AM_PM ) == 0 ? "AM" : "PM";
+                    lblTime.setText( hour + ":" + minute + ":" + second + " " + AM_PM );                    
                     try {
-                        sleep(1500);
-                    } 
-                    catch (InterruptedException ex) {
+                        sleep( 1500 );
+                    } catch (InterruptedException ex) {
                         //Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     try {
                         con();
                     } catch (UnknownHostException | SocketException ex) {
-                        Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger( Dashboard.class.getName() ).log( Level.SEVERE, null, ex );
                     }
                 }
             }
         };
-        clock.start();  
+        clock.start();        
     }
 
     /**
@@ -139,6 +139,9 @@ public class Dashboard extends javax.swing.JFrame {
         mnuManageMaterial = new javax.swing.JMenuItem();
         mnuSearch = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        mnuJobOrder = new javax.swing.JMenu();
+        mnuCreateJobOrderMaster = new javax.swing.JMenuItem();
+        mnuJobOrderList = new javax.swing.JMenuItem();
         mnuQuotations = new javax.swing.JMenu();
         mnuCreateQuotation = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
@@ -357,6 +360,22 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuSearch);
 
+        mnuJobOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/job_16px.png"))); // NOI18N
+        mnuJobOrder.setText("Job Order");
+
+        mnuCreateJobOrderMaster.setText("Create Job Order Master");
+        mnuCreateJobOrderMaster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCreateJobOrderMasterActionPerformed(evt);
+            }
+        });
+        mnuJobOrder.add(mnuCreateJobOrderMaster);
+
+        mnuJobOrderList.setText("Job Order List");
+        mnuJobOrder.add(mnuJobOrderList);
+
+        jMenuBar1.add(mnuJobOrder);
+
         mnuQuotations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/quotation_16px.png"))); // NOI18N
         mnuQuotations.setText("Quotations");
 
@@ -450,7 +469,7 @@ public class Dashboard extends javax.swing.JFrame {
     //Function to check database connection
     private void mnuCreateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateInvoiceActionPerformed
         // TODO add your handling code here:
-        CreateInvoice.getObj().setVisible(true);
+        CreateInvoice.getObj().setVisible( true );
     }//GEN-LAST:event_mnuCreateInvoiceActionPerformed
 
     private void mnuManageChallanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageChallanActionPerformed
@@ -459,59 +478,64 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void mnuManageCompanyDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageCompanyDetailsActionPerformed
         // TODO add your handling code here:
-        CompanyDetails.getObj().setVisible(true);
+        CompanyDetails.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageCompanyDetailsActionPerformed
 
     private void mnuManageClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageClientActionPerformed
         // TODO add your handling code here:
-        ManageClients.getObj().setVisible(true);
+        ManageClients.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageClientActionPerformed
 
     private void mnuManageProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageProductActionPerformed
         // TODO add your handling code here:
-        ManageProduct.getObj().setVisible(true);
+        ManageProduct.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageProductActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setExtendedState( JFrame.MAXIMIZED_BOTH );
         CurrentDate();
     }//GEN-LAST:event_formWindowOpened
 
     private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+        System.exit( 0 );
     }//GEN-LAST:event_mnuExitActionPerformed
 
     private void mnuCreateQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateQuotationActionPerformed
         // TODO add your handling code here:
-        CreateQuotation.getObj().setVisible(true);
+        CreateQuotation.getObj().setVisible( true );
     }//GEN-LAST:event_mnuCreateQuotationActionPerformed
 
     private void mnuManageProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageProcessActionPerformed
         // TODO add your handling code here:
-        ManageProcess.getObj().setVisible(true);
+        ManageProcess.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageProcessActionPerformed
 
     private void mnuManageMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageMaterialActionPerformed
         // TODO add your handling code here:
-        ManageMaterial.getObj().setVisible(true);
+        ManageMaterial.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageMaterialActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        JobOrders.getObj().setVisible(true);
+        JobOrders.getObj().setVisible( true );
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mnuCreateChallanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateChallanActionPerformed
         // TODO add your handling code here:
-        CreateChallan.getObj().setVisible(true);
+        CreateChallan.getObj().setVisible( true );
     }//GEN-LAST:event_mnuCreateChallanActionPerformed
 
     private void mnuManageInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageInvoiceActionPerformed
         // TODO add your handling code here:
-        CreateInvoice2.getObj().setVisible(true);
+//        CreateInvoice2.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageInvoiceActionPerformed
+
+    private void mnuCreateJobOrderMasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateJobOrderMasterActionPerformed
+        // TODO add your handling code here:
+        JobOrderMaster.getObj().setVisible( true );
+    }//GEN-LAST:event_mnuCreateJobOrderMasterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -524,28 +548,28 @@ public class Dashboard extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( Dashboard.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( Dashboard.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( Dashboard.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( Dashboard.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new Dashboard().setVisible(true);
+                new Dashboard().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -570,9 +594,12 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenu mnuCompanyDetails;
     private javax.swing.JMenuItem mnuCreateChallan;
     private javax.swing.JMenuItem mnuCreateInvoice;
+    private javax.swing.JMenuItem mnuCreateJobOrderMaster;
     private javax.swing.JMenuItem mnuCreateQuotation;
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenu mnuInvoices;
+    private javax.swing.JMenu mnuJobOrder;
+    private javax.swing.JMenuItem mnuJobOrderList;
     private javax.swing.JMenuItem mnuManageChallan;
     private javax.swing.JMenuItem mnuManageClient;
     private javax.swing.JMenuItem mnuManageCompanyDetails;

@@ -30,6 +30,8 @@ Connection conn=DriverManager.getConnection("jdbc:mysql://"+host.getHostAddress(
             return conn;
         }catch(ClassNotFoundException | SQLException e){
             JOptionPane.showMessageDialog(null, "Connection with database server failed.","Network Link Failure",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please check your database server system and try again later","SORRY !! TRY AGAIN",JOptionPane.INFORMATION_MESSAGE);
+System.exit( 0 );
             return null;
         }
     }
