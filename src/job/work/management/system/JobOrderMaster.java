@@ -5,8 +5,9 @@
  */
 package job.work.management.system;
 
-import com.sun.glass.events.KeyEvent;
+
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -159,7 +160,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
         try {
             String sql = "SELECT uid AS 'UID',joborderno AS 'JOB ORDER NO',productname AS 'PRODUCT NAME',processname AS 'PROCESS NAME',"
                     + "materialname AS 'MATERIAL NAME',tstrt AS 'T/START',w AS 'W',od AS 'OD',tl AS 'TL',mdp AS 'M/DP',rate AS 'RATE',qty AS 'QUANTITY',"
-                    + "discount AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
+                    + "discountper AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -382,7 +383,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
     //Function or method to add product to job list
     public void addProduct() {
         try {
-            String sql = "INSERT INTO jobordermaster (joborderno,date,clientname,productname,processname,materialname,tstrt,w,od,tl,mdp,discount,qty,rate,"
+            String sql = "INSERT INTO jobordermaster (joborderno,date,clientname,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
                     + "amount,remark,clientid,company,clientaddress,clientemail,clientmobile,clientlandline,clientgstin,discountamt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtJobOrderNo.getText() );
@@ -453,7 +454,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
                 txtOD.setText( rs2.getString( "od" ) );
                 txtTL.setText( rs2.getString( "tl" ) );
                 txtMDP.setText( rs2.getString( "mdp" ) );
-                txtDiscount.setText( rs2.getString( "discount" ) );
+                txtDiscount.setText( rs2.getString( "discountper" ) );
                 txtRate.setText( rs2.getString( "rate" ) );
                 txtQTY.setText( rs2.getString( "qty" ) );
                 txtAmount.setText( rs2.getString( "amount" ) );
@@ -1314,6 +1315,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
     private void tblJobOrderKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblJobOrderKeyPressed
         // TODO add your handling code here:
         getTableDataToField();
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            deleteProduct();
+        }
     }//GEN-LAST:event_tblJobOrderKeyPressed
 
     private void txtJobOrderNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobOrderNoKeyReleased

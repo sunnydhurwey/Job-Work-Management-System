@@ -5,8 +5,8 @@
  */
 package job.work.management.system;
 
-import com.sun.glass.events.KeyEvent;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -109,6 +109,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
     //Function or method to clear product field
     public void clearProductField() {
+        txtJobOrderNo.setText( "" );
         cmbProductName.setSelectedIndex( 0 );
         cmbProcess.setSelectedIndex( 0 );
         cmbMaterial.setSelectedIndex( 0 );
@@ -129,7 +130,6 @@ public class CreateQuotation extends javax.swing.JFrame {
         txtGSTPer.setText( "0" );
         txtBasicPrice.setText( "0" );
         txtDiscount.setText( "0" );
-        txtSubTotal.setText( "0" );
         txtGSTAmount.setText( "0" );
         txtGrandTotal.setText( "0" );
     }
@@ -171,7 +171,9 @@ public class CreateQuotation extends javax.swing.JFrame {
     //Function or method to get data to table
     public void getDataToTable() {
         try {
-            String sql = "SELECT * FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
+            String sql = "SELECT uid AS 'UID',joborderno AS 'JOB ORDER NO',productname AS 'PRODUCT NAME',processname AS 'PROCESS NAME',"
+                    + "materialname AS 'MATERIAL NAME',tstrt AS 'T/START',w AS 'W',od AS 'OD',tl AS 'TL',mdp AS 'M/DP',rate AS 'RATE',qty AS 'QUANTITY',"
+                    + "discountper AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblQuotation.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -192,12 +194,11 @@ public class CreateQuotation extends javax.swing.JFrame {
         txtGSTPer.setText( "0" );
         txtBasicPrice.setText( "0" );
         txtDiscount.setText( "0" );
-        txtSubTotal.setText( "0" );
         txtGSTAmount.setText( "0" );
         txtGrandTotal.setText( "0" );
     }
     //Function to getData
-    double disc = 0, basicprice = 0, dbamt = 0;
+    double disc = 0, basicprice = 0, dbamt = 0, dbdisc = 0, dbrate = 0, dbqty = 0;
     String cn;
 
     public void getData() {
@@ -205,13 +206,19 @@ public class CreateQuotation extends javax.swing.JFrame {
             disc = 0;
             basicprice = 0;
             dbamt = 0;
+            dbdisc = 0;
+            dbrate = 0;
+            dbqty = 0;
             String sql = "SELECT * FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
                 cn = rs.getString( "clientname" );
                 dbamt = rs.getDouble( "amount" );
-                disc = disc + rs.getDouble( "discount" );
+                dbdisc = rs.getDouble( "discountper" );
+                dbrate = rs.getDouble( "rate" );
+                dbqty = rs.getDouble( "qty" );
+                disc = disc + ((dbrate * dbqty * dbdisc) / 100);
                 basicprice = basicprice + dbamt;
             }
             txtBasicPrice.setText( String.valueOf( basicprice ) );
@@ -280,7 +287,6 @@ public class CreateQuotation extends javax.swing.JFrame {
                 txtGSTPer.setText( rs2.getString( "gstper" ) );
                 txtBasicPrice.setText( rs2.getString( "basicprice" ) );
                 txtDiscount.setText( rs2.getString( "discount" ) );
-                txtSubTotal.setText( rs2.getString( "subtotal" ) );
                 txtGSTAmount.setText( rs2.getString( "gstamt" ) );
                 txtGrandTotal.setText( rs2.getString( "totalamt" ) );
                 btnSaveQuotation.setEnabled( false );
@@ -298,7 +304,6 @@ public class CreateQuotation extends javax.swing.JFrame {
                 txtGSTPer.setText( "0" );
                 txtBasicPrice.setText( "0" );
                 txtDiscount.setText( "0" );
-                txtSubTotal.setText( "0" );
                 txtGSTAmount.setText( "0" );
                 txtGrandTotal.setText( "0" );
                 btnSaveQuotation.setEnabled( true );
@@ -505,7 +510,7 @@ public class CreateQuotation extends javax.swing.JFrame {
                 txtOD.setText( rs2.getString( "od" ) );
                 txtTL.setText( rs2.getString( "tl" ) );
                 txtMDP.setText( rs2.getString( "mdp" ) );
-                txtDisc.setText( rs2.getString( "discount" ) );
+                txtDisc.setText( rs2.getString( "discountper" ) );
                 txtRate.setText( rs2.getString( "rate" ) );
                 txtQTY.setText( rs2.getString( "qty" ) );
                 txtAmount.setText( rs2.getString( "amount" ) );
@@ -528,17 +533,23 @@ public class CreateQuotation extends javax.swing.JFrame {
     double rate = 0, quantity = 0, amount = 0;
 
     public void calcAmt() {
-        rate = Double.parseDouble( txtRate.getText() );
-        quantity = Double.parseDouble( txtQTY.getText() );
-        disc = Double.parseDouble( txtDisc.getText() );
-        if (rate < 0) {
+        rate = 0;
+        quantity = 0;
+        disc = 0;
+        if ("".equals( txtRate.getText() )) {
             rate = 0;
+        } else {
+            rate = Double.parseDouble( txtRate.getText() );
         }
-        if (quantity < 0) {
+        if ("".equals( txtQTY.getText() )) {
             quantity = 0;
+        } else {
+            quantity = Double.parseDouble( txtQTY.getText() );
         }
-        if (disc < 0) {
+        if ("".equals( txtDiscount.getText() )) {
             disc = 0;
+        } else {
+            disc = Double.parseDouble( txtDiscount.getText() );
         }
         amount = rate * quantity;
         disc = (amount * disc) / 100;
@@ -556,11 +567,9 @@ public class CreateQuotation extends javax.swing.JFrame {
             gstper = 0;
         }
 
-        subtotal = basicprice - discount;
-        txtSubTotal.setText( String.valueOf( subtotal ) );
-        gstamt = (subtotal * gstper) / 100;
+        gstamt = (basicprice * gstper) / 100;
         txtGSTAmount.setText( String.valueOf( gstamt ) );
-        grandTotal = subtotal + gstamt;
+        grandTotal = basicprice + gstamt;
         txtGrandTotal.setText( String.valueOf( grandTotal ) );
     }
 
@@ -568,7 +577,7 @@ public class CreateQuotation extends javax.swing.JFrame {
     public void saveQuotation() {
         try {
             String sql = "INSERT INTO quotation (quotationno,date,clientname,company,address,email,mobile,landline,gstin,basicprice,"
-                    + "discount,subtotal,gstper,gstamt,totalamt,joborderno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "discount,gstper,gstamt,totalamt,joborderno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtQuotationNo.getText() );
             pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
@@ -581,16 +590,13 @@ public class CreateQuotation extends javax.swing.JFrame {
             pst.setString( 9, cmbGSTIN.getSelectedItem().toString() );
             pst.setString( 10, txtBasicPrice.getText() );
             pst.setString( 11, txtDiscount.getText() );
-            pst.setString( 12, txtSubTotal.getText() );
-            pst.setString( 13, txtGSTPer.getText() );
-            pst.setString( 14, txtGSTAmount.getText() );
-            pst.setString( 15, txtGrandTotal.getText() );
-            pst.setString( 16, txtJobOrderNo.getText() );
+            pst.setString( 12, txtGSTPer.getText() );
+            pst.setString( 13, txtGSTAmount.getText() );
+            pst.setString( 14, txtGrandTotal.getText() );
+            pst.setString( 15, txtJobOrderNo.getText() );
+            pst.setString( 16, txtNote.getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Quotation saved to database", "Saved", JOptionPane.PLAIN_MESSAGE );
-//            getData();
-//            clearProductField();
-            cmbProductName.requestFocus();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "saveQuotation() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
@@ -606,7 +612,7 @@ public class CreateQuotation extends javax.swing.JFrame {
     public void updateQuotation() {
         try {
             String sql = "UPDATE quotation SET date=?,clientname=?,company=?,address=?,email=?,mobile=?,"
-                    + "landline=?,gstin=?,basicprice=?,discount=?,subtotal=?,gstper=?,gstamt=?,totalamt=?"
+                    + "landline=?,gstin=?,basicprice=?,discount=?,gstper=?,gstamt=?,totalamt=?,note=?"
                     + "WHERE quotationno='" + txtQuotationNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
@@ -619,10 +625,10 @@ public class CreateQuotation extends javax.swing.JFrame {
             pst.setString( 8, cmbGSTIN.getSelectedItem().toString() );
             pst.setString( 9, txtBasicPrice.getText() );
             pst.setString( 10, txtDiscount.getText() );
-            pst.setString( 11, txtSubTotal.getText() );
-            pst.setString( 12, txtGSTPer.getText() );
-            pst.setString( 13, txtGSTAmount.getText() );
-            pst.setString( 14, txtGrandTotal.getText() );
+            pst.setString( 11, txtGSTPer.getText() );
+            pst.setString( 12, txtGSTAmount.getText() );
+            pst.setString( 13, txtGrandTotal.getText() );
+            pst.setString( 14, txtNote.getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Quotation modified on database", "Updated", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
@@ -660,43 +666,19 @@ public class CreateQuotation extends javax.swing.JFrame {
     public void printOptions() {
         try {
             String qno = txtQuotationNo.getText();
-            //String[] choice={"CGST+SSGT Invoice","IGST Invoice"};
-            String[] choice = {"Landscape", "Portrait"};
-            //Integer[] options = {1, 3, 5, 7, 9, 11};
-            //Double[] options = {3.141, 1.618};
-            //Character[] options = {'a', 'b', 'c', 'd'};
-
-            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
-            //System.out.println(x);
-            //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
-            if (x == 0) {
-                try {
-                    String sql = "Select * from quotation,joborder,companydetails where quotation.quotationno='" + qno + "' "
-                            + "AND joborder.quotationno='" + qno + "'";
-                    JasperDesign jd = JRXmlLoader.load( "src/reports/quotationLS.jrxml" );
-                    JRDesignQuery qry = new JRDesignQuery();
-                    qry.setText( sql );
-                    jd.setQuery( qry );
-                    JasperReport jr = JasperCompileManager.compileReport( jd );
-                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
-                    JasperViewer.viewReport( jp, false );
-                } catch (JRException e) {
-                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-                }
-            } else {
-                try {
-                    String sql = "Select * from quotation,joborder,companydetails where quotation.quotationno='" + qno + "' "
-                            + "AND joborder.quotationno='" + qno + "'";
-                    JasperDesign jd = JRXmlLoader.load( "src/reports/quotationPT.jrxml" );
-                    JRDesignQuery qry = new JRDesignQuery();
-                    qry.setText( sql );
-                    jd.setQuery( qry );
-                    JasperReport jr = JasperCompileManager.compileReport( jd );
-                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
-                    JasperViewer.viewReport( jp, false );
-                } catch (JRException e) {
-                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-                }
+            String jno = txtJobOrderNo.getText();
+            try {
+                String sql = "Select * from quotation,jobordermaster,companydetails where quotation.quotationno='" + qno + "' "
+                        + "AND jobordermaster.joborderno='" + jno + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+                JasperDesign jd = JRXmlLoader.load( "src/reports/quotationPT.jrxml" );
+                JRDesignQuery qry = new JRDesignQuery();
+                qry.setText( sql );
+                jd.setQuery( qry );
+                JasperReport jr = JasperCompileManager.compileReport( jd );
+                JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+                JasperViewer.viewReport( jp, false );
+            } catch (JRException e) {
+                JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
             }
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
@@ -770,18 +752,18 @@ public class CreateQuotation extends javax.swing.JFrame {
         txtGSTPer = new javax.swing.JTextField();
         txtBasicPrice = new javax.swing.JTextField();
         txtDiscount = new javax.swing.JTextField();
-        txtSubTotal = new javax.swing.JTextField();
         txtGSTAmount = new javax.swing.JTextField();
         txtGrandTotal = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         btnSaveQuotation = new javax.swing.JButton();
         btnUpdateQuotation = new javax.swing.JButton();
         btnDeleteQuotation = new javax.swing.JButton();
         btnPrintQuotation = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtNote = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("QUOTATION BUILDER - JOB WORK MANAGEMENT SYSTEM");
@@ -801,64 +783,24 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         cmbClientName.setEditable(true);
         cmbClientName.setRequestFocusEnabled(true);
-        cmbClientName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbClientNameActionPerformed(evt);
-            }
-        });
-        cmbClientName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                cmbClientNameKeyReleased(evt);
-            }
-        });
 
         cmbCompany.setEditable(true);
         cmbCompany.setRequestFocusEnabled(true);
-        cmbCompany.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbCompanyKeyPressed(evt);
-            }
-        });
 
         cmbAddress.setEditable(true);
         cmbAddress.setRequestFocusEnabled(true);
-        cmbAddress.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbAddressKeyPressed(evt);
-            }
-        });
 
         cmbEmail.setEditable(true);
         cmbEmail.setRequestFocusEnabled(true);
-        cmbEmail.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbEmailKeyPressed(evt);
-            }
-        });
 
         cmbMobile.setEditable(true);
         cmbMobile.setRequestFocusEnabled(true);
-        cmbMobile.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbMobileKeyPressed(evt);
-            }
-        });
 
         cmbLandline.setEditable(true);
         cmbLandline.setRequestFocusEnabled(true);
-        cmbLandline.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbLandlineKeyPressed(evt);
-            }
-        });
 
         cmbGSTIN.setEditable(true);
         cmbGSTIN.setRequestFocusEnabled(true);
-        cmbGSTIN.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbGSTINKeyPressed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Clients Company Name");
@@ -956,27 +898,12 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         cmbProductName.setEditable(true);
         cmbProductName.setRequestFocusEnabled(true);
-        cmbProductName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbProductNameKeyPressed(evt);
-            }
-        });
 
         cmbProcess.setEditable(true);
         cmbProcess.setRequestFocusEnabled(true);
-        cmbProcess.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbProcessKeyPressed(evt);
-            }
-        });
 
         cmbMaterial.setEditable(true);
         cmbMaterial.setRequestFocusEnabled(true);
-        cmbMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbMaterialKeyPressed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setText("Product Name");
@@ -1030,9 +957,6 @@ public class CreateQuotation extends javax.swing.JFrame {
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
         txtQTY.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtQTYKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtQTYKeyReleased(evt);
             }
@@ -1217,6 +1141,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel30.setText("JOB ORDER NO.");
 
+        txtJobOrderNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtJobOrderNo.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -1300,7 +1225,15 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtGSTPer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTPer.setText("0");
+        txtGSTPer.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtGSTPerFocusGained(evt);
+            }
+        });
         txtGSTPer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGSTPerKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtGSTPerKeyReleased(evt);
             }
@@ -1308,28 +1241,38 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtBasicPrice.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtBasicPrice.setText("0");
-        txtBasicPrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBasicPriceActionPerformed(evt);
+        txtBasicPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBasicPriceKeyPressed(evt);
             }
         });
 
         txtDiscount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDiscount.setText("0");
         txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDiscountKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtDiscountKeyReleased(evt);
             }
         });
 
-        txtSubTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtSubTotal.setText("0");
-
         txtGSTAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTAmount.setText("0");
+        txtGSTAmount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGSTAmountKeyPressed(evt);
+            }
+        });
 
         txtGrandTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGrandTotal.setText("0");
+        txtGrandTotal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtGrandTotalKeyPressed(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1338,10 +1281,6 @@ public class CreateQuotation extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Discount");
-
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("Sub Total");
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1383,29 +1322,31 @@ public class CreateQuotation extends javax.swing.JFrame {
             }
         });
 
+        txtNote.setColumns(20);
+        txtNote.setRows(5);
+        txtNote.setBorder(javax.swing.BorderFactory.createTitledBorder("Note"));
+        jScrollPane2.setViewportView(txtNote);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtGSTPer)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtBasicPrice)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtDiscount)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSubTotal)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtGSTAmount)
@@ -1430,27 +1371,28 @@ public class CreateQuotation extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel20))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdateQuotation)
-                    .addComponent(btnDeleteQuotation)
-                    .addComponent(btnPrintQuotation)
-                    .addComponent(btnSaveQuotation))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUpdateQuotation)
+                            .addComponent(btnDeleteQuotation)
+                            .addComponent(btnPrintQuotation)
+                            .addComponent(btnSaveQuotation))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -1519,82 +1461,10 @@ public class CreateQuotation extends javax.swing.JFrame {
         getDataToTable();
     }//GEN-LAST:event_txtQuotationNoActionPerformed
 
-    private void cmbCompanyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbCompanyKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbAddress.requestFocus();
-        }
-    }//GEN-LAST:event_cmbCompanyKeyPressed
-
-    private void cmbAddressKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbAddressKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbEmail.requestFocus();
-        }
-    }//GEN-LAST:event_cmbAddressKeyPressed
-
-    private void cmbEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbEmailKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbMobile.requestFocus();
-        }
-    }//GEN-LAST:event_cmbEmailKeyPressed
-
-    private void cmbMobileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMobileKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbLandline.requestFocus();
-        }
-    }//GEN-LAST:event_cmbMobileKeyPressed
-
-    private void cmbLandlineKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbLandlineKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbGSTIN.requestFocus();
-        }
-    }//GEN-LAST:event_cmbLandlineKeyPressed
-
-    private void cmbGSTINKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbGSTINKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (clientexist == false) {
-                saveClient();
-            }
-        }
-    }//GEN-LAST:event_cmbGSTINKeyPressed
-
-    private void cmbProductNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbProductNameKeyPressed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_cmbProductNameKeyPressed
-
-    private void cmbProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbProcessKeyPressed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_cmbProcessKeyPressed
-
-    private void cmbMaterialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMaterialKeyPressed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_cmbMaterialKeyPressed
-
-    private void cmbClientNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbClientNameKeyReleased
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_cmbClientNameKeyReleased
-
     private void txtQTYKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQTYKeyReleased
         // TODO add your handling code here:
         calcAmt();
     }//GEN-LAST:event_txtQTYKeyReleased
-
-    private void txtQTYKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQTYKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            getData();
-            getDataToTable();
-        }
-    }//GEN-LAST:event_txtQTYKeyPressed
 
     private void tblQuotationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQuotationMouseClicked
         // TODO add your handling code here:
@@ -1605,11 +1475,6 @@ public class CreateQuotation extends javax.swing.JFrame {
         // TODO add your handling code here:
         getTableDataToField();
     }//GEN-LAST:event_tblQuotationKeyPressed
-
-    private void txtBasicPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBasicPriceActionPerformed
-        // TODO add your handling code here:
-        calcGT();
-    }//GEN-LAST:event_txtBasicPriceActionPerformed
 
     private void txtGSTPerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTPerKeyReleased
         // TODO add your handling code here:
@@ -1654,6 +1519,7 @@ public class CreateQuotation extends javax.swing.JFrame {
         getMaterialData();
         clearProductField();
         clearQuotationTotals();
+
         //AFTER FROM IS LOADED
         setTotCalFieldsZero();
         getData();
@@ -1661,11 +1527,6 @@ public class CreateQuotation extends javax.swing.JFrame {
         getQuotationDataCALC();
         getDataToTable();
     }//GEN-LAST:event_txtQuotationNoKeyReleased
-
-    private void cmbClientNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientNameActionPerformed
-        // TODO add your handling code here:
-        getData();
-    }//GEN-LAST:event_cmbClientNameActionPerformed
 
     private void btnPrintQuotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintQuotationActionPerformed
         // TODO add your handling code here:
@@ -1701,6 +1562,52 @@ public class CreateQuotation extends javax.swing.JFrame {
         getDataToTable();
         getClientDataFromJobOrder();
     }//GEN-LAST:event_txtJobOrderNoActionPerformed
+
+    private void txtGSTPerFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtGSTPerFocusGained
+        // TODO add your handling code here:
+        txtGSTPer.selectAll();
+    }//GEN-LAST:event_txtGSTPerFocusGained
+
+    private void txtGSTPerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTPerKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtBasicPrice.requestFocus();
+            txtBasicPrice.selectAll();
+        }
+    }//GEN-LAST:event_txtGSTPerKeyPressed
+
+    private void txtBasicPriceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBasicPriceKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtDiscount.requestFocus();
+            txtDiscount.selectAll();
+        }
+    }//GEN-LAST:event_txtBasicPriceKeyPressed
+
+    private void txtDiscountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtGSTAmount.requestFocus();
+            txtGSTAmount.selectAll();
+        }
+    }//GEN-LAST:event_txtDiscountKeyPressed
+
+    private void txtGSTAmountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGSTAmountKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtGrandTotal.requestFocus();
+            txtGrandTotal.selectAll();
+        }
+    }//GEN-LAST:event_txtGSTAmountKeyPressed
+
+    private void txtGrandTotalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGrandTotalKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            saveQuotation();
+            txtQuotationNo.requestFocus();
+            txtQuotationNo.selectAll();
+        }
+    }//GEN-LAST:event_txtGrandTotalKeyPressed
 
     /**
      * @param args the command line arguments
@@ -1763,7 +1670,6 @@ public class CreateQuotation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1789,6 +1695,7 @@ public class CreateQuotation extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblQuotation;
     private javax.swing.JTextField txtAmount;
     private javax.swing.JTextField txtBasicPrice;
@@ -1799,12 +1706,12 @@ public class CreateQuotation extends javax.swing.JFrame {
     private javax.swing.JTextField txtGrandTotal;
     private javax.swing.JTextField txtJobOrderNo;
     private javax.swing.JTextField txtMDP;
+    private javax.swing.JTextArea txtNote;
     private javax.swing.JTextField txtOD;
     private javax.swing.JTextField txtQTY;
     private javax.swing.JTextField txtQuotationNo;
     private javax.swing.JTextField txtRate;
     private javax.swing.JTextField txtRemarks;
-    private javax.swing.JTextField txtSubTotal;
     private javax.swing.JTextField txtTL;
     private javax.swing.JTextField txtTSTRT;
     private javax.swing.JTextField txtW;

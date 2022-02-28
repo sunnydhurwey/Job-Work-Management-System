@@ -5,8 +5,8 @@
  */
 package job.work.management.system;
 
-import com.sun.glass.events.KeyEvent;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +32,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author sunny
  */
 public class CreateInvoice extends javax.swing.JFrame {
-    
+
     Connection conn = null;
     ResultSet rs = null, rs2 = null;
     PreparedStatement pst = null, pst2 = null;
@@ -55,7 +55,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         AutoCompleteDecorator.decorate( cmbMobile );
         AutoCompleteDecorator.decorate( cmbLandline );
         AutoCompleteDecorator.decorate( cmbGSTIN );
-        
+
         AutoCompleteDecorator.decorate( cmbProductName );
         AutoCompleteDecorator.decorate( cmbProcess );
         AutoCompleteDecorator.decorate( cmbMaterial );
@@ -63,7 +63,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Program to set single instance of ManageClients
     private static CreateInvoice obj = null;
-    
+
     public static CreateInvoice getObj() {
         if (obj == null) {
             obj = new CreateInvoice();
@@ -73,7 +73,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Function or method to get data from database
     int invno = 0;
-    
+
     public void getInvoiceNo() {
         try {
             String sql = "SELECT * FROM invoice1";
@@ -129,7 +129,6 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtGSTPer.setText( "0" );
         txtBasicPrice.setText( "0" );
         txtDiscount.setText( "0" );
-        txtSubTotal.setText( "0" );
         txtGSTAmount.setText( "0" );
         txtGrandTotal.setText( "0" );
     }
@@ -192,29 +191,34 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtGSTPer.setText( "0" );
         txtBasicPrice.setText( "0" );
         txtDiscount.setText( "0" );
-        txtSubTotal.setText( "0" );
         txtGSTAmount.setText( "0" );
         txtGrandTotal.setText( "0" );
     }
     //Function to getData
-    double disc = 0, basicprice = 0, dbamt = 0;
+    double disc = 0, basicprice = 0, dbamt = 0, dbdisc = 0, dbrate = 0, dbqty = 0;
     String cn;
-    
+
     public void getData() {
         try {
             disc = 0;
             basicprice = 0;
             dbamt = 0;
-            String sql = "SELECT * FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
+            dbdisc = 0;
+            dbrate = 0;
+            dbqty = 0;
+            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
                 cn = rs.getString( "clientname" );
                 dbamt = rs.getDouble( "amount" );
-                disc = disc + rs.getDouble( "discount" );
-                basicprice = basicprice + dbamt - disc;
+                dbdisc = rs.getDouble( "discountper" );
+                dbrate = rs.getDouble( "rate" );
+                dbqty = rs.getDouble( "qty" );
+                disc = disc + ((dbrate * dbqty * dbdisc) / 100);
+                basicprice = basicprice + dbamt;
             }
-            txtBasicPrice.setText( String.valueOf( basicprice ) );
+            txtBasicPrice.setText( String.valueOf( Math.round( basicprice ) ) );
             txtDiscount.setText( String.valueOf( disc ) );
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
@@ -262,7 +266,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }
 
-//Function or method to get saved invoice data calculation
+//Function or method to get saved invoice data calculation value from database
     public void getInvoiceDataCALC() {
         try {
             String sql = "SELECT * FROM invoice1 WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
@@ -281,9 +285,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                 txtGSTPer.setText( rs2.getString( "gstper" ) );
                 txtBasicPrice.setText( rs2.getString( "basicprice" ) );
                 txtDiscount.setText( rs2.getString( "discount" ) );
-                txtSubTotal.setText( rs2.getString( "subtotal" ) );
                 txtGSTAmount.setText( rs2.getString( "gstamt" ) );
                 txtGrandTotal.setText( rs2.getString( "totalamt" ) );
+                txtNote.setText( rs2.getString( "note" ) );
                 btnSaveInvoice.setEnabled( false );
                 btnUpdateInvoice.setEnabled( true );
                 btnDeleteInvoice.setEnabled( true );
@@ -299,9 +303,9 @@ public class CreateInvoice extends javax.swing.JFrame {
                 txtGSTPer.setText( "0" );
                 txtBasicPrice.setText( "0" );
                 txtDiscount.setText( "0" );
-                txtSubTotal.setText( "0" );
                 txtGSTAmount.setText( "0" );
                 txtGrandTotal.setText( "0" );
+                txtNote.setText( "" );
                 btnSaveInvoice.setEnabled( true );
                 btnUpdateInvoice.setEnabled( false );
                 btnDeleteInvoice.setEnabled( false );
@@ -337,7 +341,6 @@ public class CreateInvoice extends javax.swing.JFrame {
                 txtGSTPer.setText( rs2.getString( "gstper" ) );
                 txtBasicPrice.setText( rs2.getString( "basicprice" ) );
                 txtDiscount.setText( rs2.getString( "discount" ) );
-                txtSubTotal.setText( rs2.getString( "subtotal" ) );
                 txtGSTAmount.setText( rs2.getString( "gstamt" ) );
                 txtGrandTotal.setText( rs2.getString( "totalamt" ) );
 //                btnSaveQuotation.setEnabled( false );
@@ -355,7 +358,6 @@ public class CreateInvoice extends javax.swing.JFrame {
                 txtGSTPer.setText( "0" );
                 txtBasicPrice.setText( "0" );
                 txtDiscount.setText( "0" );
-                txtSubTotal.setText( "0" );
                 txtGSTAmount.setText( "0" );
                 txtGrandTotal.setText( "0" );
                 btnSaveInvoice.setEnabled( true );
@@ -423,7 +425,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     boolean clientexist = false;
     int clientID = 0;
     String clientname;
-    
+
     public void setDataToFieldsOnNameInput() {
         clientname = cmbClientName.getSelectedItem().toString();
         try {
@@ -456,7 +458,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog( null, e );
             }
         }
-        
+
     }
 
     //Function or method to get product data
@@ -542,8 +544,8 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Function or method to get selected data from table to field
     int row;
-    String count, tblClick;
-    
+    String count, tblClick, tblInvClick;
+
     public void getTableDataToField() {
         try {
             row = tblInvoice.getSelectedRow();
@@ -562,7 +564,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 txtOD.setText( rs2.getString( "od" ) );
                 txtTL.setText( rs2.getString( "tl" ) );
                 txtMDP.setText( rs2.getString( "mdp" ) );
-                txtDisc.setText( rs2.getString( "discount" ) );
+                txtDisc.setText( rs2.getString( "discountper" ) );
                 txtRate.setText( rs2.getString( "rate" ) );
                 txtQTY.setText( rs2.getString( "qty" ) );
                 txtAmount.setText( rs2.getString( "amount" ) );
@@ -583,19 +585,25 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Function or method to calculate Rate X Quantity = AMOUNT
     double rate = 0, quantity = 0, amount = 0;
-    
+
     public void calcAmt() {
-        rate = Double.parseDouble( txtRate.getText() );
-        quantity = Double.parseDouble( txtQTY.getText() );
-        disc = Double.parseDouble( txtDisc.getText() );
-        if (rate < 0) {
+        rate = 0;
+        quantity = 0;
+        disc = 0;
+        if ("".equals( txtRate.getText() )) {
             rate = 0;
+        } else {
+            rate = Double.parseDouble( txtRate.getText() );
         }
-        if (quantity < 0) {
+        if ("".equals( txtQTY.getText() )) {
             quantity = 0;
+        } else {
+            quantity = Double.parseDouble( txtQTY.getText() );
         }
-        if (disc < 0) {
+        if ("".equals( txtDiscount.getText() )) {
             disc = 0;
+        } else {
+            disc = Double.parseDouble( txtDiscount.getText() );
         }
         amount = rate * quantity;
         disc = (amount * disc) / 100;
@@ -605,27 +613,27 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Funtion or method to calculate GRAND TOTAL
     double gstper = 0, discount = 0, subtotal = 0, gstamt = 0, grandTotal = 0;
-    
+
     public void calcGT() {
-        if (txtGSTPer.getText() != null || !"".equals( txtGSTPer.getText() )) {
+        gstamt = 0;
+        grandTotal = 0;
+        if (!"".equals( txtGSTPer.getText() )) {
             gstper = Double.parseDouble( txtGSTPer.getText() );
         } else {
             gstper = 0;
         }
-        
-        subtotal = basicprice - discount;
-        txtSubTotal.setText( String.valueOf( subtotal ) );
-        gstamt = (subtotal * gstper) / 100;
+
+        gstamt = (Double.parseDouble( txtBasicPrice.getText() ) * gstper) / 100;
         txtGSTAmount.setText( String.valueOf( gstamt ) );
-        grandTotal = subtotal + gstamt;
-        txtGrandTotal.setText( String.valueOf( grandTotal ) );
+        grandTotal = Double.parseDouble( txtBasicPrice.getText() ) + gstamt;
+        txtGrandTotal.setText( String.valueOf( Math.round( grandTotal ) ) );
     }
 
     //Function to save invoice
     public void saveInvoice() {
         try {
             String sql = "INSERT INTO invoice1 (quotationno,date,clientname,company,address,email,mobile,landline,gstin,basicprice,"
-                    + "discount,subtotal,gstper,gstamt,totalamt,joborderno,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "discount,gstper,gstamt,totalamt,joborderno,invoiceno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtQuotationNo.getText() );
             pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
@@ -638,16 +646,14 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst.setString( 9, cmbGSTIN.getSelectedItem().toString() );
             pst.setString( 10, txtBasicPrice.getText() );
             pst.setString( 11, txtDiscount.getText() );
-            pst.setString( 12, txtSubTotal.getText() );
-            pst.setString( 13, txtGSTPer.getText() );
-            pst.setString( 14, txtGSTAmount.getText() );
-            pst.setString( 15, txtGrandTotal.getText() );
-            pst.setString( 16, txtJobOrderNo.getText() );
-            pst.setString( 17, txtInvoiceNo.getText() );
+            pst.setString( 12, txtGSTPer.getText() );
+            pst.setString( 13, txtGSTAmount.getText() );
+            pst.setString( 14, txtGrandTotal.getText() );
+            pst.setString( 15, txtJobOrderNo.getText() );
+            pst.setString( 16, txtInvoiceNo.getText() );
+            pst.setString( 17, txtNote.getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Invoice saved to database", "Saved", JOptionPane.PLAIN_MESSAGE );
-//            getData();
-//            clearProductField();
             cmbProductName.requestFocus();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "saveInvoice() Exception", JOptionPane.ERROR_MESSAGE );
@@ -664,8 +670,8 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void updateInvoice() {
         try {
             String sql = "UPDATE invoice1 SET date=?,clientname=?,company=?,address=?,email=?,mobile=?,"
-                    + "landline=?,gstin=?,basicprice=?,discount=?,subtotal=?,gstper=?,gstamt=?,totalamt=?,"
-                    + "quotationno=? WHERE invoiceno='" + txtInvoiceNo.getText() + "' ";
+                    + "landline=?,gstin=?,basicprice=?,discount=?,gstper=?,gstamt=?,totalamt=?,"
+                    + "quotationno=?,note=? WHERE invoiceno='" + txtInvoiceNo.getText() + "' ";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
             pst.setString( 2, cmbClientName.getEditor().getItem().toString() );
@@ -677,11 +683,11 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst.setString( 8, cmbGSTIN.getSelectedItem().toString() );
             pst.setString( 9, txtBasicPrice.getText() );
             pst.setString( 10, txtDiscount.getText() );
-            pst.setString( 11, txtSubTotal.getText() );
-            pst.setString( 12, txtGSTPer.getText() );
-            pst.setString( 13, txtGSTAmount.getText() );
-            pst.setString( 14, txtGrandTotal.getText() );
-            pst.setString( 15, txtQuotationNo.getText() );
+            pst.setString( 11, txtGSTPer.getText() );
+            pst.setString( 12, txtGSTAmount.getText() );
+            pst.setString( 13, txtGrandTotal.getText() );
+            pst.setString( 14, txtQuotationNo.getText() );
+            pst.setString( 15, txtNote.getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Invoice modified on database", "Updated", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
@@ -762,6 +768,163 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }
 
+    //Function or method to add product to job list
+    public void importJobOrder() {
+        try {
+            String sql = "INSERT INTO invoicemaster (joborderno,date,clientname,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
+                    + "amount,remark,clientid,company,clientaddress,clientemail,clientmobile,clientlandline,clientgstin,discountamt,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            pst = conn.prepareStatement( sql );
+            pst.setString( 1, txtJobOrderNo.getText() );
+            pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
+            pst.setString( 4, cmbProductName.getSelectedItem().toString() );
+            pst.setString( 5, cmbProcess.getSelectedItem().toString() );
+            pst.setString( 6, cmbMaterial.getSelectedItem().toString() );
+            pst.setString( 7, txtTSTRT.getText() );
+            pst.setString( 8, txtW.getText() );
+            pst.setString( 9, txtOD.getText() );
+            pst.setString( 10, txtTL.getText() );
+            pst.setString( 11, txtMDP.getText() );
+            pst.setString( 12, txtDisc.getText() );
+            pst.setString( 13, txtQTY.getText() );
+            pst.setString( 14, txtRate.getText() );
+            pst.setString( 15, txtAmount.getText() );
+            pst.setString( 16, txtRemarks.getText() );
+            pst.setInt( 17, clientID );
+            pst.setString( 18, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 19, cmbAddress.getSelectedItem().toString() );
+            pst.setString( 20, cmbEmail.getSelectedItem().toString() );
+            pst.setString( 21, cmbMobile.getSelectedItem().toString() );
+            pst.setString( 22, cmbLandline.getSelectedItem().toString() );
+            pst.setString( 23, cmbGSTIN.getSelectedItem().toString() );
+            //Calculation of discountamt
+            double q = 0, r = 0, d = 0, da = 0;
+            q = Double.parseDouble( txtQTY.getText() );
+            r = Double.parseDouble( txtRate.getText() );
+            d = Double.parseDouble( txtDisc.getText() );
+            da = (q * r * d) / 100;
+            pst.setString( 24, String.valueOf( da ) );
+            pst.setInt( 25, Integer.parseInt( txtInvoiceNo.getText() ) );
+            pst.execute();
+//            JOptionPane.showMessageDialog( null, "Product added to invoice database", "Saved", JOptionPane.PLAIN_MESSAGE );
+            System.out.println( "Product added to invoice database." );
+            clearProductField();
+            cmbProductName.requestFocus();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "importJobOrder() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+//Function or method to get Invoice Table Data To Field
+
+    public void getInvoiceTableDataToField() {
+        try {
+            row = tblInvoice1.getSelectedRow();
+            tblInvClick = tblInvoice1.getModel().getValueAt( row, 0 ).toString();
+            String sql = "SELECT * FROM invoicemaster WHERE inv_uid='" + tblInvClick + "'";
+            pst2 = conn.prepareStatement( sql );
+            rs2 = pst2.executeQuery();
+            if (rs2.next()) {
+                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+                cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
+                cmbProcess.setSelectedItem( rs2.getString( "processname" ) );
+                cmbMaterial.setSelectedItem( rs2.getString( "materialname" ) );
+                txtRemarks.setText( rs2.getString( "remark" ) );
+                txtTSTRT.setText( rs2.getString( "tstrt" ) );
+                txtW.setText( rs2.getString( "w" ) );
+                txtOD.setText( rs2.getString( "od" ) );
+                txtTL.setText( rs2.getString( "tl" ) );
+                txtMDP.setText( rs2.getString( "mdp" ) );
+                txtDisc.setText( rs2.getString( "discountper" ) );
+                txtRate.setText( rs2.getString( "rate" ) );
+                txtQTY.setText( rs2.getString( "qty" ) );
+                txtAmount.setText( rs2.getString( "amount" ) );
+            } else {
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getInvoiceTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    //Remove imported Job Order selection from Invoice 
+    public void removeImport() {
+        try {
+            String sql = "DELETE FROM invoicemaster WHERE inv_uid='" + tblInvClick + "'";
+            pst = conn.prepareStatement( sql );
+            pst.execute();
+//            JOptionPane.showMessageDialog( null, "Product deleted from Invoice database", "Import Deleted", JOptionPane.PLAIN_MESSAGE );
+            System.out.println( "Product deleted from invoice database" );
+            clearProductField();
+            cmbProductName.requestFocus();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "removeImport() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    //Function or method to get data to table
+    public void getInvoiceDataToTable() {
+        try {
+            String sql = "SELECT inv_uid AS 'INV_UID',invoiceno AS 'INVOICE NO',joborderno AS 'JOB ORDER NO',productname AS 'PRODUCT NAME',processname AS 'PROCESS NAME',"
+                    + "materialname AS 'MATERIAL NAME',tstrt AS 'T/START',w AS 'W',od AS 'OD',tl AS 'TL',mdp AS 'M/DP',rate AS 'RATE',qty AS 'QUANTITY',"
+                    + "discountper AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblInvoice1.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getInvoiceDataToTable() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    public void calcInvoiceTableData() {
+        try {
+            double d = 0, a = 0;
+            String sql = "SELECT rate ,qty ,discountamt,amount  FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                d = d + rs.getDouble( "discountamt" );
+                a = a + rs.getDouble( "amount" );
+            }
+            txtBasicPrice.setText( String.valueOf( a ) );
+            txtDiscount.setText( String.valueOf( d ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "calcInvoiceTableData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -831,21 +994,25 @@ public class CreateInvoice extends javax.swing.JFrame {
         txtGSTPer = new javax.swing.JTextField();
         txtBasicPrice = new javax.swing.JTextField();
         txtDiscount = new javax.swing.JTextField();
-        txtSubTotal = new javax.swing.JTextField();
         txtGSTAmount = new javax.swing.JTextField();
         txtGrandTotal = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         btnSaveInvoice = new javax.swing.JButton();
         btnUpdateInvoice = new javax.swing.JButton();
         btnDeleteInvoice = new javax.swing.JButton();
         btnPrintInvoice = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtNote = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblInvoice1 = new javax.swing.JTable();
+        btnImport = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("QUOTATION BUILDER - JOB WORK MANAGEMENT SYSTEM");
+        setTitle("INVOICE BUILDER - JOB WORK MANAGEMENT SYSTEM");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -983,7 +1150,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                         .addComponent(jLabel26)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSaveClient)))
                 .addContainerGap())
         );
@@ -1044,6 +1211,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtTSTRT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTSTRT.setText("0");
+        txtTSTRT.setFocusable(false);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1075,21 +1243,27 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtW.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtW.setText("0");
+        txtW.setFocusable(false);
 
         txtOD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtOD.setText("0");
+        txtOD.setFocusable(false);
 
         txtTL.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTL.setText("0");
+        txtTL.setFocusable(false);
 
         txtMDP.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMDP.setText("0");
+        txtMDP.setFocusable(false);
 
         txtRate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRate.setText("0");
+        txtRate.setFocusable(false);
 
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
+        txtQTY.setFocusable(false);
         txtQTY.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtQTYKeyPressed(evt);
@@ -1101,6 +1275,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAmount.setText("0");
+        txtAmount.setFocusable(false);
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1119,10 +1294,11 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel22.setText("Discount");
+        jLabel22.setText("Disc.%");
 
         txtDisc.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDisc.setText("0");
+        txtDisc.setFocusable(false);
         txtDisc.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtDiscKeyPressed(evt);
@@ -1183,13 +1359,10 @@ public class CreateInvoice extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtQTY)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDisc, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtDisc, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtAmount)
@@ -1293,6 +1466,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel30.setText("JOB ORDER NO.");
 
+        txtJobOrderNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtJobOrderNo.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -1336,14 +1510,14 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel23)
+                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel6)
                 .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel7)
                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
@@ -1390,6 +1564,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtBasicPrice.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtBasicPrice.setText("0");
+        txtBasicPrice.setFocusable(false);
         txtBasicPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtBasicPriceActionPerformed(evt);
@@ -1398,20 +1573,20 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtDiscount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDiscount.setText("0");
+        txtDiscount.setFocusable(false);
         txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtDiscountKeyReleased(evt);
             }
         });
 
-        txtSubTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtSubTotal.setText("0");
-
         txtGSTAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGSTAmount.setText("0");
+        txtGSTAmount.setFocusable(false);
 
         txtGrandTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtGrandTotal.setText("0");
+        txtGrandTotal.setFocusable(false);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1420,10 +1595,6 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Discount");
-
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("Sub Total");
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1434,6 +1605,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel20.setText("GRAND TOTAL");
 
         btnSaveInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnSaveInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
         btnSaveInvoice.setText("SAVE");
         btnSaveInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1442,6 +1614,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         btnUpdateInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnUpdateInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/update_16px.png"))); // NOI18N
         btnUpdateInvoice.setText("UPDATE");
         btnUpdateInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1450,6 +1623,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         btnDeleteInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnDeleteInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/Delete_16px.png"))); // NOI18N
         btnDeleteInvoice.setText("DELETE");
         btnDeleteInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1458,6 +1632,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         });
 
         btnPrintInvoice.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnPrintInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/print_16px.png"))); // NOI18N
         btnPrintInvoice.setText("PRINT");
         btnPrintInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1465,29 +1640,31 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         });
 
+        txtNote.setColumns(20);
+        txtNote.setRows(5);
+        txtNote.setBorder(javax.swing.BorderFactory.createTitledBorder("Note"));
+        jScrollPane3.setViewportView(txtNote);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtGSTPer)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtBasicPrice)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtDiscount)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSubTotal)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtGSTAmount)
@@ -1512,29 +1689,72 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel20))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdateInvoice)
-                    .addComponent(btnDeleteInvoice)
-                    .addComponent(btnPrintInvoice)
-                    .addComponent(btnSaveInvoice))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUpdateInvoice)
+                            .addComponent(btnDeleteInvoice)
+                            .addComponent(btnPrintInvoice)
+                            .addComponent(btnSaveInvoice)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
+
+        tblInvoice1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        tblInvoice1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tblInvoice1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblInvoice1MouseClicked(evt);
+            }
+        });
+        tblInvoice1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblInvoice1KeyPressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblInvoice1);
+
+        btnImport.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/down_arrow_16px.png"))); // NOI18N
+        btnImport.setText("IMPORT");
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportActionPerformed(evt);
+            }
+        });
+
+        btnRemove.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/Remove_16px.png"))); // NOI18N
+        btnRemove.setText("REMOVE");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1543,9 +1763,19 @@ public class CreateInvoice extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
             .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane2)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnImport)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemove)
+                .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnImport, btnRemove});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1555,7 +1785,13 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnImport)
+                    .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1571,7 +1807,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1192, 607));
+        setSize(new java.awt.Dimension(1176, 606));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1587,8 +1823,11 @@ public class CreateInvoice extends javax.swing.JFrame {
         clearInvoiceTotals();
         //AFTER FORM IS LOADED
         setTotCalFieldsZero();
-        getData();
         getDataToTable();
+        getData();
+        getInvoiceDataToTable();
+        calcAmt();
+        calcGT();
     }//GEN-LAST:event_formWindowOpened
 
     private void btnSaveClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveClientActionPerformed
@@ -1699,6 +1938,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             calcGT();
         } else {
             txtGSTPer.setText( "0" );
+            txtGSTPer.selectAll();
             calcGT();
         }
     }//GEN-LAST:event_txtGSTPerKeyReleased
@@ -1742,6 +1982,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         getClientDataFromJobOrder();
         getQuotationDataCALC();
         getDataToTable();
+        getInvoiceDataToTable();
+        calcAmt();
+        calcGT();
     }//GEN-LAST:event_txtQuotationNoKeyReleased
 
     private void cmbClientNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientNameActionPerformed
@@ -1790,8 +2033,38 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void txtInvoiceNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyReleased
         // TODO add your handling code here:
+        getInvoiceDataToTable();
         getInvoiceDataCALC();
+        calcGT();
     }//GEN-LAST:event_txtInvoiceNoKeyReleased
+
+    private void tblInvoice1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInvoice1MouseClicked
+        // TODO add your handling code here:
+        getInvoiceTableDataToField();
+    }//GEN-LAST:event_tblInvoice1MouseClicked
+
+    private void tblInvoice1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblInvoice1KeyPressed
+        // TODO add your handling code here:
+        getInvoiceTableDataToField();
+    }//GEN-LAST:event_tblInvoice1KeyPressed
+
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
+        // TODO add your handling code here:
+        importJobOrder();
+        getInvoiceDataToTable();
+        calcInvoiceTableData();
+        calcAmt();
+        calcGT();
+    }//GEN-LAST:event_btnImportActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        removeImport();
+        getInvoiceDataToTable();
+        calcInvoiceTableData();
+        calcAmt();
+        calcGT();
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1810,13 +2083,17 @@ public class CreateInvoice extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
+            java.util.logging.Logger.getLogger( CreateInvoice.class
+                    .getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
+            java.util.logging.Logger.getLogger( CreateInvoice.class
+                    .getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
+            java.util.logging.Logger.getLogger( CreateInvoice.class
+                    .getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger( CreateInvoice.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
+            java.util.logging.Logger.getLogger( CreateInvoice.class
+                    .getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
         //</editor-fold>
@@ -1831,7 +2108,9 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteInvoice;
+    private javax.swing.JButton btnImport;
     private javax.swing.JButton btnPrintInvoice;
+    private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSaveClient;
     private javax.swing.JButton btnSaveInvoice;
     private javax.swing.JButton btnUpdateInvoice;
@@ -1855,7 +2134,6 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1882,7 +2160,10 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblInvoice;
+    private javax.swing.JTable tblInvoice1;
     private javax.swing.JTextField txtAmount;
     private javax.swing.JTextField txtBasicPrice;
     private javax.swing.JTextField txtDisc;
@@ -1893,12 +2174,12 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JTextField txtInvoiceNo;
     private javax.swing.JTextField txtJobOrderNo;
     private javax.swing.JTextField txtMDP;
+    private javax.swing.JTextArea txtNote;
     private javax.swing.JTextField txtOD;
     private javax.swing.JTextField txtQTY;
     private javax.swing.JTextField txtQuotationNo;
     private javax.swing.JTextField txtRate;
     private javax.swing.JTextField txtRemarks;
-    private javax.swing.JTextField txtSubTotal;
     private javax.swing.JTextField txtTL;
     private javax.swing.JTextField txtTSTRT;
     private javax.swing.JTextField txtW;
