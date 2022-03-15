@@ -202,7 +202,6 @@ public class CompanyDetails extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        btnPrint = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblCompanyDetails = new javax.swing.JTable();
 
@@ -410,9 +409,6 @@ public class CompanyDetails extends javax.swing.JFrame {
             }
         });
 
-        btnPrint.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btnPrint.setText("PRINT");
-
         javax.swing.GroupLayout pnlBankDetailsLayout = new javax.swing.GroupLayout(pnlBankDetails);
         pnlBankDetails.setLayout(pnlBankDetailsLayout);
         pnlBankDetailsLayout.setHorizontalGroup(
@@ -432,20 +428,18 @@ public class CompanyDetails extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIFSC))))
+                                .addComponent(txtIFSC, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBankDetailsLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnClear)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPrint)))
+                        .addComponent(btnDelete)))
                 .addContainerGap())
         );
 
-        pnlBankDetailsLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnClear, btnDelete, btnPrint, btnSave});
+        pnlBankDetailsLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnClear, btnDelete, btnSave});
 
         pnlBankDetailsLayout.setVerticalGroup(
             pnlBankDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -464,14 +458,13 @@ public class CompanyDetails extends javax.swing.JFrame {
                 .addGroup(pnlBankDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnClear)
-                    .addComponent(btnDelete)
-                    .addComponent(btnPrint))
+                    .addComponent(btnDelete))
                 .addGap(158, 158, 158))
         );
 
         pnlBankDetailsLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAccount, txtBankname, txtIFSC});
 
-        pnlBankDetailsLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnClear, btnDelete, btnPrint, btnSave});
+        pnlBankDetailsLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnClear, btnDelete, btnSave});
 
         tblCompanyDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -663,7 +656,6 @@ public class CompanyDetails extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

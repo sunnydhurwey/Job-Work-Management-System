@@ -83,7 +83,7 @@ public class JobOrders extends javax.swing.JFrame {
     //Function or method to get job order list by quotation number
     public void getJobOrderByQuotation(){
         try {
-            String sql = "SELECT * FROM joborder WHERE quotationno='"+txtQuotationNo.getText()+"'";
+            String sql = "SELECT * FROM joborder WHERE quotationno='"+txtJobOrderNo.getText()+"'";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
             tblJobOrder.setModel(DbUtils.resultSetToTableModel(rs));
@@ -152,11 +152,11 @@ public class JobOrders extends javax.swing.JFrame {
         try{
             row = tblJobOrder.getSelectedRow();
             tblClick = tblJobOrder.getModel().getValueAt(row, 0).toString();
-            String sql = "SELECT * FROM joborder WHERE uid='"+ tblClick +"'";
+            String sql = "SELECT * FROM jobordermaster WHERE uid='"+ tblClick +"'";
             pst2 = conn.prepareStatement(sql);
             rs2 = pst2.executeQuery();
             if (rs2.next()) {
-                txtQuotationNo.setText(rs2.getString("quotationno"));
+                txtJobOrderNo.setText(rs2.getString("joborderno"));
                 dtJobDate.setDate(rs2.getDate("date"));
                 cmbClientName.setSelectedItem(rs2.getString("clientname"));
                 cmbProductName.setSelectedItem(rs2.getString("productname"));                
@@ -199,7 +199,7 @@ public class JobOrders extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtQuotationNo = new javax.swing.JTextField();
+        txtJobOrderNo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         dtJobDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
@@ -243,11 +243,11 @@ public class JobOrders extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "Job Order List", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel1.setText("Quotation No.");
+        jLabel1.setText("Job Order No.");
 
-        txtQuotationNo.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtJobOrderNo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtQuotationNoKeyReleased(evt);
+                txtJobOrderNoKeyReleased(evt);
             }
         });
 
@@ -340,7 +340,7 @@ public class JobOrders extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dtJobDate, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -411,7 +411,7 @@ public class JobOrders extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel12))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -445,7 +445,7 @@ public class JobOrders extends javax.swing.JFrame {
                             .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbClientName, cmbJobStatus, cmbProductName, dtJobDate, jButton1, jButton2, txtAmount, txtDP, txtM, txtOD, txtQuotationNo, txtSTD, txtT, txtTL, txtW});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbClientName, cmbJobStatus, cmbProductName, dtJobDate, jButton1, jButton2, txtAmount, txtDP, txtJobOrderNo, txtM, txtOD, txtSTD, txtT, txtTL, txtW});
 
         tblJobOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -501,12 +501,12 @@ public class JobOrders extends javax.swing.JFrame {
         setJobList();
     }//GEN-LAST:event_formWindowOpened
 
-    private void txtQuotationNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyReleased
+    private void txtJobOrderNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobOrderNoKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtQuotationNo.getText())){
+        if(!"".equals(txtJobOrderNo.getText())){
             getJobOrderByQuotation();
         }
-    }//GEN-LAST:event_txtQuotationNoKeyReleased
+    }//GEN-LAST:event_txtJobOrderNoKeyReleased
 
     private void dtJobDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtJobDatePropertyChange
         // TODO add your handling code here:
@@ -593,9 +593,9 @@ public class JobOrders extends javax.swing.JFrame {
     private javax.swing.JTable tblJobOrder;
     private javax.swing.JTextField txtAmount;
     private javax.swing.JTextField txtDP;
+    private javax.swing.JTextField txtJobOrderNo;
     private javax.swing.JTextField txtM;
     private javax.swing.JTextField txtOD;
-    private javax.swing.JTextField txtQuotationNo;
     private javax.swing.JTextField txtSTD;
     private javax.swing.JTextField txtT;
     private javax.swing.JTextField txtTL;

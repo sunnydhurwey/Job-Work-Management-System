@@ -141,6 +141,7 @@ public class Dashboard extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         mnuJobOrder = new javax.swing.JMenu();
         mnuCreateJobOrderMaster = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
         mnuJobOrderList = new javax.swing.JMenuItem();
         mnuQuotations = new javax.swing.JMenu();
         mnuCreateQuotation = new javax.swing.JMenuItem();
@@ -150,6 +151,8 @@ public class Dashboard extends javax.swing.JFrame {
         mnuCreateInvoice = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         mnuManageInvoice = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        mnuProformaInvoice = new javax.swing.JMenuItem();
         mnuChallan = new javax.swing.JMenu();
         mnuCreateChallan = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
@@ -370,6 +373,7 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         mnuJobOrder.add(mnuCreateJobOrderMaster);
+        mnuJobOrder.add(jSeparator8);
 
         mnuJobOrderList.setText("Job Order List");
         mnuJobOrder.add(mnuJobOrderList);
@@ -396,7 +400,7 @@ public class Dashboard extends javax.swing.JFrame {
         mnuInvoices.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/invoice_16px.png"))); // NOI18N
         mnuInvoices.setText("Invoices");
 
-        mnuCreateInvoice.setText("Create Invoice");
+        mnuCreateInvoice.setText("Invoice1");
         mnuCreateInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuCreateInvoiceActionPerformed(evt);
@@ -405,13 +409,22 @@ public class Dashboard extends javax.swing.JFrame {
         mnuInvoices.add(mnuCreateInvoice);
         mnuInvoices.add(jSeparator5);
 
-        mnuManageInvoice.setText("Create Invoice2");
+        mnuManageInvoice.setText("Invoice2");
         mnuManageInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuManageInvoiceActionPerformed(evt);
             }
         });
         mnuInvoices.add(mnuManageInvoice);
+        mnuInvoices.add(jSeparator7);
+
+        mnuProformaInvoice.setText("Proforma Invoice");
+        mnuProformaInvoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuProformaInvoiceActionPerformed(evt);
+            }
+        });
+        mnuInvoices.add(mnuProformaInvoice);
 
         jMenuBar1.add(mnuInvoices);
 
@@ -529,13 +542,18 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void mnuManageInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageInvoiceActionPerformed
         // TODO add your handling code here:
-//        CreateInvoice2.getObj().setVisible( true );
+        CreateInvoice2.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageInvoiceActionPerformed
 
     private void mnuCreateJobOrderMasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateJobOrderMasterActionPerformed
         // TODO add your handling code here:
         JobOrderMaster.getObj().setVisible( true );
     }//GEN-LAST:event_mnuCreateJobOrderMasterActionPerformed
+
+    private void mnuProformaInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProformaInvoiceActionPerformed
+        // TODO add your handling code here:
+        CreateProformaInvoice.getObj().setVisible( true );
+    }//GEN-LAST:event_mnuProformaInvoiceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -585,6 +603,8 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JLabel lblConnectionStatus;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblIPAddress;
@@ -613,6 +633,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenu mnuPayments;
     private javax.swing.JMenu mnuProcess;
     private javax.swing.JMenu mnuProducts;
+    private javax.swing.JMenuItem mnuProformaInvoice;
     private javax.swing.JMenu mnuQuotations;
     private javax.swing.JMenu mnuReports;
     private javax.swing.JMenu mnuSearch;

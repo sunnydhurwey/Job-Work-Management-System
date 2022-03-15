@@ -138,6 +138,8 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateJobOrderMasterActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator8">
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuJobOrderList">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Job Order List"/>
@@ -180,7 +182,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuCreateInvoice">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Create Invoice"/>
+                <Property name="text" type="java.lang.String" value="Invoice1"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateInvoiceActionPerformed"/>
@@ -190,10 +192,20 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuManageInvoice">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Create Invoice2"/>
+                <Property name="text" type="java.lang.String" value="Invoice2"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuManageInvoiceActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuProformaInvoice">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Proforma Invoice"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuProformaInvoiceActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

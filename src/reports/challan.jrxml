@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7f62f15-4504-441e-adbd-44a459d89536">
-	<property name="ireport.zoom" value="1.948717100000011"/>
+	<property name="ireport.zoom" value="1.4641000000000082"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[SELECT * FROM joborder,companydetails,gatepass]]>
+		<![CDATA[SELECT * FROM invoicemaster,companydetails,gatepass]]>
 	</queryString>
-	<field name="uid" class="java.lang.Integer">
+	<field name="inv_uid" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="quotationno" class="java.lang.Integer">
+	<field name="invoiceno" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="joborderno" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="date" class="java.sql.Date">
@@ -19,6 +22,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="clientname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="company" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="productname" class="java.lang.String">
@@ -33,25 +39,19 @@
 	<field name="remark" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="t" class="java.lang.Double">
+	<field name="tstrt" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="w" class="java.lang.Double">
+	<field name="w" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="od" class="java.lang.Double">
+	<field name="od" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tl" class="java.lang.Double">
+	<field name="tl" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="m" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="dp" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="std" class="java.lang.Double">
+	<field name="mdp" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="rate" class="java.lang.Double">
@@ -60,7 +60,31 @@
 	<field name="qty" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="discountper" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="discountamt" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="amount" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientaddress" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientemail" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientmobile" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientlandline" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="clientgstin" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="c_uid" class="java.lang.Integer">
@@ -108,10 +132,10 @@
 	<field name="gp_firmname" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="gp_qno" class="java.lang.Integer">
+	<field name="gp_invoiceno" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="gp_qdate" class="java.sql.Date">
+	<field name="gp_invoicedate" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="gp_drivername" class="java.lang.String">
@@ -124,7 +148,7 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="description" class="java.lang.String" resetType="None" calculation="Count">
-		<variableExpression><![CDATA["T-"+$F{t}+" W-"+$F{w}+" OD-"+$F{od}+" TL-"+$F{tl}+" M-"+$F{m}+" DP-"+$F{dp}+" START-"+$F{std}]]></variableExpression>
+		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -161,13 +185,13 @@
 				<reportElement x="0" y="0" width="1" height="79" uuid="a811a49a-611a-4508-9e17-b81750dc6447"/>
 			</line>
 			<textField>
-				<reportElement x="4" y="60" width="551" height="14" uuid="34aa6504-807a-405e-8be2-9707165f3510"/>
+				<reportElement x="0" y="60" width="555" height="14" uuid="34aa6504-807a-405e-8be2-9707165f3510"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA["GSTIN: "+$F{c_gstin}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center">
 				<reportElement x="4" y="5" width="80" height="69" uuid="d8609013-5634-4df8-8a61-011e593b52b3"/>
-				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job-Work-Management-System-master\\src\\images\\Satyam Gears1.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job Work Management System\\src\\reports\\Satyam Gears1.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -210,7 +234,7 @@
 			<textField>
 				<reportElement x="418" y="51" width="131" height="14" uuid="f97a500a-24e6-4532-86b5-2687b86f52db"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Dated : "+$F{gp_qdate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Dated : "+$F{gp_invoicedate}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="64" width="553" height="1" uuid="449dc805-1d3d-49b0-9220-0f0f2d4b4785"/>
@@ -273,7 +297,7 @@
 				<reportElement x="382" y="0" width="1" height="28" uuid="04011fa3-7257-4960-ae02-0075735cadc6"/>
 			</line>
 			<textField>
-				<reportElement x="1" y="0" width="42" height="14" uuid="fa528aa1-1d74-4f9c-8cd8-bf322ee36b0e"/>
+				<reportElement x="1" y="0" width="42" height="28" uuid="fa528aa1-1d74-4f9c-8cd8-bf322ee36b0e"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
@@ -295,9 +319,8 @@
 				<textFieldExpression><![CDATA[$F{remark}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="44" y="14" width="291" height="14" uuid="c2f1b90d-5236-43ec-88a9-d9ea92004790"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{description}]]></textFieldExpression>
+				<reportElement x="44" y="13" width="291" height="14" uuid="5b763f9a-8ef6-4828-ab3b-e0f3fcd0108e"/>
+				<textFieldExpression><![CDATA["T/START: "+$F{tstrt}+" W: "+$F{w}+" OD: "+$F{od}+" TL: "+$F{tl}+" MDP:"+$F{mdp}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -335,7 +358,7 @@
 				<textFieldExpression><![CDATA[$F{gp_mobile}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="238" y="40" width="144" height="20" uuid="b10a178c-c828-4029-bef1-dd1f76e3b00b"/>
+				<reportElement x="238" y="41" width="144" height="19" uuid="b10a178c-c828-4029-bef1-dd1f76e3b00b"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{gp_vehicleno}]]></textFieldExpression>
 			</textField>

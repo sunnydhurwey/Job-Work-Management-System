@@ -92,7 +92,7 @@ public class CreateChallan extends javax.swing.JFrame {
     //Function or method to set current date to jdatechooser
     public void getDate() {
         dtGatePass.setDateFormatString( "yyyy-MM-dd" );
-        dtQuotation.setDateFormatString( "yyyy-MM-dd" );
+        dtInvoice.setDateFormatString( "yyyy-MM-dd" );
         java.util.Date date = new java.util.Date();
         dtGatePass.setDate( date );
     }
@@ -103,7 +103,7 @@ public class CreateChallan extends javax.swing.JFrame {
         txtMobile.setText( "" );
         cmbFirmName.setSelectedItem( "" );
         txtporgpno.setText( "" );
-        txtQuotationNo.setText( "" );
+        txtInvoiceNo.setText( "" );
         txtVehicleNo.setText( "" );
         getDate();
         btnAdd.setEnabled( true );
@@ -115,7 +115,7 @@ public class CreateChallan extends javax.swing.JFrame {
     //Function or method to get data to table
     public void getDataToTable() {
         try {
-            String sql = "SELECT productname,t,w,od,tl,m,dp,std,qty,remark FROM joborder WHERE quotationno='" + txtQuotationNo.getText() + "'";
+            String sql = "SELECT company,productname,tstrt,w,od,tl,mdp,qty,remark FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblChallan.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -139,8 +139,8 @@ public class CreateChallan extends javax.swing.JFrame {
             rs = pst.executeQuery();
             if (rs.next()) {
                 dtGatePass.setDate( rs.getDate( "gp_date" ) );
-                dtQuotation.setDate( rs.getDate( "gp_qdate" ) );
-                txtQuotationNo.setText( rs.getString( "gp_qno" ) );
+                dtInvoice.setDate( rs.getDate( "gp_invoicedate" ) );
+                txtInvoiceNo.setText( rs.getString( "gp_invoiceno" ) );
                 txtDriverName.setText( rs.getString( "gp_drivername" ) );
                 txtMobile.setText( rs.getString( "gp_mobile" ) );
                 txtVehicleNo.setText( rs.getString( "gp_vehicleno" ) );
@@ -166,17 +166,17 @@ public class CreateChallan extends javax.swing.JFrame {
     }
 
     //Function or method to get data to table
-    public void getQuotationDate() {
+    public void getInvoiceDate() {
         try {
-            String sql = "SELECT * FROM quotation WHERE quotationno='" + txtQuotationNo.getText() + "'";
+            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next()) {
-                dtQuotation.setDate( rs.getDate( "date" ) );
-                cmbFirmName.setSelectedItem( rs.getString( "Company" ) );
+                dtInvoice.setDate( rs.getDate( "date" ) );
+                cmbFirmName.setSelectedItem( rs.getString( "company" ) );
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog( null, e, "getDataToTable() Exception", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( null, e, "getInvoiceDate() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
@@ -212,15 +212,15 @@ public class CreateChallan extends javax.swing.JFrame {
     //Function or method to add challan
     public void addChallan() {
         try {
-            String sql = "INSERT INTO `gatepass`(`gp_no`, `gp_porgpno`, `gp_date`, `gp_firmname`, `gp_qno`, `gp_qdate`, `gp_drivername`, `gp_mobile`, `gp_vehicleno`) "
+            String sql = "INSERT INTO `gatepass`(`gp_no`, `gp_porgpno`, `gp_date`, `gp_firmname`, `gp_invoiceno`, `gp_invoicedate`, `gp_drivername`, `gp_mobile`, `gp_vehicleno`) "
                     + "VALUES (?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtGatePassNo.getText() );
             pst.setString( 2, txtporgpno.getText() );
             pst.setString( 3, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText() );
             pst.setString( 4, cmbFirmName.getSelectedItem().toString() );
-            pst.setString( 5, txtQuotationNo.getText() );
-            pst.setString( 6, ((JTextField) dtQuotation.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 5, txtInvoiceNo.getText() );
+            pst.setString( 6, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
             pst.setString( 7, txtDriverName.getText() );
             pst.setString( 8, txtMobile.getText() );
             pst.setString( 9, txtVehicleNo.getText() );
@@ -244,14 +244,14 @@ public class CreateChallan extends javax.swing.JFrame {
     //Function or method to update challan
     public void updateChallan() {
         try {
-            String sql = "UPDATE `gatepass` SET `gp_porgpno`=?, `gp_date`=?, `gp_firmname`=?, `gp_qno`=?, `gp_qdate`=?, "
+            String sql = "UPDATE `gatepass` SET `gp_porgpno`=?, `gp_date`=?, `gp_firmname`=?, `gp_invoiceno`=?, `gp_invoicedate`=?, "
                     + "`gp_drivername`=?, `gp_mobile`=?, `gp_vehicleno`=? WHERE 'gp_no'='" + txtGatePassNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtporgpno.getText() );
             pst.setString( 2, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText() );
             pst.setString( 3, cmbFirmName.getSelectedItem().toString() );
-            pst.setString( 4, txtQuotationNo.getText() );
-            pst.setString( 5, ((JTextField) dtQuotation.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 4, txtInvoiceNo.getText() );
+            pst.setString( 5, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
             pst.setString( 6, txtDriverName.getText() );
             pst.setString( 7, txtMobile.getText() );
             pst.setString( 8, txtVehicleNo.getText() );
@@ -294,10 +294,10 @@ public class CreateChallan extends javax.swing.JFrame {
     //final JDialog dialog=new JDialog();
     public void printOption() {
         try {
-            String qno = txtQuotationNo.getText();
-            String gpno = txtGatePassNo.getText();
+//            String invno = txtInvoiceNo.getText();
+//            String gpno = txtGatePassNo.getText();
             try {
-                String sql = "SELECT * FROM joborder,companydetails,gatepass WHERE joborder.quotationno='" + qno + "' AND gatepass.gp_no='" + gpno + "'";
+                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails";
                 JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
                 JRDesignQuery qry = new JRDesignQuery();
                 qry.setText( sql );
@@ -346,9 +346,9 @@ public class CreateChallan extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtporgpno = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtQuotationNo = new javax.swing.JTextField();
+        txtInvoiceNo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        dtQuotation = new com.toedter.calendar.JDateChooser();
+        dtInvoice = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Delivery Challan / Gate Pass - Job Work Management System");
@@ -374,7 +374,7 @@ public class CreateChallan extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblChallan);
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Vehicle Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Vehicle Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("Driver / Owner Name");
@@ -513,7 +513,7 @@ public class CreateChallan extends javax.swing.JFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Delivery Challan / Gate Pass Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Delivery Challan / Gate Pass Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13))); // NOI18N
 
         jLabel1.setText("Gate Pass No.");
 
@@ -550,23 +550,23 @@ public class CreateChallan extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Quot. No.");
+        jLabel5.setText("Invoice No.");
 
-        txtQuotationNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        txtQuotationNo.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtInvoiceNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtInvoiceNo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtQuotationNoKeyPressed(evt);
+                txtInvoiceNoKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtQuotationNoKeyReleased(evt);
+                txtInvoiceNoKeyReleased(evt);
             }
         });
 
-        jLabel6.setText("Quotation Dated");
+        jLabel6.setText("Invoice Dated");
 
-        dtQuotation.addKeyListener(new java.awt.event.KeyAdapter() {
+        dtInvoice.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                dtQuotationKeyPressed(evt);
+                dtInvoiceKeyPressed(evt);
             }
         });
 
@@ -583,29 +583,27 @@ public class CreateChallan extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(21, 21, 21)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(cmbFirmName, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addGap(23, 23, 23))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txtGatePassNo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dtGatePass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dtQuotation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(txtporgpno, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(cmbFirmName, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtporgpno)
+                    .addComponent(dtInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -617,10 +615,10 @@ public class CreateChallan extends javax.swing.JFrame {
                         .addComponent(txtGatePassNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)
                         .addComponent(jLabel5)
-                        .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6))
                     .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(dtQuotation, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dtInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -631,7 +629,7 @@ public class CreateChallan extends javax.swing.JFrame {
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbFirmName, dtGatePass, dtQuotation, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, txtGatePassNo, txtQuotationNo, txtporgpno});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbFirmName, dtGatePass, dtInvoice, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, txtGatePassNo, txtInvoiceNo, txtporgpno});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -660,13 +658,13 @@ public class CreateChallan extends javax.swing.JFrame {
         getFirmData();
     }//GEN-LAST:event_formWindowOpened
 
-    private void txtQuotationNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyReleased
+    private void txtInvoiceNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyReleased
         // TODO add your handling code here:
-        if (!"".equals( txtQuotationNo.getText() )) {
+        if (!"".equals( txtInvoiceNo.getText() )) {
             getDataToTable();
-            getQuotationDate();
+            getInvoiceDate();
         }
-    }//GEN-LAST:event_txtQuotationNoKeyReleased
+    }//GEN-LAST:event_txtInvoiceNoKeyReleased
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
@@ -707,23 +705,23 @@ public class CreateChallan extends javax.swing.JFrame {
 
     private void dtGatePassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dtGatePassKeyPressed
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            txtQuotationNo.requestFocus();
+            txtInvoiceNo.requestFocus();
         }        // TODO add your handling code here:
     }//GEN-LAST:event_dtGatePassKeyPressed
 
-    private void txtQuotationNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyPressed
+    private void txtInvoiceNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            dtQuotation.requestFocus();
+            dtInvoice.requestFocus();
         }
-    }//GEN-LAST:event_txtQuotationNoKeyPressed
+    }//GEN-LAST:event_txtInvoiceNoKeyPressed
 
-    private void dtQuotationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dtQuotationKeyPressed
+    private void dtInvoiceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dtInvoiceKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             txtporgpno.requestFocus();
         }
-    }//GEN-LAST:event_dtQuotationKeyPressed
+    }//GEN-LAST:event_dtInvoiceKeyPressed
 
     private void txtporgpnoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtporgpnoKeyPressed
         // TODO add your handling code here:
@@ -795,7 +793,7 @@ public class CreateChallan extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbFirmName;
     private com.toedter.calendar.JDateChooser dtGatePass;
-    private com.toedter.calendar.JDateChooser dtQuotation;
+    private com.toedter.calendar.JDateChooser dtInvoice;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -812,8 +810,8 @@ public class CreateChallan extends javax.swing.JFrame {
     private javax.swing.JTable tblChallan;
     private javax.swing.JTextField txtDriverName;
     private javax.swing.JTextField txtGatePassNo;
+    private javax.swing.JTextField txtInvoiceNo;
     private javax.swing.JTextField txtMobile;
-    private javax.swing.JTextField txtQuotationNo;
     private javax.swing.JTextField txtVehicleNo;
     private javax.swing.JTextField txtporgpno;
     // End of variables declaration//GEN-END:variables

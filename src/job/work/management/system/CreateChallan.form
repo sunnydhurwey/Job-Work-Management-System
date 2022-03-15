@@ -98,6 +98,9 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder title="Vehicle Details">
+                  <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder/>
+                  </Border>
                   <Font PropertyName="font" name="Tahoma" size="13" style="1"/>
                 </TitledBorder>
               </Border>
@@ -293,6 +296,9 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder justification="2" title="Delivery Challan / Gate Pass Details">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                <LineBorder/>
+              </Border>
               <Font PropertyName="font" name="Tahoma" size="13" style="1"/>
             </TitledBorder>
           </Border>
@@ -314,33 +320,30 @@
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="cmbFirmName" min="-2" pref="460" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="txtGatePassNo" min="-2" pref="140" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="dtGatePass" max="32767" attributes="0"/>
+                          <Component id="dtGatePass" min="-2" pref="176" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" pref="78" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="txtQuotationNo" min="-2" pref="108" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
+                          <Component id="txtInvoiceNo" min="-2" pref="115" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="cmbFirmName" min="-2" pref="554" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="dtQuotation" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="txtporgpno" min="-2" pref="271" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="txtporgpno" max="32767" attributes="0"/>
+                      <Component id="dtInvoice" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -355,11 +358,11 @@
                           <Component id="txtGatePassNo" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel5" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtQuotationNo" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtInvoiceNo" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="dtGatePass" linkSize="3" alignment="1" pref="0" max="32767" attributes="0"/>
-                      <Component id="dtQuotation" linkSize="3" alignment="1" min="-2" pref="21" max="-2" attributes="0"/>
+                      <Component id="dtInvoice" linkSize="3" alignment="1" min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -447,10 +450,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Quot. No."/>
+            <Property name="text" type="java.lang.String" value="Invoice No."/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtQuotationNo">
+        <Component class="javax.swing.JTextField" name="txtInvoiceNo">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -459,18 +462,18 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtQuotationNoKeyPressed"/>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtQuotationNoKeyReleased"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtInvoiceNoKeyPressed"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtInvoiceNoKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Quotation Dated"/>
+            <Property name="text" type="java.lang.String" value="Invoice Dated"/>
           </Properties>
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="dtQuotation">
+        <Component class="com.toedter.calendar.JDateChooser" name="dtInvoice">
           <Events>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dtQuotationKeyPressed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dtInvoiceKeyPressed"/>
           </Events>
         </Component>
       </SubComponents>

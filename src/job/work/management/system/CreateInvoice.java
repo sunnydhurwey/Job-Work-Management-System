@@ -48,13 +48,13 @@ public class CreateInvoice extends javax.swing.JFrame {
             System.out.println( e );
         }
         this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
-        AutoCompleteDecorator.decorate( cmbClientName );
+//        AutoCompleteDecorator.decorate( cmbClientName );
         AutoCompleteDecorator.decorate( cmbCompany );
         AutoCompleteDecorator.decorate( cmbAddress );
-        AutoCompleteDecorator.decorate( cmbEmail );
-        AutoCompleteDecorator.decorate( cmbMobile );
-        AutoCompleteDecorator.decorate( cmbLandline );
-        AutoCompleteDecorator.decorate( cmbGSTIN );
+//        AutoCompleteDecorator.decorate( cmbEmail );
+//        AutoCompleteDecorator.decorate( cmbMobile );
+//        AutoCompleteDecorator.decorate( cmbLandline );
+//        AutoCompleteDecorator.decorate( cmbGSTIN );
 
         AutoCompleteDecorator.decorate( cmbProductName );
         AutoCompleteDecorator.decorate( cmbProcess );
@@ -102,9 +102,9 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Function or method to set current date to jdatechooser
     public void getDate() {
-        jDateChooser1.setDateFormatString( "yyyy-MM-dd" );
+        dtInvoice.setDateFormatString( "yyyy-MM-dd" );
         java.util.Date date = new java.util.Date();
-        jDateChooser1.setDate( date );
+        dtInvoice.setDate( date );
     }
 
     //Function or method to clear product field
@@ -136,25 +136,29 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function or method to save client
     public void saveClient() {
         try {
-            String sql = "INSERT INTO clients (clientname,clientcompanyname,address,email,mobile,landline,gstin) VALUES (?,?,?,?,?,?,?)";
+//            String sql = "INSERT INTO clients (clientname,clientcompanyname,address,email,mobile,landline,gstin) VALUES (?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO clients (clientcompanyname,address) VALUES (?,?)";
             pst = conn.prepareStatement( sql );
-            pst.setString( 1, cmbClientName.getEditor().getItem().toString() );
-            pst.setString( 2, cmbCompany.getEditor().getItem().toString() );
-            pst.setString( 3, cmbAddress.getEditor().getItem().toString() );
-            pst.setString( 4, cmbEmail.getEditor().getItem().toString() );
-            pst.setString( 5, cmbMobile.getEditor().getItem().toString() );
-            pst.setString( 6, cmbLandline.getEditor().getItem().toString() );
-            pst.setString( 7, cmbGSTIN.getEditor().getItem().toString() );
+            pst.setString( 1, cmbCompany.getEditor().getItem().toString() );
+            pst.setString( 1, cmbAddress.getEditor().getItem().toString() );
+
+//            pst.setString( 1, cmbClientName.getEditor().getItem().toString() );
+//            pst.setString( 2, cmbCompany.getEditor().getItem().toString() );
+//            pst.setString( 3, cmbAddress.getEditor().getItem().toString() );
+//            pst.setString( 4, cmbEmail.getEditor().getItem().toString() );
+//            pst.setString( 5, cmbMobile.getEditor().getItem().toString() );
+//            pst.setString( 6, cmbLandline.getEditor().getItem().toString() );
+//            pst.setString( 7, cmbGSTIN.getEditor().getItem().toString() );
             pst.execute();
-            JOptionPane.showMessageDialog( null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
+            JOptionPane.showMessageDialog( null, "Client Company added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
             btnSaveClient.setEnabled( false );
-            cmbClientName.setEnabled( false );
+//            cmbClientName.setEnabled( false );
             cmbCompany.setEnabled( false );
             cmbAddress.setEnabled( false );
-            cmbEmail.setEnabled( false );
-            cmbMobile.setEnabled( false );
-            cmbLandline.setEnabled( false );
-            cmbGSTIN.setEnabled( false );
+//            cmbEmail.setEnabled( false );
+//            cmbMobile.setEnabled( false );
+//            cmbLandline.setEnabled( false );
+//            cmbGSTIN.setEnabled( false );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "saveClient() Exception", JOptionPane.ERROR_MESSAGE );
@@ -235,24 +239,14 @@ public class CreateInvoice extends javax.swing.JFrame {
     //function or method to get client data
     public void getClientData() {
         try {
-            cmbClientName.addItem( "" );
             cmbCompany.addItem( "" );
             cmbAddress.addItem( "" );
-            cmbEmail.addItem( "" );
-            cmbMobile.addItem( "" );
-            cmbLandline.addItem( "" );
-            cmbGSTIN.addItem( "" );
             String sql = "SELECT * FROM clients";
             pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             while (rs2.next()) {
-                cmbClientName.addItem( rs2.getString( "clientname" ) );
                 cmbCompany.addItem( rs2.getString( "clientcompanyname" ) );
                 cmbAddress.addItem( rs2.getString( "address" ) );
-                cmbEmail.addItem( rs2.getString( "email" ) );
-                cmbMobile.addItem( rs2.getString( "mobile" ) );
-                cmbLandline.addItem( rs2.getString( "landline" ) );
-                cmbGSTIN.addItem( rs2.getString( "gstin" ) );
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "getClientData() Exception", JOptionPane.ERROR_MESSAGE );
@@ -273,14 +267,9 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
                 cmbCompany.setSelectedItem( rs2.getString( "company" ) );
                 cmbAddress.setSelectedItem( rs2.getString( "address" ) );
-                cmbEmail.setSelectedItem( rs2.getString( "email" ) );
-                cmbMobile.setSelectedItem( rs2.getString( "mobile" ) );
-                cmbLandline.setSelectedItem( rs2.getString( "landline" ) );
-                cmbGSTIN.setSelectedItem( rs2.getString( "gstin" ) );
-                txtQuotationNo.setText( rs2.getString( "quotationno" ) );
+                txtChallanNo.setText( rs2.getString( "challanno" ) );
                 txtJobOrderNo.setText( rs2.getString( "joborderno" ) );
                 txtGSTPer.setText( rs2.getString( "gstper" ) );
                 txtBasicPrice.setText( rs2.getString( "basicprice" ) );
@@ -293,13 +282,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                 btnDeleteInvoice.setEnabled( true );
                 btnPrintInvoice.setEnabled( true );
             } else {
-                cmbClientName.setSelectedItem( "" );
                 cmbCompany.setSelectedItem( "" );
                 cmbAddress.setSelectedItem( "" );
-                cmbEmail.setSelectedItem( "" );
-                cmbMobile.setSelectedItem( "" );
-                cmbLandline.setSelectedItem( "" );
-                cmbGSTIN.setSelectedItem( "" );
                 txtGSTPer.setText( "0" );
                 txtBasicPrice.setText( "0" );
                 txtDiscount.setText( "0" );
@@ -323,38 +307,61 @@ public class CreateInvoice extends javax.swing.JFrame {
         }
     }
 
+    //Funtion or method to calculate current list
+    public void calcLatest() {
+        try {
+            disc = 0;
+            basicprice = 0;
+            dbamt = 0;
+            dbdisc = 0;
+            dbrate = 0;
+            dbqty = 0;
+            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                cn = rs.getString( "clientname" );
+                dbamt = rs.getDouble( "amount" );
+                dbdisc = rs.getDouble( "discountper" );
+                dbrate = rs.getDouble( "rate" );
+                dbqty = rs.getDouble( "qty" );
+                disc = disc + ((dbrate * dbqty * dbdisc) / 100);
+                basicprice = basicprice + dbamt;
+            }
+            txtBasicPrice.setText( String.valueOf( Math.round( basicprice ) ) );
+            txtDiscount.setText( String.valueOf( disc ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
     //Function or method to get saved quotation data calculation
     public void getQuotationDataCALC() {
         try {
-            String sql = "SELECT * FROM quotation WHERE quotationno='" + txtQuotationNo.getText() + "'";
+            String sql = "SELECT * FROM invoice1 WHERE challanno='" + txtChallanNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
-                cmbCompany.setSelectedItem( rs2.getString( "company" ) );
+                cmbCompany.setSelectedItem( rs2.getString( "clientcompanyname" ) );
+                txtChallanNo.setText( rs2.getString( "challanno" ) );
                 cmbAddress.setSelectedItem( rs2.getString( "address" ) );
-                cmbEmail.setSelectedItem( rs2.getString( "email" ) );
-                cmbMobile.setSelectedItem( rs2.getString( "mobile" ) );
-                cmbLandline.setSelectedItem( rs2.getString( "landline" ) );
-                cmbGSTIN.setSelectedItem( rs2.getString( "gstin" ) );
                 txtJobOrderNo.setText( rs2.getString( "joborderno" ) );
                 txtGSTPer.setText( rs2.getString( "gstper" ) );
                 txtBasicPrice.setText( rs2.getString( "basicprice" ) );
                 txtDiscount.setText( rs2.getString( "discount" ) );
                 txtGSTAmount.setText( rs2.getString( "gstamt" ) );
                 txtGrandTotal.setText( rs2.getString( "totalamt" ) );
-//                btnSaveQuotation.setEnabled( false );
-//                btnUpdateQuotation.setEnabled( true );
-//                btnDeleteQuotation.setEnabled( true );
-//                btnPrintQuotation.setEnabled( true );
             } else {
-                cmbClientName.setSelectedItem( "" );
                 cmbCompany.setSelectedItem( "" );
+                txtChallanNo.setText( "" );
                 cmbAddress.setSelectedItem( "" );
-                cmbEmail.setSelectedItem( "" );
-                cmbMobile.setSelectedItem( "" );
-                cmbLandline.setSelectedItem( "" );
-                cmbGSTIN.setSelectedItem( "" );
                 txtGSTPer.setText( "0" );
                 txtBasicPrice.setText( "0" );
                 txtDiscount.setText( "0" );
@@ -379,36 +386,21 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Function or method to clear client data field
     public void clearClientData() {
-        cmbClientName.setSelectedItem( "" );
         cmbCompany.setSelectedItem( "" );
         cmbAddress.setSelectedItem( "" );
-        cmbEmail.setSelectedItem( "" );
-        cmbMobile.setSelectedItem( "" );
-        cmbLandline.setSelectedItem( "" );
-        cmbGSTIN.setSelectedItem( "" );
     }
 
     //Function to populate combobox on client name input
     public void getClientDataFromJobOrder() {
         try {
-            cmbClientName.setSelectedItem( "" );
             cmbCompany.setSelectedItem( "" );
             cmbAddress.setSelectedItem( "" );
-            cmbEmail.setSelectedItem( "" );
-            cmbMobile.setSelectedItem( "" );
-            cmbLandline.setSelectedItem( "" );
-            cmbGSTIN.setSelectedItem( "" );
             String sql = "SELECT * FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
                 cmbCompany.setSelectedItem( rs2.getString( "company" ) );
                 cmbAddress.setSelectedItem( rs2.getString( "clientaddress" ) );
-                cmbEmail.setSelectedItem( rs2.getString( "clientemail" ) );
-                cmbMobile.setSelectedItem( rs2.getString( "clientmobile" ) );
-                cmbLandline.setSelectedItem( rs2.getString( "clientlandline" ) );
-                cmbGSTIN.setSelectedItem( rs2.getString( "clientgstin" ) );
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "getClientDataFromJobOrder() Exception", JOptionPane.ERROR_MESSAGE );
@@ -424,12 +416,13 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function to populate other client data comboboxes on Enter key press on client name
     boolean clientexist = false;
     int clientID = 0;
-    String clientname;
+    String clientname, company;
 
     public void setDataToFieldsOnNameInput() {
-        clientname = cmbClientName.getSelectedItem().toString();
+//        clientname = cmbClientName.getSelectedItem().toString();
+        company = cmbCompany.getSelectedItem().toString();
         try {
-            String sql = "SELECT * FROM clients WHERE clientname LIKE '" + clientname + "'";
+            String sql = "SELECT * FROM clients WHERE company LIKE '" + company + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next() == false) {
@@ -441,10 +434,6 @@ public class CreateInvoice extends javax.swing.JFrame {
                     System.out.println( String.valueOf( clientID ) );
                     cmbCompany.setSelectedItem( rs.getString( "clientcompanyname" ) );
                     cmbAddress.setSelectedItem( rs.getString( "address" ) );
-                    cmbEmail.setSelectedItem( rs.getString( "email" ) );
-                    cmbMobile.setSelectedItem( rs.getString( "mobile" ) );
-                    cmbLandline.setSelectedItem( rs.getString( "landline" ) );
-                    cmbGSTIN.setSelectedItem( rs.getString( "gstin" ) );
                 } while (rs.next());
                 btnSaveClient.setEnabled( false );
             }
@@ -554,7 +543,8 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst2 = conn.prepareStatement( sql );
             rs2 = pst2.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+//                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+                cmbCompany.setSelectedItem( rs2.getString( "company" ) );
                 cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
                 cmbProcess.setSelectedItem( rs2.getString( "processname" ) );
                 cmbMaterial.setSelectedItem( rs2.getString( "materialname" ) );
@@ -590,6 +580,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         rate = 0;
         quantity = 0;
         disc = 0;
+        amount = 0;
         if ("".equals( txtRate.getText() )) {
             rate = 0;
         } else {
@@ -600,10 +591,10 @@ public class CreateInvoice extends javax.swing.JFrame {
         } else {
             quantity = Double.parseDouble( txtQTY.getText() );
         }
-        if ("".equals( txtDiscount.getText() )) {
+        if ("".equals( txtDisc.getText() )) {
             disc = 0;
         } else {
-            disc = Double.parseDouble( txtDiscount.getText() );
+            disc = Double.parseDouble( txtDisc.getText() );
         }
         amount = rate * quantity;
         disc = (amount * disc) / 100;
@@ -632,26 +623,21 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function to save invoice
     public void saveInvoice() {
         try {
-            String sql = "INSERT INTO invoice1 (quotationno,date,clientname,company,address,email,mobile,landline,gstin,basicprice,"
-                    + "discount,gstper,gstamt,totalamt,joborderno,invoiceno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO invoice1 (challanno,date,company,address,basicprice,"
+                    + "discount,gstper,gstamt,totalamt,joborderno,invoiceno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
-            pst.setString( 1, txtQuotationNo.getText() );
-            pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
-            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
-            pst.setString( 4, cmbCompany.getSelectedItem().toString() );
-            pst.setString( 5, cmbAddress.getSelectedItem().toString() );
-            pst.setString( 6, cmbEmail.getSelectedItem().toString() );
-            pst.setString( 7, cmbMobile.getSelectedItem().toString() );
-            pst.setString( 8, cmbLandline.getSelectedItem().toString() );
-            pst.setString( 9, cmbGSTIN.getSelectedItem().toString() );
-            pst.setString( 10, txtBasicPrice.getText() );
-            pst.setString( 11, txtDiscount.getText() );
-            pst.setString( 12, txtGSTPer.getText() );
-            pst.setString( 13, txtGSTAmount.getText() );
-            pst.setString( 14, txtGrandTotal.getText() );
-            pst.setString( 15, txtJobOrderNo.getText() );
-            pst.setString( 16, txtInvoiceNo.getText() );
-            pst.setString( 17, txtNote.getText() );
+            pst.setString( 1, txtChallanNo.getText() );
+            pst.setString( 2, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 4, cmbAddress.getSelectedItem().toString() );
+            pst.setString( 5, txtBasicPrice.getText() );
+            pst.setString( 6, txtDiscount.getText() );
+            pst.setString( 7, txtGSTPer.getText() );
+            pst.setString( 8, txtGSTAmount.getText() );
+            pst.setString( 9, txtGrandTotal.getText() );
+            pst.setString( 10, txtJobOrderNo.getText() );
+            pst.setString( 11, txtInvoiceNo.getText() );
+            pst.setString( 12, txtNote.getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Invoice saved to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
@@ -669,25 +655,19 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function or method to update existing quotation
     public void updateInvoice() {
         try {
-            String sql = "UPDATE invoice1 SET date=?,clientname=?,company=?,address=?,email=?,mobile=?,"
-                    + "landline=?,gstin=?,basicprice=?,discount=?,gstper=?,gstamt=?,totalamt=?,"
-                    + "quotationno=?,note=? WHERE invoiceno='" + txtInvoiceNo.getText() + "' ";
+            String sql = "UPDATE invoice1 SET date=?,company=?,address=?,basicprice=?,discount=?,gstper=?,gstamt=?,totalamt=?,"
+                    + "challanno=?,note=? WHERE invoiceno='" + txtInvoiceNo.getText() + "' ";
             pst = conn.prepareStatement( sql );
-            pst.setString( 1, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
-            pst.setString( 2, cmbClientName.getEditor().getItem().toString() );
-            pst.setString( 3, cmbCompany.getSelectedItem().toString() );
-            pst.setString( 4, cmbAddress.getSelectedItem().toString() );
-            pst.setString( 5, cmbEmail.getSelectedItem().toString() );
-            pst.setString( 6, cmbMobile.getSelectedItem().toString() );
-            pst.setString( 7, cmbLandline.getSelectedItem().toString() );
-            pst.setString( 8, cmbGSTIN.getSelectedItem().toString() );
-            pst.setString( 9, txtBasicPrice.getText() );
-            pst.setString( 10, txtDiscount.getText() );
-            pst.setString( 11, txtGSTPer.getText() );
-            pst.setString( 12, txtGSTAmount.getText() );
-            pst.setString( 13, txtGrandTotal.getText() );
-            pst.setString( 14, txtQuotationNo.getText() );
-            pst.setString( 15, txtNote.getText() );
+            pst.setString( 1, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 2, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 3, cmbAddress.getSelectedItem().toString() );
+            pst.setString( 4, txtBasicPrice.getText() );
+            pst.setString( 5, txtDiscount.getText() );
+            pst.setString( 6, txtGSTPer.getText() );
+            pst.setString( 7, txtGSTAmount.getText() );
+            pst.setString( 8, txtGrandTotal.getText() );
+            pst.setString( 9, txtChallanNo.getText() );
+            pst.setString( 10, txtNote.getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Invoice modified on database", "Updated", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
@@ -721,90 +701,56 @@ public class CreateInvoice extends javax.swing.JFrame {
     }
 
     //Program to give printout options
-    //final JDialog dialog=new JDialog();
     public void printOptions() {
         try {
-            String qno = txtQuotationNo.getText();
-            //String[] choice={"CGST+SSGT Invoice","IGST Invoice"};
-            String[] choice = {"Landscape", "Portrait"};
-            //Integer[] options = {1, 3, 5, 7, 9, 11};
-            //Double[] options = {3.141, 1.618};
-            //Character[] options = {'a', 'b', 'c', 'd'};
-
-            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
-            //System.out.println(x);
-            //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
-            if (x == 0) {
-                try {
-                    String sql = "Select * from quotation,joborder,companydetails where quotation.quotationno='" + qno + "' "
-                            + "AND joborder.quotationno='" + qno + "'";
-                    JasperDesign jd = JRXmlLoader.load( "src/reports/quotationLS.jrxml" );
-                    JRDesignQuery qry = new JRDesignQuery();
-                    qry.setText( sql );
-                    jd.setQuery( qry );
-                    JasperReport jr = JasperCompileManager.compileReport( jd );
-                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
-                    JasperViewer.viewReport( jp, false );
-                } catch (JRException e) {
-                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-                }
-            } else {
-                try {
-                    String sql = "Select * from quotation,joborder,companydetails where quotation.quotationno='" + qno + "' "
-                            + "AND joborder.quotationno='" + qno + "'";
-                    JasperDesign jd = JRXmlLoader.load( "src/reports/quotationPT.jrxml" );
-                    JRDesignQuery qry = new JRDesignQuery();
-                    qry.setText( sql );
-                    jd.setQuery( qry );
-                    JasperReport jr = JasperCompileManager.compileReport( jd );
-                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
-                    JasperViewer.viewReport( jp, false );
-                } catch (JRException e) {
-                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-                }
-            }
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
+            String sql = "SELECT * FROM invoice1,invoicemaster,companydetails WHERE invoice1.invoiceno='" + txtInvoiceNo.getText() + "' AND invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+            JasperDesign jd = JRXmlLoader.load( "src/reports/invoicePT.jrxml" );
+            JRDesignQuery qry = new JRDesignQuery();
+            qry.setText( sql );
+            jd.setQuery( qry );
+            JasperReport jr = JasperCompileManager.compileReport( jd );
+            JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+            JasperViewer.viewReport( jp, false );
+        } catch (JRException e) {
+            JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
         }
     }
 
-    //Function or method to add product to job list
+    //Function or method to import joborder to invoice list
     public void importJobOrder() {
         try {
-            String sql = "INSERT INTO invoicemaster (joborderno,date,clientname,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
-                    + "amount,remark,clientid,company,clientaddress,clientemail,clientmobile,clientlandline,clientgstin,discountamt,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO invoicemaster (joborderno,date,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
+                    + "amount,remark,company,clientaddress,discountamt,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
-            pst.setString( 1, txtJobOrderNo.getText() );
-            pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
-            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
-            pst.setString( 4, cmbProductName.getSelectedItem().toString() );
-            pst.setString( 5, cmbProcess.getSelectedItem().toString() );
-            pst.setString( 6, cmbMaterial.getSelectedItem().toString() );
-            pst.setString( 7, txtTSTRT.getText() );
-            pst.setString( 8, txtW.getText() );
-            pst.setString( 9, txtOD.getText() );
-            pst.setString( 10, txtTL.getText() );
-            pst.setString( 11, txtMDP.getText() );
-            pst.setString( 12, txtDisc.getText() );
-            pst.setString( 13, txtQTY.getText() );
-            pst.setString( 14, txtRate.getText() );
-            pst.setString( 15, txtAmount.getText() );
-            pst.setString( 16, txtRemarks.getText() );
-            pst.setInt( 17, clientID );
-            pst.setString( 18, cmbCompany.getSelectedItem().toString() );
-            pst.setString( 19, cmbAddress.getSelectedItem().toString() );
-            pst.setString( 20, cmbEmail.getSelectedItem().toString() );
-            pst.setString( 21, cmbMobile.getSelectedItem().toString() );
-            pst.setString( 22, cmbLandline.getSelectedItem().toString() );
-            pst.setString( 23, cmbGSTIN.getSelectedItem().toString() );
+            if (!"".equals( txtJobOrderNo.getText() )) {
+                pst.setInt( 1, Integer.parseInt( txtJobOrderNo.getText() ) );
+            } else {
+                pst.setInt( 1, 0 );
+            }
+            pst.setString( 2, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
+            pst.setString( 3, cmbProductName.getSelectedItem().toString() );
+            pst.setString( 4, cmbProcess.getSelectedItem().toString() );
+            pst.setString( 5, cmbMaterial.getSelectedItem().toString() );
+            pst.setString( 6, txtTSTRT.getText() );
+            pst.setString( 7, txtW.getText() );
+            pst.setString( 8, txtOD.getText() );
+            pst.setString( 9, txtTL.getText() );
+            pst.setString( 10, txtMDP.getText() );
+            pst.setString( 11, txtDisc.getText() );
+            pst.setString( 12, txtQTY.getText() );
+            pst.setString( 13, txtRate.getText() );
+            pst.setString( 14, txtAmount.getText() );
+            pst.setString( 15, txtRemarks.getText() );
+            pst.setString( 16, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 17, cmbAddress.getSelectedItem().toString() );
             //Calculation of discountamt
             double q = 0, r = 0, d = 0, da = 0;
             q = Double.parseDouble( txtQTY.getText() );
             r = Double.parseDouble( txtRate.getText() );
             d = Double.parseDouble( txtDisc.getText() );
             da = (q * r * d) / 100;
-            pst.setString( 24, String.valueOf( da ) );
-            pst.setInt( 25, Integer.parseInt( txtInvoiceNo.getText() ) );
+            pst.setString( 18, String.valueOf( da ) );
+            pst.setInt( 19, Integer.parseInt( txtInvoiceNo.getText() ) );
             pst.execute();
 //            JOptionPane.showMessageDialog( null, "Product added to invoice database", "Saved", JOptionPane.PLAIN_MESSAGE );
             System.out.println( "Product added to invoice database." );
@@ -830,7 +776,6 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst2 = conn.prepareStatement( sql );
             rs2 = pst2.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
                 cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
                 cmbProcess.setSelectedItem( rs2.getString( "processname" ) );
                 cmbMaterial.setSelectedItem( rs2.getString( "materialname" ) );
@@ -865,7 +810,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             String sql = "DELETE FROM invoicemaster WHERE inv_uid='" + tblInvClick + "'";
             pst = conn.prepareStatement( sql );
             pst.execute();
-//            JOptionPane.showMessageDialog( null, "Product deleted from Invoice database", "Import Deleted", JOptionPane.PLAIN_MESSAGE );
+            JOptionPane.showMessageDialog( null, "Product deleted from Invoice database", "Import Deleted", JOptionPane.PLAIN_MESSAGE );
             System.out.println( "Product deleted from invoice database" );
             clearProductField();
             cmbProductName.requestFocus();
@@ -904,15 +849,15 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void calcInvoiceTableData() {
         try {
             double d = 0, a = 0;
-            String sql = "SELECT rate ,qty ,discountamt,amount  FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            String sql = "SELECT discountamt,amount  FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
                 d = d + rs.getDouble( "discountamt" );
                 a = a + rs.getDouble( "amount" );
             }
-            txtBasicPrice.setText( String.valueOf( a ) );
-            txtDiscount.setText( String.valueOf( d ) );
+            txtBasicPrice.setText( String.valueOf( Math.round( a ) ) );
+            txtDiscount.setText( String.valueOf( Math.round( d ) ) );
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "calcInvoiceTableData() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
@@ -936,20 +881,10 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        cmbClientName = new javax.swing.JComboBox<>();
         cmbCompany = new javax.swing.JComboBox<>();
         cmbAddress = new javax.swing.JComboBox<>();
-        cmbEmail = new javax.swing.JComboBox<>();
-        cmbMobile = new javax.swing.JComboBox<>();
-        cmbLandline = new javax.swing.JComboBox<>();
-        cmbGSTIN = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
         btnSaveClient = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         cmbProductName = new javax.swing.JComboBox<>();
@@ -982,9 +917,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         txtInvoiceNo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtQuotationNo = new javax.swing.JTextField();
+        txtChallanNo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dtInvoice = new com.toedter.calendar.JDateChooser();
         jLabel30 = new javax.swing.JLabel();
         txtJobOrderNo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -1024,22 +959,6 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel1.setText("Client Name");
-
-        cmbClientName.setEditable(true);
-        cmbClientName.setRequestFocusEnabled(true);
-        cmbClientName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbClientNameActionPerformed(evt);
-            }
-        });
-        cmbClientName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                cmbClientNameKeyReleased(evt);
-            }
-        });
-
         cmbCompany.setEditable(true);
         cmbCompany.setRequestFocusEnabled(true);
         cmbCompany.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1056,55 +975,11 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         });
 
-        cmbEmail.setEditable(true);
-        cmbEmail.setRequestFocusEnabled(true);
-        cmbEmail.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbEmailKeyPressed(evt);
-            }
-        });
-
-        cmbMobile.setEditable(true);
-        cmbMobile.setRequestFocusEnabled(true);
-        cmbMobile.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbMobileKeyPressed(evt);
-            }
-        });
-
-        cmbLandline.setEditable(true);
-        cmbLandline.setRequestFocusEnabled(true);
-        cmbLandline.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbLandlineKeyPressed(evt);
-            }
-        });
-
-        cmbGSTIN.setEditable(true);
-        cmbGSTIN.setRequestFocusEnabled(true);
-        cmbGSTIN.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbGSTINKeyPressed(evt);
-            }
-        });
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel2.setText("Clients Company Name");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel3.setText("Email");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel4.setText("Mobile");
+        jLabel2.setText("Firm Name");
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel24.setText("Address");
-
-        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel25.setText("LandLine");
-
-        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel26.setText("GSTIN");
 
         btnSaveClient.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnSaveClient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_administrator_16px.png"))); // NOI18N
@@ -1123,34 +998,15 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbCompany, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel24)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbAddress, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(cmbAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel25)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbLandline, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnSaveClient)))
                 .addContainerGap())
         );
@@ -1158,26 +1014,15 @@ public class CreateInvoice extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel24)
-                    .addComponent(cmbClientName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel26)
-                    .addComponent(btnSaveClient)
-                    .addComponent(cmbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbMobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbLandline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(btnSaveClient))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbAddress, cmbClientName, cmbCompany, cmbEmail, cmbGSTIN, cmbLandline, cmbMobile, jLabel1, jLabel2, jLabel24, jLabel25, jLabel26, jLabel3, jLabel4});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbAddress, cmbCompany, jLabel2, jLabel24});
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1211,7 +1056,16 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtTSTRT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTSTRT.setText("0");
-        txtTSTRT.setFocusable(false);
+        txtTSTRT.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtTSTRTFocusGained(evt);
+            }
+        });
+        txtTSTRT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtTSTRTKeyPressed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1243,27 +1097,79 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtW.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtW.setText("0");
-        txtW.setFocusable(false);
+        txtW.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtWFocusGained(evt);
+            }
+        });
+        txtW.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtWKeyPressed(evt);
+            }
+        });
 
         txtOD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtOD.setText("0");
-        txtOD.setFocusable(false);
+        txtOD.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtODFocusGained(evt);
+            }
+        });
+        txtOD.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtODKeyPressed(evt);
+            }
+        });
 
         txtTL.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTL.setText("0");
-        txtTL.setFocusable(false);
+        txtTL.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtTLFocusGained(evt);
+            }
+        });
+        txtTL.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtTLKeyPressed(evt);
+            }
+        });
 
         txtMDP.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMDP.setText("0");
-        txtMDP.setFocusable(false);
+        txtMDP.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtMDPFocusGained(evt);
+            }
+        });
+        txtMDP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMDPKeyPressed(evt);
+            }
+        });
 
         txtRate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRate.setText("0");
-        txtRate.setFocusable(false);
+        txtRate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtRateFocusGained(evt);
+            }
+        });
+        txtRate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtRateKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtRateKeyReleased(evt);
+            }
+        });
 
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
-        txtQTY.setFocusable(false);
+        txtQTY.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtQTYFocusGained(evt);
+            }
+        });
         txtQTY.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtQTYKeyPressed(evt);
@@ -1275,7 +1181,16 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAmount.setText("0");
-        txtAmount.setFocusable(false);
+        txtAmount.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAmountFocusGained(evt);
+            }
+        });
+        txtAmount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAmountKeyPressed(evt);
+            }
+        });
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1288,6 +1203,16 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel28.setText("Material");
 
         txtRemarks.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtRemarks.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtRemarksFocusGained(evt);
+            }
+        });
+        txtRemarks.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtRemarksKeyPressed(evt);
+            }
+        });
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel29.setText("Remarks");
@@ -1298,7 +1223,11 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         txtDisc.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDisc.setText("0");
-        txtDisc.setFocusable(false);
+        txtDisc.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtDiscFocusGained(evt);
+            }
+        });
         txtDisc.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtDiscKeyPressed(evt);
@@ -1321,7 +1250,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(jLabel28))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cmbMaterial, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbMaterial, 0, 384, Short.MAX_VALUE)
                             .addComponent(cmbProductName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(52, 52, 52)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1361,12 +1290,13 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDisc, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-                            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtDisc)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtAmount)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1388,44 +1318,47 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtRemarks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel22))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtQTY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDisc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel21)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtMDP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel9)
+                            .addComponent(txtMDP, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel10)
                                 .addComponent(jLabel11)
-                                .addComponent(jLabel12))
+                                .addComponent(jLabel12)
+                                .addComponent(jLabel9))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(txtW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtOD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtTL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtTSTRT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addComponent(txtTSTRT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtQTY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtDisc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtAmount))))
+                .addGap(10, 10, 10))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbMaterial, cmbProcess, cmbProductName, jLabel27, jLabel28, jLabel29, jLabel5, txtRemarks});
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAmount, txtMDP, txtOD, txtQTY, txtRate, txtTL, txtTSTRT, txtW});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAmount, txtDisc, txtMDP, txtOD, txtQTY, txtRate, txtTL, txtTSTRT, txtW});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, jLabel11, jLabel12, jLabel13, jLabel14, jLabel22});
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 153));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1434,52 +1367,66 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel23.setText("INVOICE NO.");
 
         txtInvoiceNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtInvoiceNo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtInvoiceNoFocusGained(evt);
+            }
+        });
         txtInvoiceNo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtInvoiceNoActionPerformed(evt);
             }
         });
         txtInvoiceNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtInvoiceNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtInvoiceNoKeyReleased(evt);
             }
         });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel6.setText("QUOTATION NO.");
+        jLabel6.setText("CHALLAN NO.");
 
-        txtQuotationNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtQuotationNo.addActionListener(new java.awt.event.ActionListener() {
+        txtChallanNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtChallanNo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtQuotationNoActionPerformed(evt);
+                txtChallanNoActionPerformed(evt);
             }
         });
-        txtQuotationNo.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtChallanNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtChallanNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtQuotationNoKeyReleased(evt);
+                txtChallanNoKeyReleased(evt);
             }
         });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("DATE");
 
+        dtInvoice.setDateFormatString("yyyy-MM-dd");
+        dtInvoice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dtInvoiceKeyPressed(evt);
+            }
+        });
+
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel30.setText("JOB ORDER NO.");
 
         txtJobOrderNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtJobOrderNo.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtJobOrderNoInputMethodTextChanged(evt);
-            }
-        });
         txtJobOrderNo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtJobOrderNoActionPerformed(evt);
             }
         });
         txtJobOrderNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtJobOrderNoKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtJobOrderNoKeyReleased(evt);
             }
@@ -1490,13 +1437,14 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtChallanNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1504,7 +1452,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dtInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -1514,14 +1462,14 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel6)
-                .addComponent(txtQuotationNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtChallanNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel7)
                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(dtInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jDateChooser1, jLabel6, jLabel7, txtQuotationNo});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {dtInvoice, jLabel6, jLabel7, txtChallanNo});
 
         tblInvoice.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         tblInvoice.setModel(new javax.swing.table.DefaultTableModel(
@@ -1594,7 +1542,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setText("Discount");
+        jLabel17.setText("Discount Amt.");
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1650,7 +1598,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
@@ -1663,8 +1611,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDiscount)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtDiscount, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtGSTAmount)
@@ -1711,7 +1659,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                             .addComponent(btnPrintInvoice)
                             .addComponent(btnSaveInvoice)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         tblInvoice1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -1793,7 +1741,8 @@ public class CreateInvoice extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1807,7 +1756,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1176, 606));
+        setSize(new java.awt.Dimension(1176, 644));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1835,85 +1784,76 @@ public class CreateInvoice extends javax.swing.JFrame {
         saveClient();
     }//GEN-LAST:event_btnSaveClientActionPerformed
 
-    private void txtQuotationNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuotationNoActionPerformed
+    private void txtChallanNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtChallanNoActionPerformed
         // TODO add your handling code here:
         getDataToTable();
-    }//GEN-LAST:event_txtQuotationNoActionPerformed
+    }//GEN-LAST:event_txtChallanNoActionPerformed
 
     private void cmbCompanyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbCompanyKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             cmbAddress.requestFocus();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            dtInvoice.requestFocus();
+        }
     }//GEN-LAST:event_cmbCompanyKeyPressed
 
     private void cmbAddressKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbAddressKeyPressed
         // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbEmail.requestFocus();
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            cmbProductName.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbCompany.requestFocus();
         }
     }//GEN-LAST:event_cmbAddressKeyPressed
 
-    private void cmbEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbEmailKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbMobile.requestFocus();
-        }
-    }//GEN-LAST:event_cmbEmailKeyPressed
-
-    private void cmbMobileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMobileKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbLandline.requestFocus();
-        }
-    }//GEN-LAST:event_cmbMobileKeyPressed
-
-    private void cmbLandlineKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbLandlineKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            cmbGSTIN.requestFocus();
-        }
-    }//GEN-LAST:event_cmbLandlineKeyPressed
-
-    private void cmbGSTINKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbGSTINKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (clientexist == false) {
-                saveClient();
-            }
-        }
-    }//GEN-LAST:event_cmbGSTINKeyPressed
-
     private void cmbProductNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbProductNameKeyPressed
         // TODO add your handling code here:
-
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            cmbProcess.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbAddress.requestFocus();
+        }
     }//GEN-LAST:event_cmbProductNameKeyPressed
 
     private void cmbProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbProcessKeyPressed
         // TODO add your handling code here:
-
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            cmbMaterial.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbProductName.requestFocus();
+        }
     }//GEN-LAST:event_cmbProcessKeyPressed
 
     private void cmbMaterialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMaterialKeyPressed
         // TODO add your handling code here:
-
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtRemarks.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbProcess.requestFocus();
+        }
     }//GEN-LAST:event_cmbMaterialKeyPressed
-
-    private void cmbClientNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbClientNameKeyReleased
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_cmbClientNameKeyReleased
 
     private void txtQTYKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQTYKeyReleased
         // TODO add your handling code here:
         calcAmt();
+
     }//GEN-LAST:event_txtQTYKeyReleased
 
     private void txtQTYKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQTYKeyPressed
         // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            getData();
-            getDataToTable();
+        getData();
+        getDataToTable();
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtDisc.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtRate.requestFocus();
         }
     }//GEN-LAST:event_txtQTYKeyPressed
 
@@ -1969,28 +1909,13 @@ public class CreateInvoice extends javax.swing.JFrame {
         deleteInvoice();
     }//GEN-LAST:event_btnDeleteInvoiceActionPerformed
 
-    private void txtQuotationNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQuotationNoKeyReleased
+    private void txtChallanNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtChallanNoKeyReleased
         // TODO add your handling code here:
-        getProductData();
-        getProcessData();
-        getMaterialData();
-        clearProductField();
-        clearInvoiceTotals();
-        //AFTER FROM IS LOADED
-        setTotCalFieldsZero();
-        getData();
-        getClientDataFromJobOrder();
-        getQuotationDataCALC();
-        getDataToTable();
-        getInvoiceDataToTable();
-        calcAmt();
-        calcGT();
-    }//GEN-LAST:event_txtQuotationNoKeyReleased
-
-    private void cmbClientNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientNameActionPerformed
-        // TODO add your handling code here:
-        getData();
-    }//GEN-LAST:event_cmbClientNameActionPerformed
+        if ("".equals( txtChallanNo.getText() )) {
+            txtChallanNo.setText( "0" );
+            txtChallanNo.selectAll();
+        }
+    }//GEN-LAST:event_txtChallanNoKeyReleased
 
     private void btnPrintInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintInvoiceActionPerformed
         // TODO add your handling code here:
@@ -1999,6 +1924,12 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void txtDiscKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscKeyPressed
         // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtAmount.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtQTY.requestFocus();
+        }
     }//GEN-LAST:event_txtDiscKeyPressed
 
     private void txtDiscKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscKeyReleased
@@ -2008,17 +1939,14 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void txtJobOrderNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobOrderNoKeyReleased
         // TODO add your handling code here:
+        if ("".equals( txtJobOrderNo.getText() )) {
+            txtJobOrderNo.setText( "0" );
+            txtJobOrderNo.selectAll();
+        }
         getData();
         getDataToTable();
         getClientDataFromJobOrder();
     }//GEN-LAST:event_txtJobOrderNoKeyReleased
-
-    private void txtJobOrderNoInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtJobOrderNoInputMethodTextChanged
-        // TODO add your handling code here:
-        getData();
-        getDataToTable();
-        getClientDataFromJobOrder();
-    }//GEN-LAST:event_txtJobOrderNoInputMethodTextChanged
 
     private void txtJobOrderNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJobOrderNoActionPerformed
         // TODO add your handling code here:
@@ -2035,6 +1963,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         // TODO add your handling code here:
         getInvoiceDataToTable();
         getInvoiceDataCALC();
+        calcLatest();
         calcGT();
     }//GEN-LAST:event_txtInvoiceNoKeyReleased
 
@@ -2046,6 +1975,13 @@ public class CreateInvoice extends javax.swing.JFrame {
     private void tblInvoice1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblInvoice1KeyPressed
         // TODO add your handling code here:
         getInvoiceTableDataToField();
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            removeImport();
+            getInvoiceDataToTable();
+            calcInvoiceTableData();
+            calcAmt();
+            calcGT();
+        }
     }//GEN-LAST:event_tblInvoice1KeyPressed
 
     private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
@@ -2065,6 +2001,187 @@ public class CreateInvoice extends javax.swing.JFrame {
         calcAmt();
         calcGT();
     }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void txtTSTRTFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTSTRTFocusGained
+        // TODO add your handling code here:
+        txtTSTRT.selectAll();
+    }//GEN-LAST:event_txtTSTRTFocusGained
+
+    private void txtWFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWFocusGained
+        // TODO add your handling code here:
+        txtW.selectAll();
+    }//GEN-LAST:event_txtWFocusGained
+
+    private void txtODFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtODFocusGained
+        // TODO add your handling code here:
+        txtOD.selectAll();
+    }//GEN-LAST:event_txtODFocusGained
+
+    private void txtTLFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTLFocusGained
+        // TODO add your handling code here:
+        txtTL.selectAll();
+    }//GEN-LAST:event_txtTLFocusGained
+
+    private void txtMDPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMDPFocusGained
+        // TODO add your handling code here:
+        txtMDP.selectAll();
+    }//GEN-LAST:event_txtMDPFocusGained
+
+    private void txtRateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRateFocusGained
+        // TODO add your handling code here:
+        txtRate.selectAll();
+    }//GEN-LAST:event_txtRateFocusGained
+
+    private void txtQTYFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQTYFocusGained
+        // TODO add your handling code here:
+        txtQTY.selectAll();
+    }//GEN-LAST:event_txtQTYFocusGained
+
+    private void txtDiscFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDiscFocusGained
+        // TODO add your handling code here:
+        txtDisc.selectAll();
+    }//GEN-LAST:event_txtDiscFocusGained
+
+    private void txtAmountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAmountFocusGained
+        // TODO add your handling code here:
+        txtAmount.selectAll();
+    }//GEN-LAST:event_txtAmountFocusGained
+
+    private void txtInvoiceNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInvoiceNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            dtInvoice.requestFocus();
+        }
+    }//GEN-LAST:event_txtInvoiceNoKeyPressed
+
+    private void txtChallanNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtChallanNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtJobOrderNo.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtInvoiceNo.requestFocus();
+        }
+    }//GEN-LAST:event_txtChallanNoKeyPressed
+
+    private void txtJobOrderNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobOrderNoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            dtInvoice.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtChallanNo.requestFocus();
+        }
+    }//GEN-LAST:event_txtJobOrderNoKeyPressed
+
+    private void dtInvoiceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dtInvoiceKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            cmbCompany.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtInvoiceNo.requestFocus();
+        }
+    }//GEN-LAST:event_dtInvoiceKeyPressed
+
+    private void txtRemarksKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRemarksKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtTSTRT.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbMaterial.requestFocus();
+        }
+    }//GEN-LAST:event_txtRemarksKeyPressed
+
+    private void txtTSTRTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTSTRTKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtW.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtRemarks.requestFocus();
+        }
+    }//GEN-LAST:event_txtTSTRTKeyPressed
+
+    private void txtWKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtWKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtOD.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtTSTRT.requestFocus();
+        }
+    }//GEN-LAST:event_txtWKeyPressed
+
+    private void txtODKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtODKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtTL.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtW.requestFocus();
+        }
+    }//GEN-LAST:event_txtODKeyPressed
+
+    private void txtTLKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTLKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtMDP.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtOD.requestFocus();
+        }
+    }//GEN-LAST:event_txtTLKeyPressed
+
+    private void txtMDPKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMDPKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtRate.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtTL.requestFocus();
+        }
+    }//GEN-LAST:event_txtMDPKeyPressed
+
+    private void txtRateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRateKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            txtQTY.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtMDP.requestFocus();
+        }
+    }//GEN-LAST:event_txtRateKeyPressed
+
+    private void txtAmountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountKeyPressed
+        // TODO add your handling code here:
+        importJobOrder();
+        getInvoiceDataToTable();
+        getInvoiceDataCALC();
+        calcLatest();
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            cmbProductName.requestFocus();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtDisc.requestFocus();
+        }
+    }//GEN-LAST:event_txtAmountKeyPressed
+
+    private void txtRemarksFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRemarksFocusGained
+        // TODO add your handling code here:
+        txtRemarks.selectAll();
+    }//GEN-LAST:event_txtRemarksFocusGained
+
+    private void txtInvoiceNoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtInvoiceNoFocusGained
+        // TODO add your handling code here:
+        txtInvoiceNo.selectAll();
+    }//GEN-LAST:event_txtInvoiceNoFocusGained
+
+    private void txtRateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRateKeyReleased
+        // TODO add your handling code here:
+        calcAmt();
+    }//GEN-LAST:event_txtRateKeyReleased
 
     /**
      * @param args the command line arguments
@@ -2115,17 +2232,11 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JButton btnSaveInvoice;
     private javax.swing.JButton btnUpdateInvoice;
     private javax.swing.JComboBox<String> cmbAddress;
-    private javax.swing.JComboBox<String> cmbClientName;
     private javax.swing.JComboBox<String> cmbCompany;
-    private javax.swing.JComboBox<String> cmbEmail;
-    private javax.swing.JComboBox<String> cmbGSTIN;
-    private javax.swing.JComboBox<String> cmbLandline;
     private javax.swing.JComboBox<String> cmbMaterial;
-    private javax.swing.JComboBox<String> cmbMobile;
     private javax.swing.JComboBox<String> cmbProcess;
     private javax.swing.JComboBox<String> cmbProductName;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JLabel jLabel1;
+    private com.toedter.calendar.JDateChooser dtInvoice;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -2141,14 +2252,10 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2166,6 +2273,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JTable tblInvoice1;
     private javax.swing.JTextField txtAmount;
     private javax.swing.JTextField txtBasicPrice;
+    private javax.swing.JTextField txtChallanNo;
     private javax.swing.JTextField txtDisc;
     private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtGSTAmount;
@@ -2177,7 +2285,6 @@ public class CreateInvoice extends javax.swing.JFrame {
     private javax.swing.JTextArea txtNote;
     private javax.swing.JTextField txtOD;
     private javax.swing.JTextField txtQTY;
-    private javax.swing.JTextField txtQuotationNo;
     private javax.swing.JTextField txtRate;
     private javax.swing.JTextField txtRemarks;
     private javax.swing.JTextField txtTL;

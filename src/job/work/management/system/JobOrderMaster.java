@@ -5,7 +5,6 @@
  */
 package job.work.management.system;
 
-
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
@@ -49,14 +48,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             System.out.println( e );
         }
         this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
-        AutoCompleteDecorator.decorate( cmbClientName );
         AutoCompleteDecorator.decorate( cmbCompany );
-        AutoCompleteDecorator.decorate( cmbAddress );
-        AutoCompleteDecorator.decorate( cmbEmail );
-        AutoCompleteDecorator.decorate( cmbMobile );
-        AutoCompleteDecorator.decorate( cmbLandline );
-        AutoCompleteDecorator.decorate( cmbGSTIN );
-
         AutoCompleteDecorator.decorate( cmbProductName );
         AutoCompleteDecorator.decorate( cmbProcess );
         AutoCompleteDecorator.decorate( cmbMaterial );
@@ -77,10 +69,10 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
     public void getJobNo() {
         try {
-            String sql = "SELECT MAX(joborderno) AS joborderno FROM jobordermaster GROUP BY joborderno";
+            String sql = "SELECT joborderno FROM jobordermaster ORDER BY joborderno DESC";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 jno = rs.getInt( "joborderno" );
             }
             jno++;
@@ -124,25 +116,13 @@ public class JobOrderMaster extends javax.swing.JFrame {
     //Function or method to save client
     public void saveClient() {
         try {
-            String sql = "INSERT INTO clients (clientname,clientcompanyname,address,email,mobile,landline,gstin) VALUES (?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO clients (clientcompanyname) VALUES (?)";
             pst = conn.prepareStatement( sql );
-            pst.setString( 1, cmbClientName.getEditor().getItem().toString() );
-            pst.setString( 2, cmbCompany.getEditor().getItem().toString() );
-            pst.setString( 3, cmbAddress.getEditor().getItem().toString() );
-            pst.setString( 4, cmbEmail.getEditor().getItem().toString() );
-            pst.setString( 5, cmbMobile.getEditor().getItem().toString() );
-            pst.setString( 6, cmbLandline.getEditor().getItem().toString() );
-            pst.setString( 7, cmbGSTIN.getEditor().getItem().toString() );
+            pst.setString( 1, cmbCompany.getEditor().getItem().toString() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
             btnSaveClient.setEnabled( false );
-            cmbClientName.setEnabled( false );
             cmbCompany.setEnabled( false );
-            cmbAddress.setEnabled( false );
-            cmbEmail.setEnabled( false );
-            cmbMobile.setEnabled( false );
-            cmbLandline.setEnabled( false );
-            cmbGSTIN.setEnabled( false );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "saveClient() Exception", JOptionPane.ERROR_MESSAGE );
@@ -158,7 +138,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
     //Function or method to get data to table
     public void getDataToTable() {
         try {
-            String sql = "SELECT uid AS 'UID',joborderno AS 'JOB ORDER NO',productname AS 'PRODUCT NAME',processname AS 'PROCESS NAME',"
+            String sql = "SELECT uid AS 'UID',joborderno AS 'JOB ORDER NO',pageno AS 'PAGE NO',productname AS 'PRODUCT NAME',processname AS 'PROCESS NAME',"
                     + "materialname AS 'MATERIAL NAME',tstrt AS 'T/START',w AS 'W',od AS 'OD',tl AS 'TL',mdp AS 'M/DP',rate AS 'RATE',qty AS 'QUANTITY',"
                     + "discountper AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
             pst = conn.prepareStatement( sql );
@@ -183,21 +163,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
                 cmbCompany.setSelectedItem( rs2.getString( "company" ) );
-                cmbAddress.setSelectedItem( rs2.getString( "clientaddress" ) );
-                cmbEmail.setSelectedItem( rs2.getString( "clientemail" ) );
-                cmbMobile.setSelectedItem( rs2.getString( "clientmobile" ) );
-                cmbLandline.setSelectedItem( rs2.getString( "clientlandline" ) );
-                cmbGSTIN.setSelectedItem( rs2.getString( "clientgstin" ) );
             } else {
-                cmbClientName.setSelectedItem( "" );
                 cmbCompany.setSelectedItem( "" );
-                cmbAddress.setSelectedItem( "" );
-                cmbEmail.setSelectedItem( "" );
-                cmbMobile.setSelectedItem( "" );
-                cmbLandline.setSelectedItem( "" );
-                cmbGSTIN.setSelectedItem( "" );
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "getJobOrderDataCALC() Exception", JOptionPane.ERROR_MESSAGE );
@@ -213,25 +181,13 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
     //Function or method to clear client data field
     public void clearClientData() {
-        cmbClientName.setSelectedItem( "" );
         cmbCompany.setSelectedItem( "" );
-        cmbAddress.setSelectedItem( "" );
-        cmbEmail.setSelectedItem( "" );
-        cmbMobile.setSelectedItem( "" );
-        cmbLandline.setSelectedItem( "" );
-        cmbGSTIN.setSelectedItem( "" );
     }
 
     //Function to populate combobox on client name input
     public void getClientData() {
         try {
-            cmbClientName.setSelectedItem( "" );
             cmbCompany.setSelectedItem( "" );
-            cmbAddress.setSelectedItem( "" );
-            cmbEmail.setSelectedItem( "" );
-            cmbMobile.setSelectedItem( "" );
-            cmbLandline.setSelectedItem( "" );
-            cmbGSTIN.setSelectedItem( "" );
             String sql = "SELECT * FROM clients";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
@@ -239,13 +195,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
                 System.out.println( "Resultset is empty at getClientData()" );
             } else {
                 do {
-                    cmbClientName.addItem( rs.getString( "clientname" ) );
                     cmbCompany.addItem( rs.getString( "clientcompanyname" ) );
-                    cmbAddress.addItem( rs.getString( "address" ) );
-                    cmbEmail.addItem( rs.getString( "email" ) );
-                    cmbMobile.addItem( rs.getString( "mobile" ) );
-                    cmbLandline.addItem( rs.getString( "landline" ) );
-                    cmbGSTIN.addItem( rs.getString( "gstin" ) );
                 } while (rs.next());
             }
         } catch (SQLException e) {
@@ -262,12 +212,12 @@ public class JobOrderMaster extends javax.swing.JFrame {
     //Function to populate other client data comboboxes on Enter key press on client name
     boolean clientexist = false;
     int clientID = 0;
-    String clientname;
+    String clientcompany;
 
     public void setDataToFieldsOnNameInput() {
-        clientname = cmbClientName.getSelectedItem().toString();
+        clientcompany = cmbCompany.getSelectedItem().toString();
         try {
-            String sql = "SELECT * FROM clients WHERE clientname LIKE '" + clientname + "'";
+            String sql = "SELECT * FROM clients WHERE clientcompanyname LIKE '" + clientcompany + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             if (rs.next() == false) {
@@ -278,11 +228,6 @@ public class JobOrderMaster extends javax.swing.JFrame {
                     clientID = rs.getInt( "uid" );
                     System.out.println( String.valueOf( clientID ) );
                     cmbCompany.setSelectedItem( rs.getString( "clientcompanyname" ) );
-                    cmbAddress.setSelectedItem( rs.getString( "address" ) );
-                    cmbEmail.setSelectedItem( rs.getString( "email" ) );
-                    cmbMobile.setSelectedItem( rs.getString( "mobile" ) );
-                    cmbLandline.setSelectedItem( rs.getString( "landline" ) );
-                    cmbGSTIN.setSelectedItem( rs.getString( "gstin" ) );
                 } while (rs.next());
                 btnSaveClient.setEnabled( false );
             }
@@ -383,33 +328,28 @@ public class JobOrderMaster extends javax.swing.JFrame {
     //Function or method to add product to job list
     public void addProduct() {
         try {
-            String sql = "INSERT INTO jobordermaster (joborderno,date,clientname,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
-                    + "amount,remark,clientid,company,clientaddress,clientemail,clientmobile,clientlandline,clientgstin,discountamt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO jobordermaster (joborderno,date,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
+                    + "amount,remark,clientid,company,discountamt,pageno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtJobOrderNo.getText() );
             pst.setString( 2, ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText() );
-            pst.setString( 3, cmbClientName.getEditor().getItem().toString() );
-            pst.setString( 4, cmbProductName.getSelectedItem().toString() );
-            pst.setString( 5, cmbProcess.getSelectedItem().toString() );
-            pst.setString( 6, cmbMaterial.getSelectedItem().toString() );
-            pst.setString( 7, txtTSTRT.getText() );
-            pst.setString( 8, txtW.getText() );
-            pst.setString( 9, txtOD.getText() );
-            pst.setString( 10, txtTL.getText() );
-            pst.setString( 11, txtMDP.getText() );
-            pst.setString( 12, txtDiscount.getText() );
-            pst.setString( 13, txtQTY.getText() );
-            pst.setString( 14, txtRate.getText() );
-            pst.setString( 15, txtAmount.getText() );
-            pst.setString( 16, txtRemarks.getText() );
-            pst.setInt( 17, clientID );
-            pst.setString( 18, cmbCompany.getSelectedItem().toString() );
-            pst.setString( 19, cmbAddress.getSelectedItem().toString() );
-            pst.setString( 20, cmbEmail.getSelectedItem().toString() );
-            pst.setString( 21, cmbMobile.getSelectedItem().toString() );
-            pst.setString( 22, cmbLandline.getSelectedItem().toString() );
-            pst.setString( 23, cmbGSTIN.getSelectedItem().toString() );
-            pst.setString( 24, String.valueOf( discount ) );
+            pst.setString( 3, cmbProductName.getSelectedItem().toString() );
+            pst.setString( 4, cmbProcess.getSelectedItem().toString() );
+            pst.setString( 5, cmbMaterial.getSelectedItem().toString() );
+            pst.setString( 6, txtTSTRT.getText() );
+            pst.setString( 7, txtW.getText() );
+            pst.setString( 8, txtOD.getText() );
+            pst.setString( 9, txtTL.getText() );
+            pst.setString( 10, txtMDP.getText() );
+            pst.setString( 11, txtDiscount.getText() );
+            pst.setString( 12, txtQTY.getText() );
+            pst.setString( 13, txtRate.getText() );
+            pst.setString( 14, txtAmount.getText() );
+            pst.setString( 15, txtRemarks.getText() );
+            pst.setInt( 16, clientID );
+            pst.setString( 17, cmbCompany.getSelectedItem().toString() );
+            pst.setString( 18, String.valueOf( discount ) );
+            pst.setString( 19, String.valueOf( txtPageNo.getText() ) );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Poduct added to database", "Saved", JOptionPane.PLAIN_MESSAGE );
 //            getData();
@@ -438,13 +378,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             pst2 = conn.prepareStatement( sql );
             rs2 = pst2.executeQuery();
             if (rs2.next()) {
-                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
                 cmbCompany.setSelectedItem( rs2.getString( "company" ) );
-                cmbAddress.setSelectedItem( rs2.getString( "clientaddress" ) );
-                cmbEmail.setSelectedItem( rs2.getString( "clientemail" ) );
-                cmbMobile.setSelectedItem( rs2.getString( "clientmobile" ) );
-                cmbLandline.setSelectedItem( rs2.getString( "clientlandline" ) );
-                cmbGSTIN.setSelectedItem( rs2.getString( "clientgstin" ) );
                 cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
                 cmbProcess.setSelectedItem( rs2.getString( "processname" ) );
                 cmbMaterial.setSelectedItem( rs2.getString( "materialname" ) );
@@ -589,7 +523,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
         try {
             String jno = txtJobOrderNo.getText();
             try {
-                String sql = "Select * from jobordermaster,companydetails where jobordermaster.joborderno='" + jno + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+                String sql = "SELECT * FROM jobordermaster,companydetails WHERE jobordermaster.joborderno='" + jno + "' AND jobordermaster.pageno='"+txtPageNo.getText()+"' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
                 JasperDesign jd = JRXmlLoader.load( "src/reports/joborderPT.jrxml" );
                 JRDesignQuery qry = new JRDesignQuery();
                 qry.setText( sql );
@@ -616,20 +550,8 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        cmbClientName = new javax.swing.JComboBox<>();
         cmbCompany = new javax.swing.JComboBox<>();
-        cmbAddress = new javax.swing.JComboBox<>();
-        cmbEmail = new javax.swing.JComboBox<>();
-        cmbMobile = new javax.swing.JComboBox<>();
-        cmbLandline = new javax.swing.JComboBox<>();
-        cmbGSTIN = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
         btnSaveClient = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         cmbProductName = new javax.swing.JComboBox<>();
@@ -670,6 +592,8 @@ public class JobOrderMaster extends javax.swing.JFrame {
         txtJobOrderNo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel16 = new javax.swing.JLabel();
+        txtPageNo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJobOrder = new javax.swing.JTable();
 
@@ -686,48 +610,13 @@ public class JobOrderMaster extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel1.setText("Client Name");
-
-        cmbClientName.setEditable(true);
-        cmbClientName.setRequestFocusEnabled(true);
-
         cmbCompany.setEditable(true);
         cmbCompany.setRequestFocusEnabled(true);
 
-        cmbAddress.setEditable(true);
-        cmbAddress.setRequestFocusEnabled(true);
-
-        cmbEmail.setEditable(true);
-        cmbEmail.setRequestFocusEnabled(true);
-
-        cmbMobile.setEditable(true);
-        cmbMobile.setRequestFocusEnabled(true);
-
-        cmbLandline.setEditable(true);
-        cmbLandline.setRequestFocusEnabled(true);
-
-        cmbGSTIN.setEditable(true);
-        cmbGSTIN.setRequestFocusEnabled(true);
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel2.setText("Clients Company Name");
+        jLabel2.setText("Firm Name");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel3.setText("Email");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel4.setText("Mobile");
-
-        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel24.setText("Address");
-
-        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel25.setText("LandLine");
-
-        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel26.setText("GSTIN");
-
+        btnSaveClient.setBackground(new java.awt.Color(255, 255, 255));
         btnSaveClient.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnSaveClient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_administrator_16px.png"))); // NOI18N
         btnSaveClient.setText("ADD CLIENT");
@@ -743,63 +632,24 @@ public class JobOrderMaster extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel24)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbAddress, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel25)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbLandline, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                        .addComponent(btnSaveClient)))
-                .addContainerGap())
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 826, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSaveClient)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel24)
-                    .addComponent(cmbClientName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbCompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel26)
-                    .addComponent(btnSaveClient)
-                    .addComponent(cmbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbMobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbGSTIN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbLandline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnSaveClient))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbAddress, cmbClientName, cmbCompany, cmbEmail, cmbGSTIN, cmbLandline, cmbMobile, jLabel1, jLabel2, jLabel24, jLabel25, jLabel26, jLabel3, jLabel4});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnSaveClient, cmbCompany, jLabel2});
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -818,6 +668,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtTSTRT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTSTRT.setText("0");
+        txtTSTRT.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtTSTRTFocusGained(evt);
+            }
+        });
         txtTSTRT.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtTSTRTKeyPressed(evt);
@@ -854,6 +709,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtW.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtW.setText("0");
+        txtW.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtWFocusGained(evt);
+            }
+        });
         txtW.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtWKeyPressed(evt);
@@ -862,6 +722,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtOD.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtOD.setText("0");
+        txtOD.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtODFocusGained(evt);
+            }
+        });
         txtOD.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtODKeyPressed(evt);
@@ -870,6 +735,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtTL.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTL.setText("0");
+        txtTL.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtTLFocusGained(evt);
+            }
+        });
         txtTL.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtTLKeyPressed(evt);
@@ -878,6 +748,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtMDP.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMDP.setText("0");
+        txtMDP.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtMDPFocusGained(evt);
+            }
+        });
         txtMDP.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtMDPKeyPressed(evt);
@@ -886,6 +761,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtRate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtRate.setText("0");
+        txtRate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtRateFocusGained(evt);
+            }
+        });
         txtRate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtRateKeyPressed(evt);
@@ -897,6 +777,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtQTY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtQTY.setText("0");
+        txtQTY.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtQTYFocusGained(evt);
+            }
+        });
         txtQTY.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtQTYKeyPressed(evt);
@@ -908,12 +793,18 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtAmount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtAmount.setText("0");
+        txtAmount.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAmountFocusGained(evt);
+            }
+        });
         txtAmount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtAmountKeyPressed(evt);
             }
         });
 
+        btnAddProduct.setBackground(new java.awt.Color(255, 255, 255));
         btnAddProduct.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/add_16px.png"))); // NOI18N
         btnAddProduct.setText("ADD");
@@ -923,6 +814,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             }
         });
 
+        btnDeleteProduct.setBackground(new java.awt.Color(255, 255, 255));
         btnDeleteProduct.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnDeleteProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/Delete_16px.png"))); // NOI18N
         btnDeleteProduct.setText("DELETE");
@@ -932,6 +824,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             }
         });
 
+        btnClearProduct.setBackground(new java.awt.Color(255, 255, 255));
         btnClearProduct.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnClearProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/erase_16px.png"))); // NOI18N
         btnClearProduct.setText("CLEAR");
@@ -961,6 +854,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel29.setText("Remarks");
 
+        btnAddProductName.setBackground(new java.awt.Color(255, 255, 255));
         btnAddProductName.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddProductName.setText("+ PRODUCT");
         btnAddProductName.addActionListener(new java.awt.event.ActionListener() {
@@ -969,6 +863,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             }
         });
 
+        btnAddProcessName.setBackground(new java.awt.Color(255, 255, 255));
         btnAddProcessName.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddProcessName.setText("+ PROCESS");
         btnAddProcessName.addActionListener(new java.awt.event.ActionListener() {
@@ -977,6 +872,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             }
         });
 
+        btnAddMaterialName.setBackground(new java.awt.Color(255, 255, 255));
         btnAddMaterialName.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnAddMaterialName.setText("+ MATERIAL");
         btnAddMaterialName.addActionListener(new java.awt.event.ActionListener() {
@@ -985,6 +881,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             }
         });
 
+        btnPrintJobOrder.setBackground(new java.awt.Color(255, 255, 255));
         btnPrintJobOrder.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnPrintJobOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/print_16px.png"))); // NOI18N
         btnPrintJobOrder.setText("PRINT");
@@ -1000,6 +897,11 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         txtDiscount.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtDiscount.setText("0");
+        txtDiscount.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtDiscountFocusGained(evt);
+            }
+        });
         txtDiscount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtDiscountKeyPressed(evt);
@@ -1038,7 +940,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
                         .addComponent(btnAddProcessName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddMaterialName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTSTRT, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1172,6 +1074,16 @@ public class JobOrderMaster extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel7.setText("DATE");
 
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel16.setText("Page No.");
+
+        txtPageNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtPageNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPageNoKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1181,6 +1093,10 @@ public class JobOrderMaster extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPageNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1189,6 +1105,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel16)
+                .addComponent(txtPageNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel6)
                 .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1237,10 +1156,10 @@ public class JobOrderMaster extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(10, 10, 10)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1254,7 +1173,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1192, 597));
+        setSize(new java.awt.Dimension(1099, 597));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1435,6 +1354,55 @@ public class JobOrderMaster extends javax.swing.JFrame {
         calcAmt();
     }//GEN-LAST:event_txtRateKeyReleased
 
+    private void txtPageNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPageNoKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPageNoKeyReleased
+
+    private void txtTSTRTFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTSTRTFocusGained
+        // TODO add your handling code here:
+txtTSTRT.selectAll();
+    }//GEN-LAST:event_txtTSTRTFocusGained
+
+    private void txtWFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWFocusGained
+        // TODO add your handling code here:
+txtW.selectAll();
+    }//GEN-LAST:event_txtWFocusGained
+
+    private void txtODFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtODFocusGained
+        // TODO add your handling code here:
+txtOD.selectAll();
+    }//GEN-LAST:event_txtODFocusGained
+
+    private void txtTLFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTLFocusGained
+        // TODO add your handling code here:
+txtTL.selectAll();
+    }//GEN-LAST:event_txtTLFocusGained
+
+    private void txtMDPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMDPFocusGained
+        // TODO add your handling code here:
+txtMDP.selectAll();
+    }//GEN-LAST:event_txtMDPFocusGained
+
+    private void txtRateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRateFocusGained
+        // TODO add your handling code here:
+txtRate.selectAll();
+    }//GEN-LAST:event_txtRateFocusGained
+
+    private void txtQTYFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQTYFocusGained
+        // TODO add your handling code here:
+txtQTY.selectAll();
+    }//GEN-LAST:event_txtQTYFocusGained
+
+    private void txtDiscountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDiscountFocusGained
+        // TODO add your handling code here:
+txtDiscount.selectAll();
+    }//GEN-LAST:event_txtDiscountFocusGained
+
+    private void txtAmountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAmountFocusGained
+        // TODO add your handling code here:
+txtAmount.selectAll();
+    }//GEN-LAST:event_txtAmountFocusGained
+
     /**
      * @param args the command line arguments
      */
@@ -1480,34 +1448,23 @@ public class JobOrderMaster extends javax.swing.JFrame {
     private javax.swing.JButton btnDeleteProduct;
     private javax.swing.JButton btnPrintJobOrder;
     private javax.swing.JButton btnSaveClient;
-    private javax.swing.JComboBox<String> cmbAddress;
-    private javax.swing.JComboBox<String> cmbClientName;
     private javax.swing.JComboBox<String> cmbCompany;
-    private javax.swing.JComboBox<String> cmbEmail;
-    private javax.swing.JComboBox<String> cmbGSTIN;
-    private javax.swing.JComboBox<String> cmbLandline;
     private javax.swing.JComboBox<String> cmbMaterial;
-    private javax.swing.JComboBox<String> cmbMobile;
     private javax.swing.JComboBox<String> cmbProcess;
     private javax.swing.JComboBox<String> cmbProductName;
     private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1524,6 +1481,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
     private javax.swing.JTextField txtJobOrderNo;
     private javax.swing.JTextField txtMDP;
     private javax.swing.JTextField txtOD;
+    private javax.swing.JTextField txtPageNo;
     private javax.swing.JTextField txtQTY;
     private javax.swing.JTextField txtRate;
     private javax.swing.JTextField txtRemarks;
