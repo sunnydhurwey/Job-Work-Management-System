@@ -122,7 +122,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             pst.execute();
             JOptionPane.showMessageDialog( null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
             btnSaveClient.setEnabled( false );
-            cmbCompany.setEnabled( false );
+//            cmbCompany.setEnabled( false );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "saveClient() Exception", JOptionPane.ERROR_MESSAGE );
@@ -164,8 +164,10 @@ public class JobOrderMaster extends javax.swing.JFrame {
             rs2 = pst.executeQuery();
             if (rs2.next()) {
                 cmbCompany.setSelectedItem( rs2.getString( "company" ) );
+                txtPageNo.setText( rs2.getString( "pageno" ) );
             } else {
                 cmbCompany.setSelectedItem( "" );
+                txtPageNo.setText( "" );
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "getJobOrderDataCALC() Exception", JOptionPane.ERROR_MESSAGE );
@@ -523,7 +525,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
         try {
             String jno = txtJobOrderNo.getText();
             try {
-                String sql = "SELECT * FROM jobordermaster,companydetails WHERE jobordermaster.joborderno='" + jno + "' AND jobordermaster.pageno='"+txtPageNo.getText()+"' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+                String sql = "SELECT * FROM jobordermaster,companydetails WHERE jobordermaster.joborderno='" + jno + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
                 JasperDesign jd = JRXmlLoader.load( "src/reports/joborderPT.jrxml" );
                 JRDesignQuery qry = new JRDesignQuery();
                 qry.setText( sql );
@@ -659,9 +661,19 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
         cmbProcess.setEditable(true);
         cmbProcess.setRequestFocusEnabled(true);
+        cmbProcess.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cmbProcessKeyPressed(evt);
+            }
+        });
 
         cmbMaterial.setEditable(true);
         cmbMaterial.setRequestFocusEnabled(true);
+        cmbMaterial.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cmbMaterialKeyPressed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setText("Product Name");
@@ -1219,6 +1231,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             txtDiscount.requestFocus();
             txtDiscount.selectAll();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtRate.requestFocus();
+        }
     }//GEN-LAST:event_txtQTYKeyPressed
 
     private void tblJobOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJobOrderMouseClicked
@@ -1278,6 +1293,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             txtAmount.requestFocus();
             txtAmount.selectAll();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtQTY.requestFocus();
+        }
     }//GEN-LAST:event_txtDiscountKeyPressed
 
     private void txtDiscountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyReleased
@@ -1291,6 +1309,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             txtW.requestFocus();
             txtW.selectAll();
         }
+if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtRemarks.requestFocus();
+        }
     }//GEN-LAST:event_txtTSTRTKeyPressed
 
     private void txtWKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtWKeyPressed
@@ -1298,6 +1319,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             txtOD.requestFocus();
             txtOD.selectAll();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtTSTRT.requestFocus();
         }
     }//GEN-LAST:event_txtWKeyPressed
 
@@ -1307,6 +1331,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             txtTL.requestFocus();
             txtTL.selectAll();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtW.requestFocus();
+        }
     }//GEN-LAST:event_txtODKeyPressed
 
     private void txtTLKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTLKeyPressed
@@ -1314,6 +1341,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             txtMDP.requestFocus();
             txtMDP.selectAll();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtOD.requestFocus();
         }
     }//GEN-LAST:event_txtTLKeyPressed
 
@@ -1323,6 +1353,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             txtRate.requestFocus();
             txtRate.selectAll();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtTL.requestFocus();
+        }
     }//GEN-LAST:event_txtMDPKeyPressed
 
     private void txtRateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRateKeyPressed
@@ -1330,6 +1363,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             txtQTY.requestFocus();
             txtQTY.selectAll();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtMDP.requestFocus();
         }
     }//GEN-LAST:event_txtRateKeyPressed
 
@@ -1339,6 +1375,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
             addProduct();
             getDataToTable();
         }
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            txtDiscount.requestFocus();
+        }
     }//GEN-LAST:event_txtAmountKeyPressed
 
     private void txtRemarksKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRemarksKeyPressed
@@ -1346,6 +1385,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             txtTSTRT.requestFocus();
             txtTSTRT.selectAll();
+        }
+if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbMaterial.requestFocus();
         }
     }//GEN-LAST:event_txtRemarksKeyPressed
 
@@ -1360,48 +1402,62 @@ public class JobOrderMaster extends javax.swing.JFrame {
 
     private void txtTSTRTFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTSTRTFocusGained
         // TODO add your handling code here:
-txtTSTRT.selectAll();
+        txtTSTRT.selectAll();
     }//GEN-LAST:event_txtTSTRTFocusGained
 
     private void txtWFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWFocusGained
         // TODO add your handling code here:
-txtW.selectAll();
+        txtW.selectAll();
     }//GEN-LAST:event_txtWFocusGained
 
     private void txtODFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtODFocusGained
         // TODO add your handling code here:
-txtOD.selectAll();
+        txtOD.selectAll();
     }//GEN-LAST:event_txtODFocusGained
 
     private void txtTLFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTLFocusGained
         // TODO add your handling code here:
-txtTL.selectAll();
+        txtTL.selectAll();
     }//GEN-LAST:event_txtTLFocusGained
 
     private void txtMDPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMDPFocusGained
         // TODO add your handling code here:
-txtMDP.selectAll();
+        txtMDP.selectAll();
     }//GEN-LAST:event_txtMDPFocusGained
 
     private void txtRateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRateFocusGained
         // TODO add your handling code here:
-txtRate.selectAll();
+        txtRate.selectAll();
     }//GEN-LAST:event_txtRateFocusGained
 
     private void txtQTYFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQTYFocusGained
         // TODO add your handling code here:
-txtQTY.selectAll();
+        txtQTY.selectAll();
     }//GEN-LAST:event_txtQTYFocusGained
 
     private void txtDiscountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDiscountFocusGained
         // TODO add your handling code here:
-txtDiscount.selectAll();
+        txtDiscount.selectAll();
     }//GEN-LAST:event_txtDiscountFocusGained
 
     private void txtAmountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAmountFocusGained
         // TODO add your handling code here:
-txtAmount.selectAll();
+        txtAmount.selectAll();
     }//GEN-LAST:event_txtAmountFocusGained
+
+    private void cmbMaterialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMaterialKeyPressed
+        // TODO add your handling code here:
+if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbProcess.requestFocus();
+        }
+    }//GEN-LAST:event_cmbMaterialKeyPressed
+
+    private void cmbProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbProcessKeyPressed
+        // TODO add your handling code here:
+if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            cmbProductName.requestFocus();
+        }
+    }//GEN-LAST:event_cmbProcessKeyPressed
 
     /**
      * @param args the command line arguments

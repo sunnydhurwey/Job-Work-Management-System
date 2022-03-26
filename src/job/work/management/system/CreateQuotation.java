@@ -139,8 +139,8 @@ public class CreateQuotation extends javax.swing.JFrame {
             pst.execute();
             JOptionPane.showMessageDialog( null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
             btnSaveClient.setEnabled( false );
-            cmbCompany.setEnabled( false );
-            cmbAddress.setEnabled( false );
+//            cmbCompany.setEnabled( false );
+//            cmbAddress.setEnabled( false );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog( null, e, "saveClient() Exception", JOptionPane.ERROR_MESSAGE );
@@ -655,6 +655,57 @@ public class CreateQuotation extends javax.swing.JFrame {
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
         }
+
+//        try {
+//            String qno = txtQuotationNo.getText();
+//            String[] choice = {"PRINT 1", "PRINT 2"};
+//
+//            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
+//                   
+//            if (x == 0) {
+//                try {
+//                    String sql = "SELECT * FROM quotation,quotationmaster,companydetails WHERE quotation.quotationno='" + qno + "' AND quotationmaster.quotationno='" + qno + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+//                    JasperDesign jd = JRXmlLoader.load( "src/reports/quotationPT.jrxml" );
+//                    JRDesignQuery qry = new JRDesignQuery();
+//                    qry.setText( sql );
+//                    jd.setQuery( qry );
+//                    JasperReport jr = JasperCompileManager.compileReport( jd );
+//                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+//                    JasperViewer.viewReport( jp, false );
+//                } catch (JRException e) {
+//                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+//                } finally {
+//                    try {
+//                        rs.close();
+//                        pst.close();
+//                    } catch (SQLException e) {
+//
+//                    }
+//                }
+//            } else {
+//                try {
+//                    String sql = "SELECT * FROM quotation,quotationmaster,companydetails WHERE quotation.quotationno='" + qno + "' AND quotationmaster.quotationno='" + qno + "' AND companydetails.c_uid=(SELECT MAX(companydetails.c_uid) FROM companydetails)";
+//                    JasperDesign jd = JRXmlLoader.load( "src/reports/quotationPT.jrxml" );
+//                    JRDesignQuery qry = new JRDesignQuery();
+//                    qry.setText( sql );
+//                    jd.setQuery( qry );
+//                    JasperReport jr = JasperCompileManager.compileReport( jd );
+//                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+//                    JasperViewer.viewReport( jp, false );
+//                } catch (JRException e) {
+//                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+//                } finally {
+//                    try {
+//                        rs.close();
+//                        pst.close();
+//                    } catch (SQLException e) {
+//
+//                    }
+//                }
+//            }
+//        } catch (HeadlessException e) {
+//            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
+//        }
     }
 
     /**
@@ -1333,6 +1384,7 @@ public class CreateQuotation extends javax.swing.JFrame {
 
         txtNote.setColumns(20);
         txtNote.setRows(5);
+        txtNote.setText("1. VALIDITY PERIOD:- \n2. PAYMENT TERMS:- \n3. DELIVERY TIME:- \n4. DELIVERY SITE:- Satyam Industries");
         txtNote.setBorder(javax.swing.BorderFactory.createTitledBorder("Note"));
         jScrollPane2.setViewportView(txtNote);
 
@@ -1380,29 +1432,30 @@ public class CreateQuotation extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnUpdateQuotation)
-                            .addComponent(btnDeleteQuotation)
-                            .addComponent(btnPrintQuotation)
-                            .addComponent(btnSaveQuotation))))
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel19)
+                    .addComponent(jLabel20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBasicPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGSTAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGSTPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdateQuotation)
+                    .addComponent(btnDeleteQuotation)
+                    .addComponent(btnPrintQuotation)
+                    .addComponent(btnSaveQuotation))
+                .addGap(0, 35, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

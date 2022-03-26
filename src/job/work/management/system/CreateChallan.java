@@ -95,6 +95,7 @@ public class CreateChallan extends javax.swing.JFrame {
         dtInvoice.setDateFormatString( "yyyy-MM-dd" );
         java.util.Date date = new java.util.Date();
         dtGatePass.setDate( date );
+dtPODate.setDate( date );
     }
 
     //Function or method to clear Fields
@@ -146,6 +147,7 @@ public class CreateChallan extends javax.swing.JFrame {
                 txtVehicleNo.setText( rs.getString( "gp_vehicleno" ) );
                 cmbFirmName.setSelectedItem( rs.getString( "gp_firmname" ) );
                 txtporgpno.setText( rs.getString( "gp_porgpno" ) );
+                dtPODate.setDate( rs.getDate( "gp_podate" ) );
                 btnAdd.setEnabled( false );
                 btnUpdate.setEnabled( true );
                 btnDelete.setEnabled( true );
@@ -212,8 +214,8 @@ public class CreateChallan extends javax.swing.JFrame {
     //Function or method to add challan
     public void addChallan() {
         try {
-            String sql = "INSERT INTO `gatepass`(`gp_no`, `gp_porgpno`, `gp_date`, `gp_firmname`, `gp_invoiceno`, `gp_invoicedate`, `gp_drivername`, `gp_mobile`, `gp_vehicleno`) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO `gatepass`(`gp_no`, `gp_porgpno`, `gp_date`, `gp_firmname`, `gp_invoiceno`, `gp_invoicedate`, `gp_drivername`, `gp_mobile`, `gp_vehicleno`,`gp_podate`) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtGatePassNo.getText() );
             pst.setString( 2, txtporgpno.getText() );
@@ -224,6 +226,7 @@ public class CreateChallan extends javax.swing.JFrame {
             pst.setString( 7, txtDriverName.getText() );
             pst.setString( 8, txtMobile.getText() );
             pst.setString( 9, txtVehicleNo.getText() );
+            pst.setString( 10, ((JTextField) dtPODate.getDateEditor().getUiComponent()).getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Challan added to database", "CHALLAN ADDED", JOptionPane.PLAIN_MESSAGE );
             btnAdd.setEnabled( false );
@@ -245,7 +248,7 @@ public class CreateChallan extends javax.swing.JFrame {
     public void updateChallan() {
         try {
             String sql = "UPDATE `gatepass` SET `gp_porgpno`=?, `gp_date`=?, `gp_firmname`=?, `gp_invoiceno`=?, `gp_invoicedate`=?, "
-                    + "`gp_drivername`=?, `gp_mobile`=?, `gp_vehicleno`=? WHERE 'gp_no'='" + txtGatePassNo.getText() + "'";
+                    + "`gp_drivername`=?, `gp_mobile`=?, `gp_vehicleno`=?, 'gp_podate'=? WHERE 'gp_no'='" + txtGatePassNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtporgpno.getText() );
             pst.setString( 2, ((JTextField) dtGatePass.getDateEditor().getUiComponent()).getText() );
@@ -255,6 +258,7 @@ public class CreateChallan extends javax.swing.JFrame {
             pst.setString( 6, txtDriverName.getText() );
             pst.setString( 7, txtMobile.getText() );
             pst.setString( 8, txtVehicleNo.getText() );
+            pst.setString( 9, ((JTextField) dtPODate.getDateEditor().getUiComponent()).getText() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Challan updated to database", "CHALLAN UPDATED", JOptionPane.PLAIN_MESSAGE );
             btnAdd.setEnabled( false );
@@ -293,11 +297,51 @@ public class CreateChallan extends javax.swing.JFrame {
     //Program to give printout options
     //final JDialog dialog=new JDialog();
     public void printOption() {
+//        try {
+//            try {
+//                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails";
+//                JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
+//                JRDesignQuery qry = new JRDesignQuery();
+//                qry.setText( sql );
+//                jd.setQuery( qry );
+//                JasperReport jr = JasperCompileManager.compileReport( jd );
+//                JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+//                JasperViewer.viewReport( jp, false );
+//            } catch (JRException e) {
+//                JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+//            }
+//        } catch (HeadlessException e) {
+//            JOptionPane.showMessageDialog( null, e, "Print Challan Exception", JOptionPane.ERROR_MESSAGE );
+//        }
+
         try {
-//            String invno = txtInvoiceNo.getText();
-//            String gpno = txtGatePassNo.getText();
-            try {
-                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails";
+            String[] choice = {"PRINT 1", "PRINT 2"};
+            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
+            //System.out.println(x);
+            //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
+            if (x == 0) {
+                try {
+                    String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+                    JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
+                    JRDesignQuery qry = new JRDesignQuery();
+                    qry.setText( sql );
+                    jd.setQuery( qry );
+                    JasperReport jr = JasperCompileManager.compileReport( jd );
+                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+                    JasperViewer.viewReport( jp, false );
+                } catch (JRException e) {
+                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+                }finally {
+                    try {
+                        rs.close();
+                        pst.close();
+                    } catch (SQLException e) {
+
+                    }
+                }
+            } else {
+                try {
+                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MAX(companydetails.c_uid) FROM companydetails)";
                 JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
                 JRDesignQuery qry = new JRDesignQuery();
                 qry.setText( sql );
@@ -307,9 +351,17 @@ public class CreateChallan extends javax.swing.JFrame {
                 JasperViewer.viewReport( jp, false );
             } catch (JRException e) {
                 JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+            }finally {
+                    try {
+                        rs.close();
+                        pst.close();
+                    } catch (SQLException e) {
+
+                    }
+                }
             }
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog( null, e, "Print Challan Exception", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
         }
     }
 
@@ -349,6 +401,8 @@ public class CreateChallan extends javax.swing.JFrame {
         txtInvoiceNo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         dtInvoice = new com.toedter.calendar.JDateChooser();
+        jLabel10 = new javax.swing.JLabel();
+        dtPODate = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Delivery Challan / Gate Pass - Job Work Management System");
@@ -576,6 +630,11 @@ public class CreateChallan extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel10.setText("PO Date");
+
+        dtPODate.setDateFormatString("yyyy-MM-dd");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -595,21 +654,24 @@ public class CreateChallan extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(cmbFirmName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
+                        .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbFirmName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtporgpno)
+                    .addComponent(txtInvoiceNo, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtporgpno)
-                    .addComponent(dtInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(dtInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dtPODate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -626,13 +688,15 @@ public class CreateChallan extends javax.swing.JFrame {
                     .addComponent(dtGatePass, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(dtInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cmbFirmName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtporgpno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 12, Short.MAX_VALUE))
+                        .addComponent(txtporgpno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtPODate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbFirmName, dtGatePass, dtInvoice, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, txtGatePassNo, txtInvoiceNo, txtporgpno});
@@ -800,7 +864,9 @@ public class CreateChallan extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbFirmName;
     private com.toedter.calendar.JDateChooser dtGatePass;
     private com.toedter.calendar.JDateChooser dtInvoice;
+    private com.toedter.calendar.JDateChooser dtPODate;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

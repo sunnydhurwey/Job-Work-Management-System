@@ -147,6 +147,9 @@
 	<field name="gp_vehicleno" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="gp_podate" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="description" class="java.lang.String" resetType="None" calculation="Count">
 		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
@@ -215,25 +218,37 @@
 			</line>
 			<textField>
 				<reportElement x="4" y="23" width="177" height="14" uuid="808fcbed-c69a-4c18-92aa-fea4855c59f2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Gate Pass No.: "+$F{gp_no}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="449" y="23" width="102" height="14" uuid="6c9ae08a-5049-41b5-ae4e-34b4761515e8"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["DATE : "+$F{gp_date}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="4" y="37" width="295" height="14" uuid="be7617a0-004e-45cb-8b45-3c7730e6cb83"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Firm Name : "+$F{gp_firmname}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="346" y="37" width="205" height="14" uuid="167442e2-6d95-44ef-9e1d-e65ccb75cf18"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["PO/GRNO : "+$F{gp_porgpno}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="418" y="51" width="131" height="14" uuid="f97a500a-24e6-4532-86b5-2687b86f52db"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Dated : "+$F{gp_invoicedate}]]></textFieldExpression>
 			</textField>
 			<line>
@@ -256,22 +271,30 @@
 			</line>
 			<staticText>
 				<reportElement x="2" y="65" width="41" height="16" uuid="b314055c-0577-4f0e-8ecd-888c69a88884"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Sr. No.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="44" y="65" width="291" height="16" uuid="48ac0149-0b73-4390-9856-36e1ab0663ac"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[ITEM / DESCRIPTION]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="335" y="65" width="47" height="16" uuid="64bb291d-ef85-41c2-a166-95d4903322cf"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[QTY]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="383" y="65" width="171" height="16" uuid="a855be63-675e-44ee-bf6b-b734f86a1e0e"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[REMARK]]></text>
 			</staticText>
 			<line>
@@ -303,6 +326,9 @@
 			</textField>
 			<textField>
 				<reportElement x="44" y="0" width="291" height="14" uuid="9f9a11cd-667f-4f4e-baa4-14150e911ea5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
 			</textField>
 			<line>
@@ -349,42 +375,58 @@
 			</line>
 			<textField>
 				<reportElement x="238" y="0" width="144" height="18" uuid="f6e5e4ee-67f7-46b6-9ca2-aaaaa0273992"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{gp_drivername}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="238" y="19" width="144" height="20" uuid="396bdf70-df3d-4774-9b6e-faefbffc6157"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{gp_mobile}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="238" y="41" width="144" height="19" uuid="b10a178c-c828-4029-bef1-dd1f76e3b00b"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{gp_vehicleno}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="171" y="0" width="67" height="18" uuid="cd941b1e-31b4-43a4-af83-f6df33359df7"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Driver Name:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="171" y="19" width="67" height="20" uuid="59422ed0-9540-4244-b9d3-1bfae5172b23"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Mobile:]]></text>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mobile No.:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="171" y="41" width="67" height="19" uuid="9bd247c0-af46-4ab9-806b-b0d0798daa2c"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Vehicle No.:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="42" width="168" height="18" uuid="19e9bb21-1886-4844-a967-d7caffe5d37d"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Customer Signature]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="383" y="44" width="171" height="16" uuid="5119520f-d987-4b7f-8df1-2d4c65e7928e"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Seal or Signature]]></text>
 			</staticText>
 		</band>

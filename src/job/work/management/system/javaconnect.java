@@ -21,9 +21,9 @@ public class javaconnect {
     public static Connection ConnectDB() throws UnknownHostException {
         try {
             Class.forName( "com.mysql.cj.jdbc.Driver" );
-//InetAddress host = InetAddress.getByName("SATYAM2");
+InetAddress host = InetAddress.getByName("SATYAM2");
 //InetAddress host = InetAddress.getByName("desktop-asus");
-            InetAddress host = InetAddress.getByName( "DESKTOP-RAJSE97" );
+//            InetAddress host = InetAddress.getByName( "DESKTOP-RAJSE97" );
             Connection conn = DriverManager.getConnection( "jdbc:mysql://" + host.getHostAddress() + ":3306/si_db?autoReconnect=true&useSSL=false", "si_root", "si_root" );
 
 //            Connection conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/si_db?autoReconnect=true&useSSL=false","si_root","si_root");
