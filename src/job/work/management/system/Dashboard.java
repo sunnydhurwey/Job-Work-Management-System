@@ -164,7 +164,7 @@ public class Dashboard extends javax.swing.JFrame {
         mnuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("S. I. GEARS - Job Work Management  System * Developed By CODERS TECHNOLOGIES");
+        setTitle("Satyam Industries - Job Work Management  System * Developed By CODERS TECHNOLOGIES");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -515,6 +515,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void mnuManageChallanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageChallanActionPerformed
         // TODO add your handling code here:
+ManageChallan.getObj().setVisible( true);
     }//GEN-LAST:event_mnuManageChallanActionPerformed
 
     private void mnuManageCompanyDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageCompanyDetailsActionPerformed

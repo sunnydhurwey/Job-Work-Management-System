@@ -280,7 +280,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="S. I. GEARS - Job Work Management  System * Developed By CODERS TECHNOLOGIES"/>
+    <Property name="title" type="java.lang.String" value="Satyam Industries - Job Work Management  System * Developed By CODERS TECHNOLOGIES"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>

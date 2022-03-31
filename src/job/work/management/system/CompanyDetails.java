@@ -221,6 +221,9 @@ public class CompanyDetails extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Company Details - Job Work Management System");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -617,6 +620,11 @@ public class CompanyDetails extends javax.swing.JFrame {
             saveData();
         }
     }//GEN-LAST:event_txtIFSCKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+obj=null;
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

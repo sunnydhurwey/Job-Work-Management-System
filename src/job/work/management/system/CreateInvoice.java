@@ -144,7 +144,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
             pst.execute();
             JOptionPane.showMessageDialog( null, "Client Company added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
-            btnSaveClient.setEnabled( false );
+//            btnSaveClient.setEnabled( true );
 //            cmbCompany.setEnabled( false );
 //            cmbAddress.setEnabled( false );
             cmbProductName.requestFocus();
@@ -987,6 +987,9 @@ public class CreateInvoice extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("INVOICE BUILDER - JOB WORK MANAGEMENT SYSTEM");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -2221,6 +2224,11 @@ public class CreateInvoice extends javax.swing.JFrame {
         // TODO add your handling code here:
         calcAmt();
     }//GEN-LAST:event_txtRateKeyReleased
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+obj=null;
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

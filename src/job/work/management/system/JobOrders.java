@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 /**
  *
  * @author sunny
@@ -35,20 +36,21 @@ public class JobOrders extends javax.swing.JFrame {
     Connection conn = null;
     ResultSet rs = null, rs2 = null;
     PreparedStatement pst = null, pst2 = null;
+
     /**
      * Creates new form JobOrders
      */
     public JobOrders() {
         initComponents();
-        try{
-            conn=javaconnect.ConnectDB();
-        }catch(UnknownHostException e){
-            System.out.println(e);
+        try {
+            conn = javaconnect.ConnectDB();
+        } catch (UnknownHostException e) {
+            System.out.println( e );
         }
-        this.setIconImage(new ImageIcon(getClass().getResource("LOGO.png")).getImage());
-        AutoCompleteDecorator.decorate(cmbClientName);
-        AutoCompleteDecorator.decorate(cmbProductName);
-        AutoCompleteDecorator.decorate(cmbJobStatus);
+        this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.png" ) ).getImage() );
+        AutoCompleteDecorator.decorate( cmbClientName );
+        AutoCompleteDecorator.decorate( cmbProductName );
+        AutoCompleteDecorator.decorate( cmbJobStatus );
     }
 
     //Program to set single instance of JobOrders
@@ -60,133 +62,135 @@ public class JobOrders extends javax.swing.JFrame {
         }
         return obj;
     }
-    
+
     //Funtion or method to get JobOrder Data to table
-    public void getJobOrderALL(){
+    public void getJobOrderALL() {
         try {
             String sql = "SELECT * FROM joborder ORDER BY date DESC";
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblJobOrder.setModel(DbUtils.resultSetToTableModel(rs));
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getJobOrderAll() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getJobOrderAll() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to get job order list by quotation number
-    public void getJobOrderByQuotation(){
+    public void getJobOrderByQuotation() {
         try {
-            String sql = "SELECT * FROM joborder WHERE quotationno='"+txtJobOrderNo.getText()+"'";
-            pst = conn.prepareStatement(sql);
+            String sql = "SELECT * FROM joborder WHERE quotationno='" + txtJobOrderNo.getText() + "'";
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblJobOrder.setModel(DbUtils.resultSetToTableModel(rs));
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getJobOrderByQuotation() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getJobOrderByQuotation() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function or method to get data on date change event
-    public void getJobOrderOnDateChange(){
+    public void getJobOrderOnDateChange() {
         try {
-            String sql = "SELECT * FROM joborder WHERE date='"+dtJobDate.getDate()+"' ORDER BY quotationno DESC";
-            pst = conn.prepareStatement(sql);
+            String sql = "SELECT * FROM joborder WHERE date='" + dtJobDate.getDate() + "' ORDER BY quotationno DESC";
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblJobOrder.setModel(DbUtils.resultSetToTableModel(rs));
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getJobOrderOnDateChange() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getJobOrderOnDateChange() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
-    
+
     //Function to get Job Order by client name
-    public void getJobOrderByClientName(){
+    public void getJobOrderByClientName() {
         try {
-            String sql = "SELECT * FROM joborder WHERE clientname LIKE '"+cmbClientName.getSelectedItem()+"'ORDER BY date DESC";
-            pst = conn.prepareStatement(sql);
+            String sql = "SELECT * FROM joborder WHERE clientname LIKE '" + cmbClientName.getSelectedItem() + "'ORDER BY date DESC";
+            pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
-            tblJobOrder.setModel(DbUtils.resultSetToTableModel(rs));
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e, "getJobOrderAll() Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog( null, e, "getJobOrderAll() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
                 pst.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     //Function or method to add job status
-    public void setJobList(){
+    public void setJobList() {
         cmbJobStatus.removeAllItems();
-        cmbJobStatus.addItem("");
-        cmbJobStatus.addItem("PENDING");
-        cmbJobStatus.addItem("COMPLETE");
+        cmbJobStatus.addItem( "" );
+        cmbJobStatus.addItem( "PENDING" );
+        cmbJobStatus.addItem( "COMPLETE" );
     }
-    
+
     //Function or method to get table data to fields
     int row;
-    String count,tblClick,status;
-    
-    public void getTableDataToField(){
-        try{
+    String count, tblClick, status;
+
+    public void getTableDataToField() {
+        try {
             row = tblJobOrder.getSelectedRow();
-            tblClick = tblJobOrder.getModel().getValueAt(row, 0).toString();
-            String sql = "SELECT * FROM jobordermaster WHERE uid='"+ tblClick +"'";
-            pst2 = conn.prepareStatement(sql);
+            tblClick = tblJobOrder.getModel().getValueAt( row, 0 ).toString();
+            String sql = "SELECT * FROM jobordermaster WHERE uid='" + tblClick + "'";
+            pst2 = conn.prepareStatement( sql );
             rs2 = pst2.executeQuery();
             if (rs2.next()) {
-                txtJobOrderNo.setText(rs2.getString("joborderno"));
-                dtJobDate.setDate(rs2.getDate("date"));
-                cmbClientName.setSelectedItem(rs2.getString("clientname"));
-                cmbProductName.setSelectedItem(rs2.getString("productname"));                
-                if(rs2.getString("status")==null || "".equals(rs2.getString("status"))){
-                    cmbJobStatus.setSelectedItem("PENDING");
-                }else{
-                    cmbJobStatus.setSelectedItem("COMPLETE");
+                txtJobOrderNo.setText( rs2.getString( "joborderno" ) );
+                dtJobDate.setDate( rs2.getDate( "date" ) );
+                cmbClientName.setSelectedItem( rs2.getString( "clientname" ) );
+                cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
+                if (rs2.getString( "status" ) == null || "".equals( rs2.getString( "status" ) )) {
+                    cmbJobStatus.setSelectedItem( "PENDING" );
+                } else {
+                    cmbJobStatus.setSelectedItem( "COMPLETE" );
                 }
-                txtT.setText(rs2.getString("t"));
-                txtW.setText(rs2.getString("w"));
-                txtOD.setText(rs2.getString("od"));
-                txtTL.setText(rs2.getString("tl"));
-                txtM.setText(rs2.getString("m"));
-                txtDP.setText(rs2.getString("dp"));
-                txtSTD.setText(rs2.getString("std"));
-                txtAmount.setText(rs2.getString("amount"));
+                txtT.setText( rs2.getString( "t" ) );
+                txtW.setText( rs2.getString( "w" ) );
+                txtOD.setText( rs2.getString( "od" ) );
+                txtTL.setText( rs2.getString( "tl" ) );
+                txtM.setText( rs2.getString( "m" ) );
+                txtDP.setText( rs2.getString( "dp" ) );
+                txtSTD.setText( rs2.getString( "std" ) );
+                txtAmount.setText( rs2.getString( "amount" ) );
             } else {
-                JOptionPane.showMessageDialog(null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e,"getTableDataToField() Exception",JOptionPane.ERROR_MESSAGE);
-        }finally{
-            try{
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getTableDataToField() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
                 rs2.close();
                 pst2.close();
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
             }
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -232,6 +236,9 @@ public class JobOrders extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("JOB ORDER LIST - Job Work Management System");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -503,7 +510,7 @@ public class JobOrders extends javax.swing.JFrame {
 
     private void txtJobOrderNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobOrderNoKeyReleased
         // TODO add your handling code here:
-        if(!"".equals(txtJobOrderNo.getText())){
+        if (!"".equals( txtJobOrderNo.getText() )) {
             getJobOrderByQuotation();
         }
     }//GEN-LAST:event_txtJobOrderNoKeyReleased
@@ -532,6 +539,11 @@ public class JobOrders extends javax.swing.JFrame {
         getTableDataToField();
     }//GEN-LAST:event_tblJobOrderMouseClicked
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        obj = null;
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -543,28 +555,28 @@ public class JobOrders extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                if ("Nimbus".equals( info.getName() )) {
+                    javax.swing.UIManager.setLookAndFeel( info.getClassName() );
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JobOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( JobOrders.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JobOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( JobOrders.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JobOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( JobOrders.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JobOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger( JobOrders.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
-                new JobOrders().setVisible(true);
+                new JobOrders().setVisible( true );
             }
-        });
+        } );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

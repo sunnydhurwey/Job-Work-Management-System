@@ -121,7 +121,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             pst.setString( 1, cmbCompany.getEditor().getItem().toString() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Client added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
-            btnSaveClient.setEnabled( false );
+//            btnSaveClient.setEnabled( false );
 //            cmbCompany.setEnabled( false );
             cmbProductName.requestFocus();
         } catch (SQLException e) {
@@ -602,6 +602,9 @@ public class JobOrderMaster extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("JOB ORDER MASTER - JOB WORK MANAGEMENT SYSTEM");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -1309,7 +1312,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
             txtW.requestFocus();
             txtW.selectAll();
         }
-if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
             txtRemarks.requestFocus();
         }
     }//GEN-LAST:event_txtTSTRTKeyPressed
@@ -1386,7 +1389,7 @@ if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
             txtTSTRT.requestFocus();
             txtTSTRT.selectAll();
         }
-if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
             cmbMaterial.requestFocus();
         }
     }//GEN-LAST:event_txtRemarksKeyPressed
@@ -1447,17 +1450,22 @@ if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
 
     private void cmbMaterialKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMaterialKeyPressed
         // TODO add your handling code here:
-if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
             cmbProcess.requestFocus();
         }
     }//GEN-LAST:event_cmbMaterialKeyPressed
 
     private void cmbProcessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbProcessKeyPressed
         // TODO add your handling code here:
-if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+        if (evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
             cmbProductName.requestFocus();
         }
     }//GEN-LAST:event_cmbProcessKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        obj = null;
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

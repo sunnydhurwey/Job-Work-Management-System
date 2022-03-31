@@ -158,7 +158,7 @@
 			</textField>
 			<image hAlign="Center">
 				<reportElement x="7" y="5" width="74" height="69" uuid="69aa6e3a-fc22-4b8e-872a-1dbcef919c3e"/>
-				<imageExpression><![CDATA["C:\\Users\\sunny\\Documents\\NetBeansProjects\\Job Work Management System\\src\\reports\\Satyam Gears1.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Job Work Management System\\src\\reports\\Satyam Gears1.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>

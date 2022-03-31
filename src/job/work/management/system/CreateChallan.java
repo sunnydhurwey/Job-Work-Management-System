@@ -95,7 +95,7 @@ public class CreateChallan extends javax.swing.JFrame {
         dtInvoice.setDateFormatString( "yyyy-MM-dd" );
         java.util.Date date = new java.util.Date();
         dtGatePass.setDate( date );
-dtPODate.setDate( date );
+        dtPODate.setDate( date );
     }
 
     //Function or method to clear Fields
@@ -297,51 +297,9 @@ dtPODate.setDate( date );
     //Program to give printout options
     //final JDialog dialog=new JDialog();
     public void printOption() {
-//        try {
-//            try {
-//                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails";
-//                JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
-//                JRDesignQuery qry = new JRDesignQuery();
-//                qry.setText( sql );
-//                jd.setQuery( qry );
-//                JasperReport jr = JasperCompileManager.compileReport( jd );
-//                JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
-//                JasperViewer.viewReport( jp, false );
-//            } catch (JRException e) {
-//                JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-//            }
-//        } catch (HeadlessException e) {
-//            JOptionPane.showMessageDialog( null, e, "Print Challan Exception", JOptionPane.ERROR_MESSAGE );
-//        }
-
         try {
-            String[] choice = {"PRINT 1", "PRINT 2"};
-            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
-            //System.out.println(x);
-            //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
-            if (x == 0) {
-                try {
-                    String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
-                    JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
-                    JRDesignQuery qry = new JRDesignQuery();
-                    qry.setText( sql );
-                    jd.setQuery( qry );
-                    JasperReport jr = JasperCompileManager.compileReport( jd );
-                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
-                    JasperViewer.viewReport( jp, false );
-                } catch (JRException e) {
-                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-                }finally {
-                    try {
-                        rs.close();
-                        pst.close();
-                    } catch (SQLException e) {
-
-                    }
-                }
-            } else {
-                try {
-                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MAX(companydetails.c_uid) FROM companydetails)";
+            try {
+                String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
                 JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
                 JRDesignQuery qry = new JRDesignQuery();
                 qry.setText( sql );
@@ -351,18 +309,60 @@ dtPODate.setDate( date );
                 JasperViewer.viewReport( jp, false );
             } catch (JRException e) {
                 JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
-            }finally {
-                    try {
-                        rs.close();
-                        pst.close();
-                    } catch (SQLException e) {
-
-                    }
-                }
             }
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( null, e, "Print Challan Exception", JOptionPane.ERROR_MESSAGE );
         }
+
+//        try {
+//            String[] choice = {"PRINT 1", "PRINT 2"};
+//            int x = JOptionPane.showOptionDialog( null, "Choose Print Method", "Invoice Print", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choice, choice[0] );
+//            //System.out.println(x);
+//            //JOptionPane.showMessageDialog(null, "You Selected: "+x);            
+//            if (x == 0) {
+//                try {
+//                    String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+//                    JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
+//                    JRDesignQuery qry = new JRDesignQuery();
+//                    qry.setText( sql );
+//                    jd.setQuery( qry );
+//                    JasperReport jr = JasperCompileManager.compileReport( jd );
+//                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+//                    JasperViewer.viewReport( jp, false );
+//                } catch (JRException e) {
+//                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+//                } finally {
+//                    try {
+//                        rs.close();
+//                        pst.close();
+//                    } catch (SQLException e) {
+//
+//                    }
+//                }
+//            } else {
+//                try {
+//                    String sql = "SELECT * FROM invoicemaster,companydetails,gatepass WHERE invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND gatepass.gp_no='" + txtGatePassNo.getText() + "' AND companydetails.c_uid=(SELECT MAX(companydetails.c_uid) FROM companydetails)";
+//                    JasperDesign jd = JRXmlLoader.load( "src/reports/challan.jrxml" );
+//                    JRDesignQuery qry = new JRDesignQuery();
+//                    qry.setText( sql );
+//                    jd.setQuery( qry );
+//                    JasperReport jr = JasperCompileManager.compileReport( jd );
+//                    JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+//                    JasperViewer.viewReport( jp, false );
+//                } catch (JRException e) {
+//                    JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+//                } finally {
+//                    try {
+//                        rs.close();
+//                        pst.close();
+//                    } catch (SQLException e) {
+//
+//                    }
+//                }
+//            }
+//        } catch (HeadlessException e) {
+//            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
+//        }
     }
 
     /**
@@ -407,6 +407,9 @@ dtPODate.setDate( date );
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Delivery Challan / Gate Pass - Job Work Management System");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -820,6 +823,11 @@ dtPODate.setDate( date );
             addChallan();
         }
     }//GEN-LAST:event_txtVehicleNoKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        obj = null;
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
