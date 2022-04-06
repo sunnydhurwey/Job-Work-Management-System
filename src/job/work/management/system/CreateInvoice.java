@@ -32,7 +32,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author sunny
  */
 public class CreateInvoice extends javax.swing.JFrame {
-
+    
     Connection conn = null;
     ResultSet rs = null, rs2 = null;
     PreparedStatement pst = null, pst2 = null;
@@ -51,10 +51,6 @@ public class CreateInvoice extends javax.swing.JFrame {
 //        AutoCompleteDecorator.decorate( cmbClientName );
         AutoCompleteDecorator.decorate( cmbCompany );
         AutoCompleteDecorator.decorate( cmbAddress );
-//        AutoCompleteDecorator.decorate( cmbEmail );
-//        AutoCompleteDecorator.decorate( cmbMobile );
-//        AutoCompleteDecorator.decorate( cmbLandline );
-//        AutoCompleteDecorator.decorate( cmbGSTIN );
 
         AutoCompleteDecorator.decorate( cmbProductName );
         AutoCompleteDecorator.decorate( cmbProcess );
@@ -63,7 +59,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Program to set single instance of ManageClients
     private static CreateInvoice obj = null;
-
+    
     public static CreateInvoice getObj() {
         if (obj == null) {
             obj = new CreateInvoice();
@@ -71,12 +67,19 @@ public class CreateInvoice extends javax.swing.JFrame {
         return obj;
     }
 
+//Function or method to populate invoicetype
+    public void fillInvoiceType() {
+//        cmbInvoiceType.addItem( null );
+        cmbInvoiceType.addItem( "MFG" );
+        cmbInvoiceType.addItem( "SER" );
+    }
+
     //Function or method to get data from database
     int invno = 0;
-
+    
     public void getInvoiceNo() {
         try {
-            String sql = "SELECT * FROM invoice1";
+            String sql = "SELECT * FROM invoice1 WHERE invoicecategory LIKE '" + cmbInvoiceType.getSelectedItem() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
@@ -141,7 +144,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst = conn.prepareStatement( sql );
             pst.setString( 1, cmbCompany.getEditor().getItem().toString() );
             pst.setString( 2, cmbAddress.getEditor().getItem().toString() );
-
+            
             pst.execute();
             JOptionPane.showMessageDialog( null, "Client Company added to database", "CLIENT ADDED", JOptionPane.PLAIN_MESSAGE );
 //            btnSaveClient.setEnabled( true );
@@ -189,7 +192,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function to getData
     double disc = 0, basicprice = 0, dbamt = 0, dbdisc = 0, dbrate = 0, dbqty = 0;
     String cn;
-
+    
     public void getData() {
         try {
             disc = 0;
@@ -198,7 +201,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             dbdisc = 0;
             dbrate = 0;
             dbqty = 0;
-            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "' AND inv_category='" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
@@ -251,12 +254,13 @@ public class CreateInvoice extends javax.swing.JFrame {
 //Function or method to get saved invoice data calculation value from database
     public void getInvoiceDataCALC() {
         try {
-            String sql = "SELECT * FROM invoice1 WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            String sql = "SELECT * FROM invoice1 WHERE invoiceno='" + txtInvoiceNo.getText() + "' AND invoicecategory = '" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             rs2 = pst.executeQuery();
             if (rs2.next()) {
                 cmbCompany.setSelectedItem( rs2.getString( "company" ) );
                 cmbAddress.setSelectedItem( rs2.getString( "address" ) );
+                cmbInvoiceType.setSelectedItem( "invoicecategory" );
                 txtChallanNo.setText( rs2.getString( "challanno" ) );
                 txtJobOrderNo.setText( rs2.getString( "joborderno" ) );
                 txtGSTPer.setText( rs2.getString( "gstper" ) );
@@ -270,14 +274,14 @@ public class CreateInvoice extends javax.swing.JFrame {
                 btnDeleteInvoice.setEnabled( true );
                 btnPrintInvoice.setEnabled( true );
             } else {
-                cmbCompany.setSelectedItem( "" );
-                cmbAddress.setSelectedItem( "" );
+//                cmbCompany.setSelectedItem( "" );
+//                cmbAddress.setSelectedItem( "" );
                 txtGSTPer.setText( "0" );
                 txtBasicPrice.setText( "0" );
                 txtDiscount.setText( "0" );
                 txtGSTAmount.setText( "0" );
                 txtGrandTotal.setText( "0" );
-                txtNote.setText( "" );
+//                txtNote.setText( "" );
                 btnSaveInvoice.setEnabled( true );
                 btnUpdateInvoice.setEnabled( false );
                 btnDeleteInvoice.setEnabled( false );
@@ -304,7 +308,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             dbdisc = 0;
             dbrate = 0;
             dbqty = 0;
-            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            String sql = "SELECT * FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "' AND inv_category = '" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
@@ -319,7 +323,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             txtBasicPrice.setText( String.valueOf( Math.round( basicprice ) ) );
             txtDiscount.setText( String.valueOf( disc ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog( null, e, "getData() Exception", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( null, e, "calcLatest() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
@@ -338,6 +342,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             rs2 = pst.executeQuery();
             if (rs2.next()) {
                 cmbCompany.setSelectedItem( rs2.getString( "clientcompanyname" ) );
+                cmbInvoiceType.setSelectedItem( "invoicecategory" );
                 txtChallanNo.setText( rs2.getString( "challanno" ) );
                 cmbAddress.setSelectedItem( rs2.getString( "address" ) );
                 txtJobOrderNo.setText( rs2.getString( "joborderno" ) );
@@ -405,7 +410,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     boolean clientexist = false;
     int clientID = 0;
     String clientname, company;
-
+    
     public void setDataToFieldsOnNameInput() {
 //        clientname = cmbClientName.getSelectedItem().toString();
         company = cmbCompany.getSelectedItem().toString();
@@ -435,7 +440,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog( null, e );
             }
         }
-
+        
     }
 
     //Function or method to get product data
@@ -522,7 +527,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function or method to get selected data from table to field
     int row;
     String count, tblClick, tblInvClick;
-
+    
     public void getTableDataToField() {
         try {
             row = tblInvoice.getSelectedRow();
@@ -563,7 +568,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Function or method to calculate Rate X Quantity = AMOUNT
     double rate = 0, quantity = 0, amount = 0;
-
+    
     public void calcAmt() {
         rate = 0;
         quantity = 0;
@@ -592,7 +597,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     //Funtion or method to calculate GRAND TOTAL
     double gstper = 0, discount = 0, subtotal = 0, gstamt = 0, grandTotal = 0;
-
+    
     public void calcGT() {
         gstamt = 0;
         grandTotal = 0;
@@ -601,7 +606,7 @@ public class CreateInvoice extends javax.swing.JFrame {
         } else {
             gstper = 0;
         }
-
+        
         gstamt = (Double.parseDouble( txtBasicPrice.getText() ) * gstper) / 100;
         txtGSTAmount.setText( String.valueOf( gstamt ) );
         grandTotal = Double.parseDouble( txtBasicPrice.getText() ) + gstamt;
@@ -612,7 +617,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void saveInvoice() {
         try {
             String sql = "INSERT INTO invoice1 (challanno,date,company,address,basicprice,"
-                    + "discount,gstper,gstamt,totalamt,joborderno,invoiceno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "discount,gstper,gstamt,totalamt,joborderno,invoiceno,note,invoicecategory) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, txtChallanNo.getText() );
             pst.setString( 2, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
@@ -626,6 +631,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst.setString( 10, txtJobOrderNo.getText() );
             pst.setString( 11, txtInvoiceNo.getText() );
             pst.setString( 12, txtNote.getText() );
+            pst.setString( 13, cmbInvoiceType.getSelectedItem().toString() );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Invoice saved to database", "Saved", JOptionPane.PLAIN_MESSAGE );
             cmbProductName.requestFocus();
@@ -644,7 +650,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void updateInvoice() {
         try {
             String sql = "UPDATE invoice1 SET date=?,company=?,address=?,basicprice=?,discount=?,gstper=?,gstamt=?,totalamt=?,"
-                    + "challanno=?,note=? WHERE invoiceno='" + txtInvoiceNo.getText() + "' ";
+                    + "challanno=?,note=? WHERE invoiceno='" + txtInvoiceNo.getText() + "' AND invoicecategory = '" + cmbInvoiceType.getSelectedItem().toString() + "' ";
             pst = conn.prepareStatement( sql );
             pst.setString( 1, ((JTextField) dtInvoice.getDateEditor().getUiComponent()).getText() );
             pst.setString( 2, cmbCompany.getSelectedItem().toString() );
@@ -673,7 +679,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Function or method to delete saved Quotation
     public void deleteInvoice() {
         try {
-            String sql = "DELETE FROM invoice1 WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            String sql = "DELETE FROM invoice1 WHERE invoiceno='" + txtInvoiceNo.getText() + "' AND invoicecategory = '" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             pst.execute();
         } catch (SQLException e) {
@@ -691,7 +697,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Program to give printout options
     public void printOptions() {
         try {
-            String sql = "SELECT * FROM invoice1,invoicemaster,companydetails WHERE invoice1.invoiceno='" + txtInvoiceNo.getText() + "' AND invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+            String sql = "SELECT * FROM invoice1,invoicemaster,companydetails WHERE invoice1.invoicecategory = '" + cmbInvoiceType.getSelectedItem().toString() + "' AND invoice1.invoiceno='" + txtInvoiceNo.getText() + "' AND invoicemaster.inv_category = '" + cmbInvoiceType.getSelectedItem().toString() + "' AND invoicemaster.invoiceno='" + txtInvoiceNo.getText() + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
             JasperDesign jd = JRXmlLoader.load( "src/reports/invoicePT.jrxml" );
             JRDesignQuery qry = new JRDesignQuery();
             qry.setText( sql );
@@ -758,7 +764,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     public void importJobOrder() {
         try {
             String sql = "INSERT INTO invoicemaster (joborderno,date,productname,processname,materialname,tstrt,w,od,tl,mdp,discountper,qty,rate,"
-                    + "amount,remark,company,clientaddress,discountamt,invoiceno) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "amount,remark,company,clientaddress,discountamt,invoiceno,inv_category) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement( sql );
             if (!"".equals( txtJobOrderNo.getText() )) {
                 pst.setInt( 1, Integer.parseInt( txtJobOrderNo.getText() ) );
@@ -781,7 +787,8 @@ public class CreateInvoice extends javax.swing.JFrame {
             pst.setString( 15, txtRemarks.getText() );
             pst.setString( 16, cmbCompany.getSelectedItem().toString() );
             pst.setString( 17, cmbAddress.getSelectedItem().toString() );
-            //Calculation of discountamt
+
+//Calculation of discountamt
             double q = 0, r = 0, d = 0, da = 0;
             q = Double.parseDouble( txtQTY.getText() );
             r = Double.parseDouble( txtRate.getText() );
@@ -789,6 +796,7 @@ public class CreateInvoice extends javax.swing.JFrame {
             da = (q * r * d) / 100;
             pst.setString( 18, String.valueOf( da ) );
             pst.setInt( 19, Integer.parseInt( txtInvoiceNo.getText() ) );
+            pst.setString( 20, cmbInvoiceType.getSelectedItem().toString() );
             pst.execute();
 //            JOptionPane.showMessageDialog( null, "Product added to invoice database", "Saved", JOptionPane.PLAIN_MESSAGE );
             System.out.println( "Product added to invoice database." );
@@ -817,6 +825,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                 cmbProductName.setSelectedItem( rs2.getString( "productname" ) );
                 cmbProcess.setSelectedItem( rs2.getString( "processname" ) );
                 cmbMaterial.setSelectedItem( rs2.getString( "materialname" ) );
+                cmbInvoiceType.setSelectedItem( "inv_category" );
                 txtRemarks.setText( rs2.getString( "remark" ) );
                 txtTSTRT.setText( rs2.getString( "tstrt" ) );
                 txtW.setText( rs2.getString( "w" ) );
@@ -845,7 +854,7 @@ public class CreateInvoice extends javax.swing.JFrame {
     //Remove imported Job Order selection from Invoice 
     public void removeImport() {
         try {
-            String sql = "DELETE FROM invoicemaster WHERE inv_uid='" + tblInvClick + "'";
+            String sql = "DELETE FROM invoicemaster WHERE inv_uid='" + tblInvClick + "' AND inv_category='" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             pst.execute();
             JOptionPane.showMessageDialog( null, "Product deleted from Invoice database", "Import Deleted", JOptionPane.PLAIN_MESSAGE );
@@ -868,7 +877,8 @@ public class CreateInvoice extends javax.swing.JFrame {
         try {
             String sql = "SELECT inv_uid AS 'INV_UID',invoiceno AS 'INVOICE NO',joborderno AS 'JOB ORDER NO',productname AS 'PRODUCT NAME',processname AS 'PROCESS NAME',"
                     + "materialname AS 'MATERIAL NAME',tstrt AS 'T/START',w AS 'W',od AS 'OD',tl AS 'TL',mdp AS 'M/DP',rate AS 'RATE',qty AS 'QUANTITY',"
-                    + "discountper AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+                    + "discountper AS 'DISC. %',discountamt AS 'DISC. AMT',amount AS 'AMOUNT' FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "' "
+                    + "AND inv_category='" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblInvoice1.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -883,11 +893,11 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         }
     }
-
+    
     public void calcInvoiceTableData() {
         try {
             double d = 0, a = 0;
-            String sql = "SELECT discountamt,amount  FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "'";
+            String sql = "SELECT discountamt,amount  FROM invoicemaster WHERE invoiceno='" + txtInvoiceNo.getText() + "' AND inv_category='" + cmbInvoiceType.getSelectedItem().toString() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             while (rs.next()) {
@@ -952,7 +962,6 @@ public class CreateInvoice extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         txtDisc = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
         txtInvoiceNo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtChallanNo = new javax.swing.JTextField();
@@ -960,6 +969,8 @@ public class CreateInvoice extends javax.swing.JFrame {
         dtInvoice = new com.toedter.calendar.JDateChooser();
         jLabel30 = new javax.swing.JLabel();
         txtJobOrderNo = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        cmbInvoiceType = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInvoice = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
@@ -1404,13 +1415,17 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 153));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel23.setText("INVOICE NO.");
-
         txtInvoiceNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtInvoiceNo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtInvoiceNoFocusGained(evt);
+            }
+        });
+        txtInvoiceNo.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtInvoiceNoInputMethodTextChanged(evt);
             }
         });
         txtInvoiceNo.addActionListener(new java.awt.event.ActionListener() {
@@ -1473,19 +1488,30 @@ public class CreateInvoice extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel1.setText("Invoice No.");
+
+        cmbInvoiceType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbInvoiceTypeItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel23)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addComponent(cmbInvoiceType, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtChallanNo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtChallanNo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1499,14 +1525,14 @@ public class CreateInvoice extends javax.swing.JFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel23)
-                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel6)
                 .addComponent(txtChallanNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel7)
                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtJobOrderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1)
+                .addComponent(cmbInvoiceType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(dtInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
@@ -1698,7 +1724,7 @@ public class CreateInvoice extends javax.swing.JFrame {
                     .addComponent(btnDeleteInvoice)
                     .addComponent(btnPrintInvoice)
                     .addComponent(btnSaveInvoice))
-                .addGap(0, 37, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
@@ -1804,6 +1830,7 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        fillInvoiceType();
         getInvoiceNo();
         getDate();
         getClientData();
@@ -1992,9 +2019,12 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void txtJobOrderNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJobOrderNoActionPerformed
         // TODO add your handling code here:
-        getData();
-        getDataToTable();
-        getClientDataFromJobOrder();
+        if (!"".equals( txtJobOrderNo.getText() )) {
+            getData();
+            getDataToTable();
+            getClientDataFromJobOrder();
+        } else {
+        }
     }//GEN-LAST:event_txtJobOrderNoActionPerformed
 
     private void txtInvoiceNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInvoiceNoActionPerformed
@@ -2227,8 +2257,22 @@ public class CreateInvoice extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-obj=null;
+        obj = null;
     }//GEN-LAST:event_formWindowClosing
+
+    private void cmbInvoiceTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbInvoiceTypeItemStateChanged
+        // TODO add your handling code here:
+        getInvoiceNo();
+        getInvoiceDataToTable();
+        getInvoiceDataCALC();
+        calcLatest();
+        calcGT();
+    }//GEN-LAST:event_cmbInvoiceTypeItemStateChanged
+
+    private void txtInvoiceNoInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtInvoiceNoInputMethodTextChanged
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtInvoiceNoInputMethodTextChanged
 
     /**
      * @param args the command line arguments
@@ -2280,10 +2324,12 @@ obj=null;
     private javax.swing.JButton btnUpdateInvoice;
     private javax.swing.JComboBox<String> cmbAddress;
     private javax.swing.JComboBox<String> cmbCompany;
+    private javax.swing.JComboBox<String> cmbInvoiceType;
     private javax.swing.JComboBox<String> cmbMaterial;
     private javax.swing.JComboBox<String> cmbProcess;
     private javax.swing.JComboBox<String> cmbProductName;
     private com.toedter.calendar.JDateChooser dtInvoice;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -2297,7 +2343,6 @@ obj=null;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;

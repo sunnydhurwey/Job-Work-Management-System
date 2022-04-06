@@ -63,10 +63,63 @@ public class JobOrders extends javax.swing.JFrame {
         return obj;
     }
 
+//Function to populate combobox on client name input
+    public void getClientData() {
+        try {
+            cmbClientName.setSelectedItem( "" );
+            String sql = "SELECT * FROM clients";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            if (rs.next() == false) {
+                System.out.println( "Resultset is empty at getClientData()" );
+            } else {
+                do {
+                    cmbClientName.addItem( rs.getString( "clientcompanyname" ) );
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getClientData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+//Function or method to get product data
+    public void getProductData() {
+        try {
+            cmbProductName.removeAllItems();
+            cmbProductName.addItem( "" );
+            String sql = "SELECT * FROM products";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            if (rs.next() == false) {
+                System.out.println( "Resultset is empty at getProductData()" );
+            } else {
+                do {
+                    cmbProductName.addItem( rs.getString( "productname" ) );
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getProductData() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
     //Funtion or method to get JobOrder Data to table
     public void getJobOrderALL() {
         try {
-            String sql = "SELECT * FROM joborder ORDER BY date DESC";
+            String sql = "SELECT * FROM jobordermaster ORDER BY date DESC";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -82,15 +135,15 @@ public class JobOrders extends javax.swing.JFrame {
         }
     }
 
-    //Function or method to get job order list by quotation number
-    public void getJobOrderByQuotation() {
+    //Function or method to get job order list by Job Order No number
+    public void getJobOrderByJobOrderNo() {
         try {
-            String sql = "SELECT * FROM joborder WHERE quotationno='" + txtJobOrderNo.getText() + "'";
+            String sql = "SELECT * FROM jobordermaster WHERE joborderno='" + txtJobOrderNo.getText() + "'";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog( null, e, "getJobOrderByQuotation() Exception", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( null, e, "getJobOrderByJobOrderNo() Exception", JOptionPane.ERROR_MESSAGE );
         } finally {
             try {
                 rs.close();
@@ -104,7 +157,7 @@ public class JobOrders extends javax.swing.JFrame {
     //Function or method to get data on date change event
     public void getJobOrderOnDateChange() {
         try {
-            String sql = "SELECT * FROM joborder WHERE date='" + dtJobDate.getDate() + "' ORDER BY quotationno DESC";
+            String sql = "SELECT * FROM jobordermaster WHERE date='" + dtJobDate.getDate() + "' ORDER BY uid DESC";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -120,10 +173,120 @@ public class JobOrders extends javax.swing.JFrame {
         }
     }
 
+//Function or method to get data on T/START Entry
+    public void getJobOrderOnTSTRT() {
+        try {
+            String sql = "SELECT * FROM jobordermaster WHERE tstrt='" + txtTSTART.getText() + "' ORDER BY uid DESC";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getJobOrderOnTSRT() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    public void getJobOrderOnW() {
+        try {
+            String sql = "SELECT * FROM jobordermaster WHERE w='" + txtW.getText() + "' ORDER BY uid DESC";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getJobOrderOnW() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    public void getJobOrderOnOD() {
+        try {
+            String sql = "SELECT * FROM jobordermaster WHERE od='" + txtOD.getText() + "' ORDER BY uid DESC";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getJobOrderOnOD() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    public void getJobOrderOnTL() {
+        try {
+            String sql = "SELECT * FROM jobordermaster WHERE tl='" + txtTL.getText() + "' ORDER BY uid DESC";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getJobOrderOnW() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+    public void getJobOrderOnMDP() {
+        try {
+            String sql = "SELECT * FROM jobordermaster WHERE mdp='" + txtMDP.getText() + "' ORDER BY uid DESC";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getJobOrderOnW() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
     //Function to get Job Order by client name
     public void getJobOrderByClientName() {
         try {
-            String sql = "SELECT * FROM joborder WHERE clientname LIKE '" + cmbClientName.getSelectedItem() + "'ORDER BY date DESC";
+            String sql = "SELECT * FROM jobordermaster WHERE clientname LIKE '" + cmbClientName.getSelectedItem().toString() + "'ORDER BY date DESC";
+            pst = conn.prepareStatement( sql );
+            rs = pst.executeQuery();
+            tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "getJobOrderAll() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+//Function to get Job Order by Product
+    public void getJobOrderByProduct() {
+        try {
+            String sql = "SELECT * FROM jobordermaster WHERE productname LIKE '" + cmbProductName.getSelectedItem().toString() + "'ORDER BY date DESC";
             pst = conn.prepareStatement( sql );
             rs = pst.executeQuery();
             tblJobOrder.setModel( DbUtils.resultSetToTableModel( rs ) );
@@ -168,13 +331,11 @@ public class JobOrders extends javax.swing.JFrame {
                 } else {
                     cmbJobStatus.setSelectedItem( "COMPLETE" );
                 }
-                txtT.setText( rs2.getString( "t" ) );
+                txtTSTART.setText( rs2.getString( "tstrt" ) );
                 txtW.setText( rs2.getString( "w" ) );
                 txtOD.setText( rs2.getString( "od" ) );
                 txtTL.setText( rs2.getString( "tl" ) );
-                txtM.setText( rs2.getString( "m" ) );
-                txtDP.setText( rs2.getString( "dp" ) );
-                txtSTD.setText( rs2.getString( "std" ) );
+                txtMDP.setText( rs2.getString( "mdp" ) );
                 txtAmount.setText( rs2.getString( "amount" ) );
             } else {
                 JOptionPane.showMessageDialog( null, "No data found. Please check your database connection.", "No record found", JOptionPane.ERROR_MESSAGE );
@@ -188,6 +349,46 @@ public class JobOrders extends javax.swing.JFrame {
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog( null, e );
             }
+        }
+    }
+
+//Funtion or method to Update JobOrder Status
+    public void updateJobOrder() {
+        try {
+            String sql = "UPDATE jobordermaster SET status='" + cmbJobStatus.getSelectedItem().toString() + "' WHERE uid='" + tblClick + "'";
+            pst = conn.prepareStatement( sql );
+            pst.execute();
+            JOptionPane.showMessageDialog( null, "STATUS_UPDATED", "UPDATED", JOptionPane.PLAIN_MESSAGE );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog( null, e, "updateJobOrder() Exception", JOptionPane.ERROR_MESSAGE );
+        } finally {
+            try {
+                rs2.close();
+                pst2.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog( null, e );
+            }
+        }
+    }
+
+//final JDialog dialog=new JDialog();
+    public void printOptions() {
+        try {
+            String jno = txtJobOrderNo.getText();
+            try {
+                String sql = "SELECT * FROM jobordermaster,companydetails WHERE jobordermaster.status IS NULL OR jobordermaster.status!='COMPLETE' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails) ORDER BY jobordermaster.date DESC";
+                JasperDesign jd = JRXmlLoader.load( "src/reports/joborderManagePrint.jrxml" );
+                JRDesignQuery qry = new JRDesignQuery();
+                qry.setText( sql );
+                jd.setQuery( qry );
+                JasperReport jr = JasperCompileManager.compileReport( jd );
+                JasperPrint jp = JasperFillManager.fillReport( jr, null, conn );
+                JasperViewer.viewReport( jp, false );
+            } catch (JRException e) {
+                JOptionPane.showMessageDialog( null, e, "printOption() Exception", JOptionPane.ERROR_MESSAGE );
+            }
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog( null, e, "Print Invoice Exception", JOptionPane.ERROR_MESSAGE );
         }
     }
 
@@ -210,26 +411,22 @@ public class JobOrders extends javax.swing.JFrame {
         cmbClientName = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         cmbProductName = new javax.swing.JComboBox<>();
-        txtT = new javax.swing.JTextField();
+        txtTSTART = new javax.swing.JTextField();
         txtW = new javax.swing.JTextField();
         txtOD = new javax.swing.JTextField();
         txtTL = new javax.swing.JTextField();
-        txtM = new javax.swing.JTextField();
-        txtDP = new javax.swing.JTextField();
-        txtSTD = new javax.swing.JTextField();
+        txtMDP = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         cmbJobStatus = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         txtAmount = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        btnPrint = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJobOrder = new javax.swing.JTable();
 
@@ -271,6 +468,11 @@ public class JobOrders extends javax.swing.JFrame {
         jLabel3.setText("Client Name");
 
         cmbClientName.setEditable(true);
+        cmbClientName.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbClientNameItemStateChanged(evt);
+            }
+        });
         cmbClientName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 cmbClientNameKeyReleased(evt);
@@ -281,10 +483,45 @@ public class JobOrders extends javax.swing.JFrame {
         jLabel4.setText("Product Name");
 
         cmbProductName.setEditable(true);
+        cmbProductName.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbProductNameItemStateChanged(evt);
+            }
+        });
+
+        txtTSTART.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTSTARTKeyReleased(evt);
+            }
+        });
+
+        txtW.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtWKeyReleased(evt);
+            }
+        });
+
+        txtOD.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtODKeyReleased(evt);
+            }
+        });
+
+        txtTL.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTLKeyReleased(evt);
+            }
+        });
+
+        txtMDP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtMDPKeyReleased(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("T");
+        jLabel5.setText("T/START");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -300,15 +537,7 @@ public class JobOrders extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("M");
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("DP");
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("STD");
+        jLabel9.setText("M/DP");
 
         cmbJobStatus.setEditable(true);
 
@@ -324,18 +553,18 @@ public class JobOrders extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/print_16px.png"))); // NOI18N
-        jButton2.setText("PRINT");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Amount");
+
+        btnPrint.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/job/work/images/print_16px.png"))); // NOI18N
+        btnPrint.setText("PRINT ORDERS");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -356,28 +585,28 @@ public class JobOrders extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtT, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbClientName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtW, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtOD, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTL, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtM, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDP, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSTD, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbProductName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(0, 268, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtTSTART, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtW, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtOD, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTL, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtMDP, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -387,25 +616,16 @@ public class JobOrders extends javax.swing.JFrame {
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cmbClientName, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbProductName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                    .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPrint)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2});
-
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -434,25 +654,21 @@ public class JobOrders extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel11)
                             .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTSTART, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtOD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSTD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMDP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbJobStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPrint)))))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbClientName, cmbJobStatus, cmbProductName, dtJobDate, jButton1, jButton2, txtAmount, txtDP, txtJobOrderNo, txtM, txtOD, txtSTD, txtT, txtTL, txtW});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbClientName, cmbJobStatus, cmbProductName, dtJobDate, jButton1, txtAmount, txtJobOrderNo, txtMDP, txtOD, txtTL, txtTSTART, txtW});
 
         tblJobOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -504,14 +720,17 @@ public class JobOrders extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        getClientData();
+        getProductData();
         getJobOrderALL();
         setJobList();
+
     }//GEN-LAST:event_formWindowOpened
 
     private void txtJobOrderNoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobOrderNoKeyReleased
         // TODO add your handling code here:
         if (!"".equals( txtJobOrderNo.getText() )) {
-            getJobOrderByQuotation();
+            getJobOrderByJobOrderNo();
         }
     }//GEN-LAST:event_txtJobOrderNoKeyReleased
 
@@ -527,12 +746,10 @@ public class JobOrders extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-//        updateJobOrderStatus();
+        updateJobOrder();
+        getJobOrderALL();
+        setJobList();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void tblJobOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJobOrderMouseClicked
         // TODO add your handling code here:
@@ -543,6 +760,70 @@ public class JobOrders extends javax.swing.JFrame {
         // TODO add your handling code here:
         obj = null;
     }//GEN-LAST:event_formWindowClosing
+
+    private void txtTSTARTKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTSTARTKeyReleased
+        // TODO add your handling code here:
+        if (!"".equals( txtTSTART.getText() )) {
+            getJobOrderOnTSTRT();
+        } else {
+            getJobOrderALL();
+        }
+    }//GEN-LAST:event_txtTSTARTKeyReleased
+
+    private void txtWKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtWKeyReleased
+        // TODO add your handling code here:
+        if (!"".equals( txtW.getText() )) {
+            getJobOrderOnW();
+        } else {
+            getJobOrderALL();
+        }
+    }//GEN-LAST:event_txtWKeyReleased
+
+    private void txtODKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtODKeyReleased
+        // TODO add your handling code here:
+        if (!"".equals( txtOD.getText() )) {
+            getJobOrderOnOD();
+        } else {
+            getJobOrderALL();
+        }
+    }//GEN-LAST:event_txtODKeyReleased
+
+    private void txtTLKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTLKeyReleased
+        // TODO add your handling code here:
+        if (!"".equals( txtTL.getText() )) {
+            getJobOrderOnTL();
+        } else {
+            getJobOrderALL();
+        }
+    }//GEN-LAST:event_txtTLKeyReleased
+
+    private void txtMDPKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMDPKeyReleased
+        // TODO add your handling code here:
+        if (!"".equals( txtMDP.getText() )) {
+            getJobOrderOnMDP();
+        } else {
+            getJobOrderALL();
+        }
+    }//GEN-LAST:event_txtMDPKeyReleased
+
+    private void cmbClientNameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbClientNameItemStateChanged
+        // TODO add your handling code here:
+        if (!"".equals( cmbClientName.getSelectedItem().toString() )) {
+            getJobOrderByClientName();
+        }
+    }//GEN-LAST:event_cmbClientNameItemStateChanged
+
+    private void cmbProductNameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbProductNameItemStateChanged
+        // TODO add your handling code here:
+        if (!"".equals( cmbProductName.getSelectedItem() )) {
+            getJobOrderByProduct();
+        }
+    }//GEN-LAST:event_cmbProductNameItemStateChanged
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        // TODO add your handling code here:
+        printOptions();
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     /**
      * @param args the command line arguments
@@ -580,15 +861,13 @@ public class JobOrders extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPrint;
     private javax.swing.JComboBox<String> cmbClientName;
     private javax.swing.JComboBox<String> cmbJobStatus;
     private javax.swing.JComboBox<String> cmbProductName;
     private com.toedter.calendar.JDateChooser dtJobDate;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
@@ -604,13 +883,11 @@ public class JobOrders extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblJobOrder;
     private javax.swing.JTextField txtAmount;
-    private javax.swing.JTextField txtDP;
     private javax.swing.JTextField txtJobOrderNo;
-    private javax.swing.JTextField txtM;
+    private javax.swing.JTextField txtMDP;
     private javax.swing.JTextField txtOD;
-    private javax.swing.JTextField txtSTD;
-    private javax.swing.JTextField txtT;
     private javax.swing.JTextField txtTL;
+    private javax.swing.JTextField txtTSTART;
     private javax.swing.JTextField txtW;
     // End of variables declaration//GEN-END:variables
 }

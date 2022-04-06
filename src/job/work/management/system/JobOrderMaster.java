@@ -525,7 +525,7 @@ public class JobOrderMaster extends javax.swing.JFrame {
         try {
             String jno = txtJobOrderNo.getText();
             try {
-                String sql = "SELECT * FROM jobordermaster,companydetails WHERE jobordermaster.joborderno='" + jno + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails)";
+                String sql = "SELECT * FROM jobordermaster,companydetails WHERE jobordermaster.joborderno='" + jno + "' AND companydetails.c_uid=(SELECT MIN(companydetails.c_uid) FROM companydetails) ";
                 JasperDesign jd = JRXmlLoader.load( "src/reports/joborderPT.jrxml" );
                 JRDesignQuery qry = new JRDesignQuery();
                 qry.setText( sql );

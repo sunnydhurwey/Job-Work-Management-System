@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7f62f15-4504-441e-adbd-44a459d89536">
 	<property name="ireport.zoom" value="2.1435888100000264"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="104"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT * FROM invoice1,invoicemaster,companydetails]]>
 	</queryString>
 	<field name="uid" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="invoicecategory" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="invoiceno" class="java.lang.Integer">
@@ -61,6 +64,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="inv_uid" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="inv_category" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="clientid" class="java.lang.Integer">
@@ -215,7 +221,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Invoice No.: "+$F{invoiceno}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Invoice No.: "+$F{inv_category}+$F{invoiceno}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement x="342" y="87" width="210" height="16" uuid="5c5ddaa4-82e8-4710-bd85-6098e43251ae"/>
@@ -516,7 +522,7 @@
 				<textElement verticalAlignment="Top">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Total Discount : Rs."+$F{discount}+"\nBilling Amount : Rs."+$F{basicprice}+"\nGST Rate : "+$F{gstper}+"% \nGST Amount : Rs."+Math.round($F{gstamt})+"\nGRAND TOTAL : Rs."+Math.round($F{totalamt})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Total Discount : Rs."+Math.round($F{discount})+"\nBilling Amount : Rs."+$F{basicprice}+"\nGST Rate : "+$F{gstper}+"% \nGST Amount : Rs."+Math.round($F{gstamt})+"\nGRAND TOTAL : Rs."+Math.round($F{totalamt})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="4" y="2" width="35" height="13" uuid="9fd22704-305f-400c-b123-f4ebd9e51cec"/>

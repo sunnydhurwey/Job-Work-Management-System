@@ -29,11 +29,11 @@ import java.util.logging.Logger;
  * @author sunny
  */
 public class Dashboard extends javax.swing.JFrame {
-    
+
     Connection conn = null, connect = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
-    
+
     public void con() throws UnknownHostException, SocketException {
         try {
             connect = javaconnect.ConnectDB();
@@ -43,16 +43,16 @@ public class Dashboard extends javax.swing.JFrame {
             } else {
                 lblConnectionStatus.setText( "ONLINE" );
                 lblConnectionStatus.setForeground( Color.GREEN );
-            }            
+            }
         } finally {
             if (connect != null) try {
                 connect.close();
             } catch (SQLException e) {
             }
         }
-        
+
         InetAddress ip = InetAddress.getLocalHost();
-        lblIPAddress.setText( "IP ADDRESS IS : " + ip );        
+        lblIPAddress.setText( "IP ADDRESS IS : " + ip );
     }
 
     /**
@@ -67,8 +67,8 @@ public class Dashboard extends javax.swing.JFrame {
         }
         this.setIconImage( new ImageIcon( getClass().getResource( "LOGO.jpg" ) ).getImage() );
     }
-    
-    public void CurrentDate() {        
+
+    public void CurrentDate() {
         Thread clock;
         clock = new Thread() {
             @Override
@@ -83,12 +83,12 @@ public class Dashboard extends javax.swing.JFrame {
                     DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
                     String formatedDate = myDateObj.format( myFormatObj );
                     lblDate.setText( "" + formatedDate );
-                    
+
                     int second = cal.get( Calendar.SECOND );
                     int minute = cal.get( Calendar.MINUTE );
                     int hour = cal.get( Calendar.HOUR );
                     String AM_PM = cal.get( Calendar.AM_PM ) == 0 ? "AM" : "PM";
-                    lblTime.setText( hour + ":" + minute + ":" + second + " " + AM_PM );                    
+                    lblTime.setText( hour + ":" + minute + ":" + second + " " + AM_PM );
                     try {
                         sleep( 1500 );
                     } catch (InterruptedException ex) {
@@ -102,7 +102,7 @@ public class Dashboard extends javax.swing.JFrame {
                 }
             }
         };
-        clock.start();        
+        clock.start();
     }
 
     /**
@@ -141,6 +141,8 @@ public class Dashboard extends javax.swing.JFrame {
         mnuCreateJobOrderMaster = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         mnuSearchJobOrder = new javax.swing.JMenuItem();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
+        mnuManageJobOrder = new javax.swing.JMenuItem();
         mnuQuotations = new javax.swing.JMenu();
         mnuCreateQuotation = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
@@ -371,6 +373,15 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         mnuJobOrder.add(mnuSearchJobOrder);
+        mnuJobOrder.add(jSeparator9);
+
+        mnuManageJobOrder.setText("Manage Job Order");
+        mnuManageJobOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuManageJobOrderActionPerformed(evt);
+            }
+        });
+        mnuJobOrder.add(mnuManageJobOrder);
 
         jMenuBar1.add(mnuJobOrder);
 
@@ -515,7 +526,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void mnuManageChallanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageChallanActionPerformed
         // TODO add your handling code here:
-ManageChallan.getObj().setVisible( true);
+        ManageChallan.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageChallanActionPerformed
 
     private void mnuManageCompanyDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageCompanyDetailsActionPerformed
@@ -608,6 +619,11 @@ ManageChallan.getObj().setVisible( true);
         SearchQuotation.getObj().setVisible( true );
     }//GEN-LAST:event_mnuManageQuotationActionPerformed
 
+    private void mnuManageJobOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuManageJobOrderActionPerformed
+        // TODO add your handling code here:
+        JobOrders.getObj().setVisible( true );
+    }//GEN-LAST:event_mnuManageJobOrderActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -658,6 +674,7 @@ ManageChallan.getObj().setVisible( true);
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JLabel lblConnectionStatus;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblIPAddress;
@@ -679,6 +696,7 @@ ManageChallan.getObj().setVisible( true);
     private javax.swing.JMenuItem mnuManageChallan;
     private javax.swing.JMenuItem mnuManageClient;
     private javax.swing.JMenuItem mnuManageCompanyDetails;
+    private javax.swing.JMenuItem mnuManageJobOrder;
     private javax.swing.JMenuItem mnuManageMaterial;
     private javax.swing.JMenuItem mnuManageProcess;
     private javax.swing.JMenuItem mnuManageProduct;
